@@ -10,7 +10,6 @@ export default function Code() {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const [value, setValue] = useState<string>("");
-  const [isTextAreaFocused, setIsTextAreaFocused] = useState<boolean>(true);
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setValue(event.target.value);
@@ -83,12 +82,15 @@ export default function Code() {
   return (
     <div
       className={clsx(
-        isTextAreaFocused ? "border-pink-400" : "border-white/20",
         "h-2/3 w-2/3 max-w-4xl rounded-xl border-[1px] py-4",
-        "transition-colors duration-300 ease-in-out"
+        "transition-colors duration-300 ease-in-out",
+        "border-white/20 focus-within:border-pink-400"
       )}
     >
-      <div ref={containerRef} className="relative h-full w-full overflow-auto">
+      <div
+        ref={containerRef}
+        className="relative h-full w-full overflow-auto transition-all duration-300 ease-in-out"
+      >
         <Highlight {...defaultProps} theme={theme} code={value} language="jsx">
           {({ className, tokens, getLineProps, getTokenProps }) => (
             <>
@@ -98,8 +100,6 @@ export default function Code() {
                 placeholder="Add some code here..."
                 onChange={handleChange}
                 spellCheck={false}
-                onFocus={() => setIsTextAreaFocused(true)}
-                onBlur={() => setIsTextAreaFocused(false)}
                 className={clsx(
                   className,
                   "absolute w-full resize-none overflow-hidden whitespace-pre-wrap break-words break-keep bg-transparent pl-16 pr-3 font-mono text-transparent",
