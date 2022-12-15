@@ -54,7 +54,7 @@ export default function Select<T extends GradientBackground | LanguageName>({
           enter="transition-all transform ease-in-out duration-200"
           enterFrom="opacity-0 scale-90"
           enterTo="opacity-100"
-          leave="transition-all ease-in-out duration-200"
+          leave="transition-all transform ease-in-out duration-200"
           leaveFrom="opacity-100"
           leaveTo="opacity-0 scale-90"
         >
