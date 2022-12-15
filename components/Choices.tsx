@@ -1,5 +1,5 @@
-import { RadioGroup } from "@headlessui/react";
 import clsx from "clsx";
+import { RadioGroup } from "@headlessui/react";
 
 import type { Choice } from "lib/types";
 
