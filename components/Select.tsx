@@ -42,7 +42,7 @@ export default function Select<T extends GradientBackground | LanguageName>({
           {type === "language" ? (
             <span>{initialValue as LanguageName}</span>
           ) : (
-            <ThemeBubble color={(initialValue as GradientBackground).value} />
+            <ThemeBubble color={(initialValue as GradientBackground).class} />
           )}
 
           <span className="pointer-events-none">
@@ -83,7 +83,7 @@ export default function Select<T extends GradientBackground | LanguageName>({
                   </span>
                 ) : (
                   <>
-                    <ThemeBubble color={(option as GradientBackground).value} />
+                    <ThemeBubble color={(option as GradientBackground).class} />
                     <span className="block truncate">
                       {(option as GradientBackground).name}
                     </span>
