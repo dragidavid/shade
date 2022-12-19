@@ -1,11 +1,20 @@
-export type GradientBackground = {
-  name: string;
+import { Extension } from "@codemirror/state";
+
+export type ThemeDefinition = {
+  id: string;
+  label: string;
   class: string;
-  baseColors: string[]; // temporary until I get the colors right
   generatedColors: string[];
 };
 
-export type Choice = {
+export type ChoiceDefinition = {
+  id: string;
   label: string;
   class: string;
+};
+
+export type LanguageDefinition = {
+  id: string;
+  label: string;
+  extension: () => Promise<Extension>;
 };
