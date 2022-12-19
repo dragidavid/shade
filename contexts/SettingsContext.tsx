@@ -30,15 +30,15 @@ type SettingsProviderProps = {
   children: ReactNode;
 };
 
-const languages = SUPPORTED_LANGUAGES;
-const themes = SUPPORTED_THEMES;
-const paddingChoices = SUPPORTED_PADDING_CHOICES;
-
 const SettingsProvider: FC<SettingsProviderProps> = ({ children }) => {
-  const [language, setLanguage] = useState<LanguageDefinition>(languages[0]);
-  const [theme, setTheme] = useState<ThemeDefinition>(themes[4]);
+  const [language, setLanguage] = useState<LanguageDefinition>(
+    SUPPORTED_LANGUAGES[0]
+  );
+  const [theme, setTheme] = useState<ThemeDefinition>(SUPPORTED_THEMES[4]);
   const [lineNumbers, setLineNumbers] = useState<boolean>(true);
-  const [padding, setPadding] = useState<ChoiceDefinition>(paddingChoices[1]);
+  const [padding, setPadding] = useState<ChoiceDefinition>(
+    SUPPORTED_PADDING_CHOICES[1]
+  );
 
   return (
     <SettingsContext.Provider

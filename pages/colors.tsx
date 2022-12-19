@@ -1,8 +1,8 @@
 import clsx from "clsx";
 
-import { backgroundOptions } from "contexts/SettingsContext";
+import { SUPPORTED_THEMES } from "lib/themes";
 
-import type { GradientBackground } from "lib/types";
+import type { ThemeDefinition } from "lib/types";
 
 export default function Colors() {
   return (
@@ -10,28 +10,33 @@ export default function Colors() {
       id="main"
       className="flex min-h-full flex-col items-center justify-center"
     >
-      <h1 className="text-4xl font-bold text-white">Color testing</h1>
-
-      {backgroundOptions.map((option: GradientBackground) => {
+      {SUPPORTED_THEMES.map((option: ThemeDefinition) => {
         return (
-          <div key={option.name} className="mt-4 flex flex-wrap gap-4">
+          <div key={option.id} className="mt-4 flex flex-wrap gap-4">
             <div
               className={clsx(
-                "h-20 w-20 rounded-md",
+                "h-10 w-10 rounded-md",
                 "bg-gradient-to-br",
                 option.class
               )}
             />
-            <span className="flex items-center justify-center text-2xl font-black">
+            <span className="flex justify-center pt-1 text-2xl font-black">
               -
             </span>
             <div className="flex gap-3">
               {option.generatedColors.map((color, index) => (
                 <div
                   key={index}
-                  className="h-20 w-20 rounded-md"
-                  style={{ backgroundColor: color }}
-                />
+                  className="flex flex-col items-center justify-center"
+                >
+                  <div
+                    className="h-10 w-10 rounded-md"
+                    style={{ backgroundColor: color }}
+                  />
+                  <span className="text-sm font-black text-white/70">
+                    {index}
+                  </span>
+                </div>
               ))}
             </div>
           </div>

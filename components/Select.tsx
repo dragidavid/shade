@@ -3,8 +3,7 @@ import clsx from "clsx";
 import { Listbox, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 
-import type { LanguageName } from "@uiw/codemirror-extensions-langs";
-import type { GradientBackground } from "lib/types";
+import type { LanguageDefinition, ThemeDefinition } from "lib/types";
 
 function ThemeBubble({ color }: { color: string }) {
   return (
@@ -21,7 +20,7 @@ interface SelectProps<T> {
   options: T[];
 }
 
-export default function Select<T extends GradientBackground | LanguageName>({
+export default function Select<T extends LanguageDefinition | ThemeDefinition>({
   type,
   initialValue,
   setValue,
@@ -40,9 +39,9 @@ export default function Select<T extends GradientBackground | LanguageName>({
           )}
         >
           {type === "language" ? (
-            <span>{initialValue as LanguageName}</span>
+            <span>{(initialValue as LanguageDefinition).label}</span>
           ) : (
-            <ThemeBubble color={(initialValue as GradientBackground).class} />
+            <ThemeBubble color={(initialValue as ThemeDefinition).class} />
           )}
 
           <span className="pointer-events-none">
@@ -65,9 +64,10 @@ export default function Select<T extends GradientBackground | LanguageName>({
               "focus:outline-none"
             )}
           >
-            {options.map((option, i) => (
+            {options.map((option) => (
               <Listbox.Option
-                key={`${type}-${i}`}
+                key={`${type}-${option.id}`}
+                value={option}
                 className={clsx(
                   "flex items-center gap-3 rounded-lg p-2 text-xs",
                   "cursor-pointer select-none",
@@ -75,17 +75,16 @@ export default function Select<T extends GradientBackground | LanguageName>({
                   "ui-active:bg-white/20 ui-active:text-white",
                   "ui-selected:bg-white/20 ui-selected:text-white"
                 )}
-                value={option}
               >
                 {type === "language" ? (
                   <span className="block truncate pr-9">
-                    {option as LanguageName}
+                    {option.label as any}
                   </span>
                 ) : (
                   <>
-                    <ThemeBubble color={(option as GradientBackground).class} />
+                    <ThemeBubble color={(option as ThemeDefinition).class} />
                     <span className="block truncate">
-                      {(option as GradientBackground).name}
+                      {(option as ThemeDefinition).label}
                     </span>
                   </>
                 )}

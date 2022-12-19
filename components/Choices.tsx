@@ -1,25 +1,25 @@
 import clsx from "clsx";
 import { RadioGroup } from "@headlessui/react";
 
-import type { Choice } from "lib/types";
+import type { ChoiceDefinition } from "lib/types";
 
 interface ChoicesProps {
-  choices: Choice[];
-  initialValue: Choice;
-  setValue: (_: Choice) => void;
+  initialValue: ChoiceDefinition;
+  setValue: (_: ChoiceDefinition) => void;
+  choices: ChoiceDefinition[];
 }
 
 export default function Choices({
-  choices,
   initialValue,
   setValue,
+  choices,
 }: ChoicesProps) {
   return (
     <RadioGroup value={initialValue} onChange={setValue}>
       <div className="flex gap-3 py-[7px] text-sm">
         {choices.map((choice) => (
           <RadioGroup.Option
-            key={choice.label}
+            key={choice.id}
             value={choice}
             className={clsx(
               "cursor-pointer select-none rounded-md",

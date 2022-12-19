@@ -1,3 +1,168 @@
+export function generateColors(color1: string, color2: string): string[] {
+  // Convert the hexadecimal strings to RGB values
+  const [r1, g1, b1] = hexToRgb(color1);
+  const [r2, g2, b2] = hexToRgb(color2);
+  const [rRef, gRef, bRef] = cssColorToRgb("rgba(0, 0, 0, 0.7)");
+
+  // Calculate the average RGB values of the two colors
+  const avgR = Math.floor((r1 + r2) / 2);
+  const avgG = Math.floor((g1 + g2) / 2);
+  const avgB = Math.floor((b1 + b2) / 2);
+
+  // Generate the five similar colors by slightly adjusting the average RGB values
+  let gC1 = rgbToHex(avgR + 20, avgG - 20, avgB - 20);
+  let gC2 = rgbToHex(avgR - 20, avgG + 20, avgB + 20);
+  let gC3 = rgbToHex(avgR + 10, avgG + 10, avgB - 30);
+  let gC4 = rgbToHex(avgR - 30, avgG - 10, avgB + 10);
+  let gC5 = rgbToHex(avgR + 20, avgG - 10, avgB + 20);
+
+  // generate a whole number between -30 and 30
+  const random = Math.floor(Math.random() * 61) - 30;
+
+  // Ensure that each of the generated colors has a good contrast ratio with the reference color
+  const minContrastRatio = 7;
+  [gC1, gC2, gC3, gC4, gC5] = [gC1, gC2, gC3, gC4, gC5].map((color) => {
+    const [r, g, b] = hexToRgb(color);
+    const contrastRatio = calculateContrastRatio(r, g, b, rRef, gRef, bRef);
+    if (contrastRatio < minContrastRatio) {
+      // Adjust the color to increase its contrast ratio
+      const factor = (minContrastRatio + 0.05) / contrastRatio;
+      return rgbToHex(
+        Math.min(255, Math.max(0, Math.round(r * factor))),
+        Math.min(255, Math.max(0, Math.round(g * factor))),
+        Math.min(255, Math.max(0, Math.round(b * factor)))
+      );
+    } else {
+      return color;
+    }
+  });
+
+  // Convert the generated colors to HSL and adjust their saturation and lightness values
+  const hslColors = convertToHSL([gC1, gC2, gC3, gC4, gC5]);
+  const adjustedColors = modifyColors(
+    hslColors,
+    [90, 85, 100, 100, 85], // saturation values
+    [87, 70, 63, 58, 45] // lightness values
+  );
+  const shiftedColors = shiftHue(adjustedColors);
+
+  return [...adjustedColors, ...shiftedColors];
+}
+
+function convertToHSL(colors: string[]): string[] {
+  const hslColors: string[] = [];
+
+  for (const color of colors) {
+    // Convert hex to RGB
+    const r = parseInt(color.slice(1, 3), 16);
+    const g = parseInt(color.slice(3, 5), 16);
+    const b = parseInt(color.slice(5, 7), 16);
+
+    // Normalize RGB values
+    const rNormalized = r / 255;
+    const gNormalized = g / 255;
+    const bNormalized = b / 255;
+
+    // Find minimum and maximum RGB values
+    const max = Math.max(rNormalized, gNormalized, bNormalized);
+    const min = Math.min(rNormalized, gNormalized, bNormalized);
+
+    // Initialize HSL values
+    let h = 0;
+    let s = 0;
+    let l = (max + min) / 2;
+
+    // Calculate saturation and hue
+    if (max !== min) {
+      const d = max - min;
+      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+      h =
+        max === rNormalized
+          ? (gNormalized - bNormalized) / d +
+            (gNormalized < bNormalized ? 6 : 0)
+          : max === gNormalized
+          ? (bNormalized - rNormalized) / d + 2
+          : (rNormalized - gNormalized) / d + 4;
+      h /= 6;
+    }
+
+    // Round HSL values and append to result array
+    hslColors.push(
+      `hsl(${Math.round(h * 360)}, ${Math.round(s * 100)}%, ${Math.round(
+        l * 100
+      )}%)`
+    );
+  }
+
+  return hslColors;
+}
+
+function modifyColors(
+  hslColors: string[],
+  saturationValues: number[],
+  lightnessValues: number[]
+): string[] {
+  const modifiedHslColors: string[] = [];
+
+  for (let i = 0; i < hslColors.length; i++) {
+    const hslColor = hslColors[i];
+    const lightnessValue = lightnessValues[i];
+    const saturationValue = saturationValues[i];
+
+    // Extract current hue, saturation, and lightness values from HSL color string
+    const currentHue = hslColor.match(/hsl\((\d+), (\d+)%, (\d+)%\)/)![1];
+    // const currentSaturation = hslColor.match(/hsl\((\d+), (\d+)%, (\d+)%\)/)![2];
+    // const currentLightness = hslColor.match(/hsl\((\d+), (\d+)%, (\d+)%\)/)![3];
+
+    modifiedHslColors.push(
+      `hsl(${currentHue}, ${saturationValue}%, ${lightnessValue}%)`
+    );
+  }
+
+  return modifiedHslColors;
+}
+
+function shiftHue(colors: string[]): string[] {
+  const shiftedColors = [];
+
+  for (const degree of [120, 240]) {
+    for (const color of colors) {
+      // Parse the color string to get the hue, saturation, and lightness values
+      const match = color.match(
+        /hsl\((\d+), (\d+)%, (\d+)%\)/
+      ) as RegExpMatchArray;
+      const hue = match[1];
+      const saturation = match[2];
+      const lightness = match[3];
+
+      const shiftedHue = (parseInt(hue, 10) + degree) % 360;
+
+      const shiftedColor = `hsl(${shiftedHue}, ${saturation}%, ${lightness}%)`;
+
+      shiftedColors.push(shiftedColor);
+    }
+  }
+
+  return shiftedColors;
+}
+
+export function hslToHsla(color: string, a: number): string {
+  // Extract the hue, saturation, and lightness values from the HSL color string
+  const values = color.match(/^hsl\((\d+),\s*([\d.]+)%,\s*([\d.]+)%\)$/);
+  if (!values) {
+    throw new Error(`Invalid HSL color: ${color}`);
+  }
+  const h = parseInt(values[1], 10);
+  const s = parseInt(values[2], 10);
+  const l = parseInt(values[3], 10);
+
+  // Make sure the alpha value is between 0 and 1
+  a = Math.max(0, Math.min(1, a));
+
+  // Return the HSLA color as a string
+  return `hsla(${h}, ${s}%, ${l}%, ${a})`;
+}
+
 function calculateContrastRatio(
   r1: number,
   g1: number,
@@ -79,126 +244,4 @@ function rgbToHex(r: number, g: number, b: number): string {
   b = Math.max(0, Math.min(255, b));
 
   return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
-}
-
-export function generateColors(color1: string, color2: string): string[] {
-  // Convert the hexadecimal strings to RGB values
-  const [r1, g1, b1] = hexToRgb(color1);
-  const [r2, g2, b2] = hexToRgb(color2);
-  const [rRef, gRef, bRef] = cssColorToRgb("rgba(0, 0, 0, 0.7)");
-
-  // Calculate the average RGB values of the two colors
-  const avgR = Math.floor((r1 + r2) / 2);
-  const avgG = Math.floor((g1 + g2) / 2);
-  const avgB = Math.floor((b1 + b2) / 2);
-
-  // Generate the five similar colors by slightly adjusting the average RGB values
-  let color3 = rgbToHex(avgR + 20, avgG - 20, avgB - 20);
-  let color4 = rgbToHex(avgR - 20, avgG + 20, avgB + 20);
-  let color5 = rgbToHex(avgR + 10, avgG + 10, avgB - 30);
-  let color6 = rgbToHex(avgR - 30, avgG - 10, avgB + 10);
-  let color7 = rgbToHex(avgR + 20, avgG - 10, avgB + 20);
-
-  // Ensure that each of the generated colors has a good contrast ratio with the reference color
-  const minContrastRatio = 4.5;
-  [color3, color4, color5, color6, color7] = [
-    color3,
-    color4,
-    color5,
-    color6,
-    color7,
-  ].map((color) => {
-    const [r, g, b] = hexToRgb(color);
-    const contrastRatio = calculateContrastRatio(r, g, b, rRef, gRef, bRef);
-    if (contrastRatio < minContrastRatio) {
-      // Adjust the color to increase its contrast ratio
-      const factor = (minContrastRatio + 0.05) / contrastRatio;
-      return rgbToHex(
-        Math.min(255, Math.max(0, Math.round(r * factor))),
-        Math.min(255, Math.max(0, Math.round(g * factor))),
-        Math.min(255, Math.max(0, Math.round(b * factor)))
-      );
-    } else {
-      return color;
-    }
-  });
-
-  return convertToHSL([color3, color4, color5, color6, color7]);
-}
-
-function convertToHSL(colors: string[]): string[] {
-  const hslColors: string[] = [];
-
-  for (const color of colors) {
-    // Convert hex to RGB
-    const r = parseInt(color.slice(1, 3), 16);
-    const g = parseInt(color.slice(3, 5), 16);
-    const b = parseInt(color.slice(5, 7), 16);
-
-    // Normalize RGB values
-    const rNormalized = r / 255;
-    const gNormalized = g / 255;
-    const bNormalized = b / 255;
-
-    // Find minimum and maximum RGB values
-    const max = Math.max(rNormalized, gNormalized, bNormalized);
-    const min = Math.min(rNormalized, gNormalized, bNormalized);
-
-    // Initialize HSL values
-    let h = 0;
-    let s = 0;
-    let l = (max + min) / 2;
-
-    // Calculate saturation and hue
-    if (max !== min) {
-      const d = max - min;
-      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-      h =
-        max === rNormalized
-          ? (gNormalized - bNormalized) / d +
-            (gNormalized < bNormalized ? 6 : 0)
-          : max === gNormalized
-          ? (bNormalized - rNormalized) / d + 2
-          : (rNormalized - gNormalized) / d + 4;
-      h /= 6;
-    }
-
-    // Round HSL values and append to result array
-    hslColors.push(
-      `hsl(${Math.round(h * 360)}, ${Math.round(s * 100)}%, ${Math.round(
-        l * 100
-      )}%)`
-    );
-  }
-
-  return modifyColors(hslColors, [70, 80, 90, 100, 30], [90, 80, 65, 50, 40]);
-}
-
-function modifyColors(
-  hslColors: string[],
-  saturationValues: number[],
-  lightnessValues: number[]
-): string[] {
-  const modifiedHslColors: string[] = [];
-
-  for (let i = 0; i < hslColors.length; i++) {
-    const hslColor = hslColors[i];
-    const lightnessValue = lightnessValues[i];
-    const saturationValue = saturationValues[i];
-
-    // Extract current hue, saturation, and lightness values from HSL color string
-    const currentHue = hslColor.match(/hsl\((\d+), (\d+)%, (\d+)%\)/)![1];
-    // const currentSaturation = hslColor.match(/hsl\((\d+), (\d+)%, (\d+)%\)/)![2];
-    // const currentLightness = hslColor.match(/hsl\((\d+), (\d+)%, (\d+)%\)/)![3];
-
-    // Generate random saturation value
-    // const saturation = Math.floor(Math.random() * 20 + 80);
-
-    // Create new HSL color string with modified lightness value
-    const modifiedHslColor = `hsl(${currentHue}, ${saturationValue}%, ${lightnessValue}%)`;
-
-    modifiedHslColors.push(modifiedHslColor);
-  }
-
-  return modifiedHslColors;
 }

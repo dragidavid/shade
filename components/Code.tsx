@@ -7,9 +7,9 @@ import { EditorView } from "@codemirror/view";
 import { createTheme } from "@uiw/codemirror-themes";
 import { tags as t } from "@lezer/highlight";
 
-import { hslToHsla as adjustLightness } from "lib/colors";
-
 import { useSettingsContext } from "contexts/SettingsContext";
+
+import { hslToHsla as adjustLightness } from "lib/colors";
 
 export default function Code() {
   const [selectedLanguage, setSelectedLanguage] = useState<any>(null);
@@ -27,7 +27,7 @@ export default function Shade({ yourCode, isInShade }: ShadeProps) {
   return <h1>meh.. 🥱</h1>;
 }`);
 
-  const { language, background, lineNumbers, padding } = useSettingsContext();
+  const { language, theme, lineNumbers, padding } = useSettingsContext();
 
   const onChange = useCallback((value: string) => {
     setCode(value);
@@ -63,7 +63,7 @@ export default function Shade({ yourCode, isInShade }: ShadeProps) {
     },
   });
 
-  const c = background.generatedColors;
+  const c = theme.generatedColors;
 
   const myTheme = createTheme({
     theme: "dark",
@@ -168,7 +168,7 @@ export default function Shade({ yourCode, isInShade }: ShadeProps) {
         "relative z-0 w-auto min-w-[512px] max-w-5xl",
         padding.class,
         "bg-gradient-to-br",
-        background.class,
+        theme.class,
         "transition-all duration-200 ease-in-out"
       )}
     >
@@ -186,7 +186,7 @@ export default function Shade({ yourCode, isInShade }: ShadeProps) {
             className={clsx(
               "absolute inset-0 z-[3] rounded-xl",
               "bg-gradient-to-br",
-              background.class
+              theme.class
             )}
           />
         </div>
