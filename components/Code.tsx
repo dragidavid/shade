@@ -53,11 +53,11 @@ export default function Shade({ yourCode, isInShade }: ShadeProps) {
     ".cm-gutterElement": {
       display: "flex",
       justifyContent: "flex-end",
+      paddingRight: "1rem !important",
       lineHeight: "1.5rem",
       letterSpacing: ".1px",
     },
     ".cm-content": {
-      paddingLeft: "1rem",
       lineHeight: "1.5rem",
       letterSpacing: ".1px",
     },
