@@ -1,12 +1,17 @@
 import { createContext, FC, ReactNode, useContext, useState } from "react";
 
-import { SUPPORTED_LANGUAGES } from "lib/languages";
-import { SUPPORTED_THEMES, SUPPORTED_PADDING_CHOICES } from "lib/themes";
+import {
+  SUPPORTED_LANGUAGES,
+  SUPPORTED_THEMES,
+  SUPPORTED_PADDING_CHOICES,
+  SUPPORTED_FONT_STYLES,
+} from "lib/values";
 
 import type {
   LanguageDefinition,
   ThemeDefinition,
   ChoiceDefinition,
+  FontDefinition,
 } from "lib/types";
 
 interface SettingsContextProps {
@@ -14,6 +19,8 @@ interface SettingsContextProps {
   setLanguage: (_: LanguageDefinition) => void;
   theme: ThemeDefinition;
   setTheme: (_: ThemeDefinition) => void;
+  fontStyle: FontDefinition;
+  setFontStyle: (_: FontDefinition) => void;
   lineNumbers: boolean;
   setLineNumbers: (_: boolean) => void;
   padding: ChoiceDefinition;
@@ -32,9 +39,12 @@ type SettingsProviderProps = {
 
 const SettingsProvider: FC<SettingsProviderProps> = ({ children }) => {
   const [language, setLanguage] = useState<LanguageDefinition>(
-    SUPPORTED_LANGUAGES[0]
+    SUPPORTED_LANGUAGES.at(0)!
   );
-  const [theme, setTheme] = useState<ThemeDefinition>(SUPPORTED_THEMES[4]);
+  const [theme, setTheme] = useState<ThemeDefinition>(SUPPORTED_THEMES.at(-1)!);
+  const [fontStyle, setFontStyle] = useState<FontDefinition>(
+    SUPPORTED_FONT_STYLES.at(0)!
+  );
   const [lineNumbers, setLineNumbers] = useState<boolean>(true);
   const [padding, setPadding] = useState<ChoiceDefinition>(
     SUPPORTED_PADDING_CHOICES[1]
@@ -47,6 +57,8 @@ const SettingsProvider: FC<SettingsProviderProps> = ({ children }) => {
         setLanguage,
         theme,
         setTheme,
+        fontStyle,
+        setFontStyle,
         lineNumbers,
         setLineNumbers,
         padding,

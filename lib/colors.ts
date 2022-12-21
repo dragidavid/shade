@@ -16,11 +16,9 @@ export function generateColors(color1: string, color2: string): string[] {
   let gC4 = rgbToHex(avgR - 30, avgG - 10, avgB + 10);
   let gC5 = rgbToHex(avgR + 20, avgG - 10, avgB + 20);
 
-  // generate a whole number between -30 and 30
-  const random = Math.floor(Math.random() * 61) - 30;
-
   // Ensure that each of the generated colors has a good contrast ratio with the reference color
   const minContrastRatio = 7;
+
   [gC1, gC2, gC3, gC4, gC5] = [gC1, gC2, gC3, gC4, gC5].map((color) => {
     const [r, g, b] = hexToRgb(color);
     const contrastRatio = calculateContrastRatio(r, g, b, rRef, gRef, bRef);
@@ -149,9 +147,11 @@ function shiftHue(colors: string[]): string[] {
 export function hslToHsla(color: string, a: number): string {
   // Extract the hue, saturation, and lightness values from the HSL color string
   const values = color.match(/^hsl\((\d+),\s*([\d.]+)%,\s*([\d.]+)%\)$/);
+
   if (!values) {
     throw new Error(`Invalid HSL color: ${color}`);
   }
+
   const h = parseInt(values[1], 10);
   const s = parseInt(values[2], 10);
   const l = parseInt(values[3], 10);
@@ -198,6 +198,7 @@ function cssColorToRgb(cssColor: string): number[] {
   const matches = cssColor.match(
     /rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d+(?:\.\d+)?))?\)/
   );
+
   if (!matches) {
     throw new Error(`Invalid color string: ${cssColor}`);
   }

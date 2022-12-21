@@ -11,8 +11,12 @@ import { useSettingsContext } from "contexts/SettingsContext";
 
 import { hslToHsla as adjustLightness } from "lib/colors";
 
+import type { Extension } from "@codemirror/state";
+
 export default function Code() {
-  const [selectedLanguage, setSelectedLanguage] = useState<any>(null);
+  const [selectedLanguage, setSelectedLanguage] = useState<Extension | null>(
+    null
+  );
   const [code, setCode] = useState<string>(`interface ShadeProps {
   yourCode: string;
   isInShade: boolean;
@@ -27,7 +31,8 @@ export default function Shade({ yourCode, isInShade }: ShadeProps) {
   return <h1>meh.. 🥱</h1>;
 }`);
 
-  const { language, theme, lineNumbers, padding } = useSettingsContext();
+  const { language, theme, fontStyle, lineNumbers, padding } =
+    useSettingsContext();
 
   const onChange = useCallback((value: string) => {
     setCode(value);
@@ -43,7 +48,7 @@ export default function Shade({ yourCode, isInShade }: ShadeProps) {
     loadLanguage();
   }, [language]);
 
-  const styleTheme = EditorView.baseTheme({
+  const customStyles = EditorView.baseTheme({
     "&.cm-editor": {
       fontSize: "0.9375rem",
     },
@@ -63,9 +68,22 @@ export default function Shade({ yourCode, isInShade }: ShadeProps) {
     },
   });
 
+  const customFontStyle = EditorView.theme({
+    ".cm-content *": {
+      fontFamily: fontStyle.value,
+      fontVariantLigatures: "normal",
+    },
+    ".cm-gutters": {
+      fontFamily: fontStyle.value,
+      fontVariantLigatures: "normal",
+    },
+  });
+
+  const lineWrapping = EditorView.lineWrapping;
+
   const c = theme.generatedColors;
 
-  const myTheme = createTheme({
+  const editorTheme = createTheme({
     theme: "dark",
     settings: {
       background: "transparent",
@@ -198,8 +216,9 @@ export default function Shade({ yourCode, isInShade }: ShadeProps) {
               onChange={onChange}
               extensions={[
                 selectedLanguage,
-                styleTheme,
-                EditorView.lineWrapping,
+                customStyles,
+                customFontStyle,
+                lineWrapping,
               ]}
               basicSetup={{
                 lineNumbers: lineNumbers,
@@ -214,7 +233,7 @@ export default function Shade({ yourCode, isInShade }: ShadeProps) {
                 completionKeymap: false,
                 foldKeymap: false,
               }}
-              theme={myTheme}
+              theme={editorTheme}
             />
           )}
         </div>

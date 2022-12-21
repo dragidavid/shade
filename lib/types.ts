@@ -18,3 +18,9 @@ export type ChoiceDefinition = {
   label: string;
   class: string;
 };
+
+export type FontDefinition = {
+  id: string;
+  label: string;
+  value: string;
+};
