@@ -1,3 +1,4 @@
+import { memo } from "react";
 import clsx from "clsx";
 import { Switch } from "@headlessui/react";
 
@@ -6,7 +7,7 @@ interface ToggleProps {
   setValue: (_: boolean) => void;
 }
 
-export default function Toggle({ initialValue, setValue }: ToggleProps) {
+export default memo(function Toggle({ initialValue, setValue }: ToggleProps) {
   return (
     <div className="flex h-[34px] items-center">
       <Switch
@@ -30,4 +31,4 @@ export default function Toggle({ initialValue, setValue }: ToggleProps) {
       </Switch>
     </div>
   );
-}
+});
