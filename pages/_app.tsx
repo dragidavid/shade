@@ -18,32 +18,38 @@ import "styles/globals.css";
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
+  preload: true,
 });
 
 const firaCode = Fira_Code({
   subsets: ["latin"],
   variable: "--font-fira-code",
+  preload: true,
 });
 
 const jetBrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-jetbrains-mono",
+  preload: true,
 });
 
 const inconsolata = Inconsolata({
   subsets: ["latin"],
   variable: "--font-inconsolata",
+  preload: true,
 });
 
 const sourceCodePro = Source_Code_Pro({
   subsets: ["latin"],
   variable: "--font-source-code-pro",
+  preload: true,
 });
 
 const ibmPlexMono = IBM_Plex_Mono({
   weight: ["400"],
   style: ["normal", "italic"],
   variable: "--font-ibm-plex-mono",
+  preload: true,
 });
 
 export default function App({ Component, pageProps }: AppProps) {
