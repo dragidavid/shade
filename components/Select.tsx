@@ -27,6 +27,23 @@ interface SelectProps<T> {
 export default memo(function Select<
   T extends LanguageDefinition | ThemeDefinition | FontDefinition
 >({ type, initialValue, setValue, options }: SelectProps<T>) {
+  const getClassName = (fontVariable: string) => {
+    switch (fontVariable) {
+      case "var(--font-fira-code)":
+        return "font-firaCode";
+      case "var(--font-jetbrains-mono)":
+        return "font-jetBrainsMono";
+      case "var(--font-inconsolata)":
+        return "font-inconsolata";
+      case "var(--font-source-code-pro)":
+        return "font-sourceCodePro";
+      case "var(--font-ibm-plex-mono)":
+        return "font-ibmPlexMono";
+      default:
+        return "font-mono";
+    }
+  };
+
   const getInitialValue = (type: string) => {
     switch (type) {
       case "language":
@@ -37,9 +54,7 @@ export default memo(function Select<
         return (
           <span
             className={clsx(
-              (initialValue as FontDefinition).value === "--font-fira-code"
-                ? "font-firaCode"
-                : "font-jetBrainsMono"
+              getClassName((initialValue as FontDefinition).value)
             )}
           >
             {(initialValue as FontDefinition).label}
@@ -76,9 +91,7 @@ export default memo(function Select<
           <span
             className={clsx(
               "block truncate pr-9",
-              (initialValue as FontDefinition).value === "--font-fira-code"
-                ? "font-firaCode"
-                : "font-jetBrainsMono"
+              getClassName((option as FontDefinition).value)
             )}
           >
             {(option as FontDefinition).label}
