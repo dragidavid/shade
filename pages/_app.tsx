@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { motion } from "framer-motion";
 import {
   Inter,
   Fira_Code,
@@ -48,8 +49,11 @@ const ibmPlexMono = IBM_Plex_Mono({
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <SettingsProvider>
-      <main
+      <motion.main
         id="main"
+        animate={{ opacity: 1 }}
+        initial={{ opacity: 0 }}
+        transition={{ duration: 0.2, delay: 0.2 }}
         className={clsx(
           inter.variable,
           firaCode.variable,
@@ -62,7 +66,7 @@ export default function App({ Component, pageProps }: AppProps) {
         )}
       >
         <Component {...pageProps} />
-      </main>
+      </motion.main>
     </SettingsProvider>
   );
 }
