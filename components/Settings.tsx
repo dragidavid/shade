@@ -16,6 +16,12 @@ import Select from "components/Select";
 import Toggle from "components/Toggle";
 import Choices from "components/Choices";
 
+import type {
+  FontDefinition,
+  LanguageDefinition,
+  ThemeDefinition,
+} from "lib/types";
+
 export default function Settings() {
   const [mainDimensions, setMainDimensions] = useState<{
     height: number;
@@ -137,7 +143,11 @@ export default function Settings() {
           <Select
             type="language"
             initialValue={language}
-            setValue={setLanguage}
+            setValue={
+              setLanguage as (
+                _: LanguageDefinition | ThemeDefinition | FontDefinition
+              ) => void
+            }
             options={SUPPORTED_LANGUAGES}
           />
         </div>
@@ -146,7 +156,11 @@ export default function Settings() {
           <Select
             type="theme"
             initialValue={theme}
-            setValue={setTheme}
+            setValue={
+              setTheme as (
+                _: LanguageDefinition | ThemeDefinition | FontDefinition
+              ) => void
+            }
             options={SUPPORTED_THEMES}
           />
         </div>
@@ -155,7 +169,11 @@ export default function Settings() {
           <Select
             type="font"
             initialValue={fontStyle}
-            setValue={setFontStyle}
+            setValue={
+              setFontStyle as (
+                _: LanguageDefinition | ThemeDefinition | FontDefinition
+              ) => void
+            }
             options={SUPPORTED_FONT_STYLES}
           />
         </div>
