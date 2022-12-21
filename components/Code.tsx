@@ -70,11 +70,11 @@ export default function Shade({ yourCode, isInShade }: ShadeProps) {
 
   const customFontStyle = EditorView.theme({
     ".cm-content *": {
-      fontFamily: fontStyle.value,
+      fontFamily: fontStyle.variable,
       fontVariantLigatures: "normal",
     },
     ".cm-gutters": {
-      fontFamily: fontStyle.value,
+      fontFamily: fontStyle.variable,
       fontVariantLigatures: "normal",
     },
   });

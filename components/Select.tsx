@@ -37,8 +37,6 @@ export default memo(function Select<
         return "font-inconsolata";
       case "var(--font-source-code-pro)":
         return "font-sourceCodePro";
-      case "var(--font-ibm-plex-mono)":
-        return "font-ibmPlexMono";
       default:
         return "font-mono";
     }
@@ -54,7 +52,7 @@ export default memo(function Select<
         return (
           <span
             className={clsx(
-              getClassName((initialValue as FontDefinition).value)
+              getClassName((initialValue as FontDefinition).variable)
             )}
           >
             {(initialValue as FontDefinition).label}
@@ -91,7 +89,7 @@ export default memo(function Select<
           <span
             className={clsx(
               "block truncate pr-9",
-              getClassName((option as FontDefinition).value)
+              getClassName((option as FontDefinition).variable)
             )}
           >
             {(option as FontDefinition).label}
