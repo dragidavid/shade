@@ -27,21 +27,6 @@ interface SelectProps<T> {
 export default memo(function Select<
   T extends LanguageDefinition | ThemeDefinition | FontDefinition
 >({ type, initialValue, setValue, options }: SelectProps<T>) {
-  const getClassName = (fontVariable: string) => {
-    switch (fontVariable) {
-      case "var(--font-fira-code)":
-        return "font-firaCode";
-      case "var(--font-jetbrains-mono)":
-        return "font-jetBrainsMono";
-      case "var(--font-inconsolata)":
-        return "font-inconsolata";
-      case "var(--font-source-code-pro)":
-        return "font-sourceCodePro";
-      default:
-        return "font-mono";
-    }
-  };
-
   const getInitialValue = (type: string) => {
     switch (type) {
       case "language":
@@ -50,11 +35,7 @@ export default memo(function Select<
         return <ThemeBubble color={(initialValue as ThemeDefinition).class} />;
       case "font":
         return (
-          <span
-            className={clsx(
-              getClassName((initialValue as FontDefinition).variable)
-            )}
-          >
+          <span className={clsx((initialValue as FontDefinition).class)}>
             {(initialValue as FontDefinition).label}
           </span>
         );
@@ -89,7 +70,7 @@ export default memo(function Select<
           <span
             className={clsx(
               "block truncate pr-9",
-              getClassName((option as FontDefinition).variable)
+              (option as FontDefinition).class
             )}
           >
             {(option as FontDefinition).label}

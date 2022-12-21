@@ -64,7 +64,6 @@ export default function Shade({ yourCode, isInShade }: ShadeProps) {
     },
     ".cm-content": {
       lineHeight: "1.5rem",
-      letterSpacing: ".1px",
     },
   });
 
