@@ -5,12 +5,22 @@ import { DragHandleDots2Icon } from "@radix-ui/react-icons";
 
 import { useSettingsContext } from "contexts/SettingsContext";
 
-import { SUPPORTED_LANGUAGES } from "lib/languages";
-import { SUPPORTED_THEMES, SUPPORTED_PADDING_CHOICES } from "lib/themes";
+import {
+  SUPPORTED_LANGUAGES,
+  SUPPORTED_THEMES,
+  SUPPORTED_PADDING_CHOICES,
+  SUPPORTED_FONT_STYLES,
+} from "lib/values";
 
 import Select from "components/Select";
 import Toggle from "components/Toggle";
 import Choices from "components/Choices";
+
+import type {
+  FontDefinition,
+  LanguageDefinition,
+  ThemeDefinition,
+} from "lib/types";
 
 export default function Settings() {
   const [mainDimensions, setMainDimensions] = useState<{
@@ -29,6 +39,8 @@ export default function Settings() {
     setLanguage,
     theme,
     setTheme,
+    fontStyle,
+    setFontStyle,
     lineNumbers,
     setLineNumbers,
     padding,
@@ -131,7 +143,11 @@ export default function Settings() {
           <Select
             type="language"
             initialValue={language}
-            setValue={setLanguage}
+            setValue={
+              setLanguage as (
+                _: LanguageDefinition | ThemeDefinition | FontDefinition
+              ) => void
+            }
             options={SUPPORTED_LANGUAGES}
           />
         </div>
@@ -140,8 +156,25 @@ export default function Settings() {
           <Select
             type="theme"
             initialValue={theme}
-            setValue={setTheme}
+            setValue={
+              setTheme as (
+                _: LanguageDefinition | ThemeDefinition | FontDefinition
+              ) => void
+            }
             options={SUPPORTED_THEMES}
+          />
+        </div>
+        <div>
+          <label htmlFor="font">Font</label>
+          <Select
+            type="font"
+            initialValue={fontStyle}
+            setValue={
+              setFontStyle as (
+                _: LanguageDefinition | ThemeDefinition | FontDefinition
+              ) => void
+            }
+            options={SUPPORTED_FONT_STYLES}
           />
         </div>
         <div>

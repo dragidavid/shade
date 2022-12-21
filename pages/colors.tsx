@@ -1,6 +1,6 @@
 import clsx from "clsx";
 
-import { SUPPORTED_THEMES } from "lib/themes";
+import { SUPPORTED_THEMES } from "lib/values";
 
 import type { ThemeDefinition } from "lib/types";
 
