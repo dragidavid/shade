@@ -57,8 +57,8 @@ export function generateColors(color1: string, color2: string): string[] {
   // Modify the saturation and lightness values of the HSL colors
   const adjustedColors = modifyColors(
     hslColors,
-    [90, 85, 100, 100, 85], // Saturation values
-    [88, 72, 65, 59, 53] // Lightness values
+    [100, 93, 98, 100, 91], // Saturation values
+    [90, 80, 70, 60, 50] // Lightness values
   );
 
   // Shift the hue values of the adjusted HSL colors

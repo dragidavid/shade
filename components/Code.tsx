@@ -123,10 +123,11 @@ export default function Shade({ yourCode, isInShade }: ShadeProps) {
         ],
         color: c.at(0),
       },
-      { tag: t.variableName, color: c.at(5), fontStyle: "italic" },
-      { tag: t.propertyName, color: c.at(5), fontStyle: "italic" },
-      { tag: t.definition(t.variableName), color: c.at(10) },
-      { tag: t.definition(t.propertyName), color: c.at(8) },
+      // The following tags change a lot usually so adjust these for more drastic changes
+      { tag: t.variableName, color: c.at(6), fontStyle: "italic" },
+      { tag: t.propertyName, color: c.at(6), fontStyle: "italic" },
+      { tag: t.definition(t.variableName), color: c.at(4) },
+      { tag: t.definition(t.propertyName), color: c.at(6) },
       {
         tag: [
           t.moduleKeyword,
@@ -138,7 +139,7 @@ export default function Shade({ yourCode, isInShade }: ShadeProps) {
           t.self,
           t.meta,
         ],
-        color: c.at(1),
+        color: c.at(11),
       },
       {
         tag: [t.typeName, t.typeOperator],
