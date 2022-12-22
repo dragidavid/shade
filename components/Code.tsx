@@ -9,7 +9,7 @@ import { tags as t } from "@lezer/highlight";
 
 import { useSettingsContext } from "contexts/SettingsContext";
 
-import { hslToHsla as adjustLightness } from "lib/colors";
+import { hslToHsla as adjustLightness } from "lib/colors/conversions";
 
 import type { Extension } from "@codemirror/state";
 
