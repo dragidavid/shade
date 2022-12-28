@@ -1,5 +1,7 @@
 import clsx from "clsx";
 import { motion } from "framer-motion";
+import { SessionProvider } from "next-auth/react";
+
 import {
   Inter,
   Fira_Code,
@@ -52,27 +54,32 @@ const ibmPlexMono = IBM_Plex_Mono({
   variable: "--font-ibm-plex-mono",
 });
 
-export default function App({ Component, pageProps }: AppProps) {
+export default function App({
+  Component,
+  pageProps: { session, ...pageProps },
+}: AppProps) {
   return (
-    <SettingsProvider>
-      <motion.main
-        id="main"
-        animate={{ opacity: 1 }}
-        initial={{ opacity: 0 }}
-        transition={{ duration: 0.2, delay: 0.3 }}
-        className={clsx(
-          inter.variable,
-          firaCode.variable,
-          jetBrainsMono.variable,
-          inconsolata.variable,
-          sourceCodePro.variable,
-          ibmPlexMono.variable,
-          "flex min-h-full flex-col items-center justify-center",
-          "font-sans"
-        )}
-      >
-        <Component {...pageProps} />
-      </motion.main>
-    </SettingsProvider>
+    <SessionProvider session={session}>
+      <SettingsProvider>
+        <motion.main
+          id="main"
+          animate={{ opacity: 1 }}
+          initial={{ opacity: 0 }}
+          transition={{ duration: 0.2, delay: 0.3 }}
+          className={clsx(
+            inter.variable,
+            firaCode.variable,
+            jetBrainsMono.variable,
+            inconsolata.variable,
+            sourceCodePro.variable,
+            ibmPlexMono.variable,
+            "flex min-h-full flex-col items-center justify-center",
+            "font-sans"
+          )}
+        >
+          <Component {...pageProps} />
+        </motion.main>
+      </SettingsProvider>
+    </SessionProvider>
   );
 }
