@@ -12,8 +12,13 @@ import { useSettingsContext } from "contexts/SettingsContext";
 import { hslToHsla as adjustLightness } from "lib/colors/conversions";
 
 import type { Extension } from "@codemirror/state";
+import type { Snippet } from "lib/types";
 
-export default function Code() {
+interface CodeProps {
+  snippet?: Snippet;
+}
+
+export default function Code({ snippet }: CodeProps) {
   const [selectedLanguage, setSelectedLanguage] = useState<Extension | null>(
     null
   );
@@ -37,6 +42,12 @@ export default function Shade({ yourCode, isInShade }: ShadeProps) {
   const onChange = useCallback((value: string) => {
     setCode(value);
   }, []);
+
+  useEffect(() => {
+    if (snippet) {
+      setCode(snippet.content || "");
+    }
+  }, [snippet]);
 
   useEffect(() => {
     async function loadLanguage() {

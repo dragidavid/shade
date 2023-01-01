@@ -8,9 +8,12 @@ import { useSettingsContext } from "contexts/SettingsContext";
 import {
   SUPPORTED_LANGUAGES,
   SUPPORTED_THEMES,
-  SUPPORTED_PADDING_CHOICES,
   SUPPORTED_FONT_STYLES,
+  SUPPORTED_PADDING_CHOICES,
 } from "lib/values";
+
+import { exists } from "lib/exists";
+import { find } from "lib/find";
 
 import Select from "components/Select";
 import Toggle from "components/Toggle";
@@ -20,9 +23,14 @@ import type {
   FontDefinition,
   LanguageDefinition,
   ThemeDefinition,
+  Settings,
 } from "lib/types";
 
-export default function Settings() {
+interface SettingsProps {
+  settings?: Settings;
+}
+
+export default function Settings({ settings }: SettingsProps) {
   const [mainDimensions, setMainDimensions] = useState<{
     height: number;
     width: number;
@@ -50,6 +58,17 @@ export default function Settings() {
   const animationControls = useAnimationControls();
 
   useEffect(() => {
+    if (exists(settings)) {
+      setLanguage(find(SUPPORTED_LANGUAGES, settings.language));
+      setTheme(find(SUPPORTED_THEMES, settings.theme));
+      setFontStyle(find(SUPPORTED_FONT_STYLES, settings.fontStyle));
+      setLineNumbers(settings.lineNumbers);
+      setPadding(find(SUPPORTED_PADDING_CHOICES, settings.padding));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [settings]);
+
+  useEffect(() => {
     const main = document.getElementById("main");
     let timeoutId: NodeJS.Timeout;
 
@@ -74,6 +93,7 @@ export default function Settings() {
 
     return () => {
       clearTimeout(timeoutId);
+
       window.removeEventListener("resize", handleResize);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps

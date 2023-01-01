@@ -1,8 +1,8 @@
 import { unstable_getServerSession } from "next-auth/next";
 
-import { exists } from "lib/exists";
-
 import { authOptions } from "pages/api/auth/[...nextauth]";
+
+import { exists } from "lib/exists";
 
 import type {
   GetServerSidePropsContext,
