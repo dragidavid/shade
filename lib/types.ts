@@ -30,5 +30,16 @@ export type Settings = {
   language: LanguageDefinition["id"];
   theme: ThemeDefinition["id"];
   fontStyle: FontDefinition["id"];
+  lineNumbers: boolean;
   padding: ChoiceDefinition["id"];
+};
+
+export type Snippet = {
+  id: string;
+  title: string | null;
+  content: string | null;
+  settings: Settings;
+  createdAt: Date;
+  updatedAt: Date;
+  authorId: string;
 };
