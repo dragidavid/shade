@@ -71,9 +71,9 @@ model VerificationToken {
 
 model Snippet {
   id        String   @id @default(cuid())
-  title     String
-  content   String   @db.Text
-  settings  Json
+  title     String?
+  content   String?  @db.Text
+  settings  Json?    @default("{ \"language\": \"typescript\", \"theme\": \"salem\", \"fontStyle\": \"fira_code\", \"padding\": \"md\" }")
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @default(now()) @map(name: "updated_at")
   authorId  String   @map(name: "author_id")
