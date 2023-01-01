@@ -3,15 +3,15 @@ import { createContext, FC, ReactNode, useContext, useState } from "react";
 import {
   SUPPORTED_LANGUAGES,
   SUPPORTED_THEMES,
-  SUPPORTED_PADDING_CHOICES,
   SUPPORTED_FONT_STYLES,
+  SUPPORTED_PADDING_CHOICES,
 } from "lib/values";
 
 import type {
   LanguageDefinition,
   ThemeDefinition,
-  ChoiceDefinition,
   FontDefinition,
+  ChoiceDefinition,
 } from "lib/types";
 
 interface SettingsContextProps {
