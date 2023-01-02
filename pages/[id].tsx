@@ -47,7 +47,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     };
   }
 
-  if (exists(session) && session.user.id === snippet!.authorId) {
+  if (exists(session) && session.user.id === snippet!.userId) {
     editAllowed = true;
   }
 

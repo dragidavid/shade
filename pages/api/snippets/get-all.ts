@@ -8,7 +8,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   const snippets = await prisma.snippet.findMany({
     where: {
-      authorId: session.user.id as string,
+      userId: session.user.id as string,
     },
   });
 

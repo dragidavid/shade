@@ -41,5 +41,5 @@ export type Snippet = {
   settings: Settings;
   createdAt: Date;
   updatedAt: Date;
-  authorId: string;
+  userId: string;
 };

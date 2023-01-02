@@ -10,7 +10,6 @@ generator client {
 
 model Account {
   id                 String  @id @default(cuid())
-  userId             String
   type               String
   provider           String
   providerAccountId  String
@@ -23,6 +22,7 @@ model Account {
   session_state      String?
   
   user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId             String
 
   @@index([userId])
 
@@ -34,10 +34,10 @@ model Account {
 model Session {
   id           String   @id @default(cuid())
   sessionToken String   @unique
-  userId       String
   expires      DateTime
   
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String
 
   @@index([userId])
 
@@ -76,11 +76,11 @@ model Snippet {
   settings  Json?    @default("{ \"language\": \"typescript\", \"theme\": \"salem\", \"fontStyle\": \"fira_code\", \"lineNumbers\": true, \"padding\": \"md\" }")
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @default(now()) @map(name: "updated_at")
-  authorId  String   @map(name: "author_id")
 
-  author    User     @relation(fields: [authorId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
 
-  @@index([authorId])
+  @@index([userId])
   
   @@map(name: "snippets")
 }

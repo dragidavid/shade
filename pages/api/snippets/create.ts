@@ -9,7 +9,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   const snippet = await prisma.snippet.create({
     data: {
-      authorId: session.user.id as string,
+      userId: session.user.id as string,
     },
   });
 
