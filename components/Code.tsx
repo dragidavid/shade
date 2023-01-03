@@ -10,15 +10,17 @@ import { tags as t } from "@lezer/highlight";
 import { useSettingsContext } from "contexts/SettingsContext";
 
 import { hslToHsla as adjustLightness } from "lib/colors/conversions";
+import { exists } from "lib/exists";
 
 import type { Extension } from "@codemirror/state";
 import type { Snippet } from "lib/types";
 
 interface CodeProps {
   snippet?: Snippet;
+  editAllowed?: boolean;
 }
 
-export default function Code({ snippet }: CodeProps) {
+export default function Code({ snippet, editAllowed }: CodeProps) {
   const [selectedLanguage, setSelectedLanguage] = useState<Extension | null>(
     null
   );
@@ -223,6 +225,7 @@ export default function Shade({ yourCode, isInShade }: ShadeProps) {
           {selectedLanguage && (
             <CodeMirror
               // autoFocus={true}
+              editable={exists(editAllowed) && editAllowed}
               value={code}
               onChange={onChange}
               extensions={[

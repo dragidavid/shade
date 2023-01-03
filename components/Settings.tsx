@@ -12,9 +12,6 @@ import {
   SUPPORTED_PADDING_CHOICES,
 } from "lib/values";
 
-import { exists } from "lib/exists";
-import { find } from "lib/find";
-
 import Select from "components/Select";
 import Toggle from "components/Toggle";
 import Choices from "components/Choices";
@@ -56,17 +53,6 @@ export default function Settings({ settings }: SettingsProps) {
   } = useSettingsContext();
   const dragControls = useDragControls();
   const animationControls = useAnimationControls();
-
-  useEffect(() => {
-    if (exists(settings)) {
-      setLanguage(find(SUPPORTED_LANGUAGES, settings.language));
-      setTheme(find(SUPPORTED_THEMES, settings.theme));
-      setFontStyle(find(SUPPORTED_FONT_STYLES, settings.fontStyle));
-      setLineNumbers(settings.lineNumbers);
-      setPadding(find(SUPPORTED_PADDING_CHOICES, settings.padding));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [settings]);
 
   useEffect(() => {
     const main = document.getElementById("main");
@@ -123,7 +109,7 @@ export default function Settings({ settings }: SettingsProps) {
   }, [mainDimensions.height, mainDimensions.width]);
 
   return (
-    <motion.section
+    <motion.div
       id="settings"
       drag
       dragListener={false}
@@ -210,6 +196,6 @@ export default function Settings({ settings }: SettingsProps) {
           />
         </div>
       </div>
-    </motion.section>
+    </motion.div>
   );
 }

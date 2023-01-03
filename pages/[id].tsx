@@ -1,9 +1,21 @@
+import { useEffect } from "react";
+
 import Code from "components/Code";
 import Settings from "components/Settings";
 
+import { useSettingsContext } from "contexts/SettingsContext";
+
+import {
+  SUPPORTED_LANGUAGES,
+  SUPPORTED_THEMES,
+  SUPPORTED_FONT_STYLES,
+  SUPPORTED_PADDING_CHOICES,
+} from "lib/values";
+
 import prisma from "lib/prisma";
-import { exists } from "lib/exists";
 import { getServerSession } from "lib/auth";
+import { exists } from "lib/exists";
+import { find } from "lib/find";
 
 import type { GetServerSidePropsContext } from "next";
 import type { Snippet } from "lib/types";
@@ -17,11 +29,25 @@ export default function SingleSnippetPage({
   snippet,
   editAllowed,
 }: SingleSnippetPageProps) {
+  const { setLanguage, setTheme, setFontStyle, setLineNumbers, setPadding } =
+    useSettingsContext();
+
+  useEffect(() => {
+    if (exists(snippet) && exists(snippet.settings)) {
+      setLanguage(find(SUPPORTED_LANGUAGES, snippet.settings.language));
+      setTheme(find(SUPPORTED_THEMES, snippet.settings.theme));
+      setFontStyle(find(SUPPORTED_FONT_STYLES, snippet.settings.fontStyle));
+      setLineNumbers(snippet.settings.lineNumbers);
+      setPadding(find(SUPPORTED_PADDING_CHOICES, snippet.settings.padding));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [snippet]);
+
   return (
     <>
-      <Code snippet={snippet} />
+      <Code snippet={snippet} editAllowed={editAllowed} />
 
-      {editAllowed && <Settings settings={snippet.settings} />}
+      {editAllowed && <Settings />}
     </>
   );
 }
