@@ -102,16 +102,16 @@ export default memo(function Select<
         </Listbox.Button>
         <Transition
           as={Fragment}
-          enter="transition-all transform ease-in-out duration-200"
-          enterFrom="opacity-0 scale-90"
-          enterTo="opacity-100"
-          leave="transition-all transform ease-in-out duration-200"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0 scale-90"
+          enter="transition ease-out duration-100"
+          enterFrom="transform opacity-0 scale-95"
+          enterTo="transform opacity-100 scale-100"
+          leave="transition ease-in duration-75"
+          leaveFrom="transform opacity-100 scale-100"
+          leaveTo="transform opacity-0 scale-95"
         >
           <Listbox.Options
             className={clsx(
-              "absolute z-10 max-h-80 -translate-x-1/4 -translate-y-3/4 space-y-1 overflow-auto rounded-xl p-2",
+              "absolute z-10 max-h-80 origin-bottom -translate-x-1/4 -translate-y-3/4 space-y-1 overflow-auto rounded-xl p-2",
               "border-[1px] border-white/20 bg-black",
               "focus:outline-none"
             )}
