@@ -19,7 +19,7 @@ import type { Snippet } from "lib/types";
 
 const BUTTON_COLORS = {
   DEFAULT:
-    "border-white/20 bg-black hover:bg-white/20 focus:ring-white active:bg-white/10",
+    "border-white/20 bg-black hover:bg-white/20 hover:text-white hover:border-white focus:ring-white active:bg-white/10",
   SUCCESS:
     "border-green-400/20 text-green-400 bg-green-500/20 focus:ring-green-400 active:bg-green-400/10",
   ERROR:
@@ -104,7 +104,7 @@ export default function Dashboard() {
               "flex w-full items-center justify-between gap-2 rounded-lg p-2 text-xs",
               "border-[1px] border-white/20 bg-black",
               "transition-all duration-200 ease-in-out",
-              "hover:cursor-pointer hover:bg-white/20",
+              "hover:cursor-pointer hover:border-white hover:bg-white/20 hover:text-white",
               "focus:outline-none focus:ring-1 focus:ring-white",
               "active:bg-white/10"
             )}
@@ -154,7 +154,7 @@ export default function Dashboard() {
             buttonColors
           )}
         >
-          <span className={clsx("pointer-events-none")}>
+          <span className="pointer-events-none">
             {isMutating ? (
               <ReloadIcon className="h-3 w-3 animate-spin" aria-hidden="true" />
             ) : (

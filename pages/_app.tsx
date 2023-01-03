@@ -11,6 +11,8 @@ import {
   IBM_Plex_Mono,
 } from "@next/font/google";
 
+import Top from "components/Top";
+
 import { SettingsProvider } from "contexts/SettingsContext";
 
 import type { AppProps } from "next/app";
@@ -61,11 +63,7 @@ export default function App({
   return (
     <SessionProvider session={session}>
       <SettingsProvider>
-        <motion.main
-          id="main"
-          animate={{ opacity: 1 }}
-          initial={{ opacity: 0 }}
-          transition={{ duration: 0.2, delay: 0.3 }}
+        <div
           className={clsx(
             inter.variable,
             firaCode.variable,
@@ -73,12 +71,21 @@ export default function App({
             inconsolata.variable,
             sourceCodePro.variable,
             ibmPlexMono.variable,
-            "flex min-h-full flex-col items-center justify-center",
+            "grid min-h-screen grid-rows-[auto,1fr]",
             "font-sans"
           )}
         >
-          <Component {...pageProps} />
-        </motion.main>
+          <Top />
+          <motion.div
+            id="main"
+            animate={{ opacity: 1 }}
+            initial={{ opacity: 0 }}
+            transition={{ duration: 0.2, delay: 0.3 }}
+            className={clsx("flex flex-col items-center justify-center")}
+          >
+            <Component {...pageProps} />
+          </motion.div>
+        </div>
       </SettingsProvider>
     </SessionProvider>
   );
