@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
-import Image from "next/image";
 import Link from "next/link";
 import useSWR from "swr";
 import { useSession } from "next-auth/react";
@@ -132,15 +131,7 @@ export default function Dashboard() {
       )}
     >
       <div className="flex w-full items-center justify-between">
-        <Image
-          src={session?.user?.image!}
-          alt={session?.user?.name ?? "IMG"}
-          width={34}
-          height={34}
-          className={clsx(
-            "pointer-events-none touch-none select-none rounded-full"
-          )}
-        />
+        <h2 className="text-xl font-black">Snippets</h2>
 
         <button
           type="button"
@@ -165,10 +156,7 @@ export default function Dashboard() {
         </button>
       </div>
 
-      <div className="flex w-full flex-col gap-3">
-        <h2 className="text-xl font-black">Snippets</h2>
-        {getContent()}
-      </div>
+      {getContent()}
     </section>
   );
 }
