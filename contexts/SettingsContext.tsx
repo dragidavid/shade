@@ -1,4 +1,6 @@
-import { createContext, FC, ReactNode, useContext, useState } from "react";
+import { createContext, useContext, useState } from "react";
+
+import type { FC, ReactNode } from "react";
 
 import {
   SUPPORTED_LANGUAGES,
@@ -47,7 +49,7 @@ const SettingsProvider: FC<SettingsProviderProps> = ({ children }) => {
   );
   const [lineNumbers, setLineNumbers] = useState<boolean>(true);
   const [padding, setPadding] = useState<ChoiceDefinition>(
-    SUPPORTED_PADDING_CHOICES[1]
+    SUPPORTED_PADDING_CHOICES.at(1)!
   );
 
   return (

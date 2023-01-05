@@ -224,7 +224,6 @@ export default function Shade({ yourCode, isInShade }: ShadeProps) {
         <div className="relative z-[4] rounded-xl bg-black/70 p-4">
           {selectedLanguage && (
             <CodeMirror
-              // autoFocus={true}
               editable={exists(editAllowed) && editAllowed}
               value={code}
               onChange={onChange}
