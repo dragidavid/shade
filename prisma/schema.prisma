@@ -9,7 +9,7 @@ generator client {
 }
 
 model Account {
-  id                 String  @id @default(cuid())
+  id                 String   @id @default(cuid())
   type               String
   provider           String
   providerAccountId  String
@@ -70,12 +70,12 @@ model VerificationToken {
 }
 
 model Snippet {
-  id        String   @id @default(cuid())
+  id        String    @id @default(cuid())
   title     String?
-  content   String?  @db.Text
-  settings  Json?    @default("{ \"language\": \"typescript\", \"theme\": \"salem\", \"fontStyle\": \"fira_code\", \"lineNumbers\": true, \"padding\": \"md\" }")
-  createdAt DateTime @default(now()) @map(name: "created_at")
-  updatedAt DateTime @default(now()) @map(name: "updated_at")
+  code      String    @default("// Write some code here")
+  settings  Json?     @default("{ \"language\": \"typescript\", \"theme\": \"salem\", \"fontStyle\": \"fira_code\", \"lineNumbers\": true, \"padding\": \"md\" }")
+  createdAt DateTime  @default(now()) @map(name: "created_at")
+  updatedAt DateTime  @default(now()) @map(name: "updated_at")
 
   user      User     @relation(fields: [userId], references: [id])
   userId    String

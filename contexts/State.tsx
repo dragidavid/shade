@@ -3,6 +3,7 @@ import { createContext, useContext, useState } from "react";
 import type { FC, ReactNode } from "react";
 
 import {
+  INITIAL_CODE,
   SUPPORTED_LANGUAGES,
   SUPPORTED_THEMES,
   SUPPORTED_FONT_STYLES,
@@ -40,19 +41,7 @@ type StateProviderProps = {
 };
 
 const StateProvider: FC<StateProviderProps> = ({ children }) => {
-  const [code, setCode] = useState<string>(`interface ShadeProps {
-  yourCode: string;
-  isInShade: boolean;
-}
-
-// Example code
-export default function Shade({ yourCode, isInShade }: ShadeProps) {
-  if (isInShade) {
-    return <h1>{yourCode} is looking sick! 🔥</h1>;
-  }
-
-  return <h1>meh.. 🥱</h1>;
-}`);
+  const [code, setCode] = useState<string>(INITIAL_CODE);
   const [language, setLanguage] = useState<LanguageDefinition>(
     SUPPORTED_LANGUAGES.at(0)!
   );

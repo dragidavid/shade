@@ -37,7 +37,7 @@ export type Settings = {
 export type Snippet = {
   id: string;
   title: string | null;
-  content: string | null;
+  code: string;
   settings: Settings;
   createdAt: Date;
   updatedAt: Date;

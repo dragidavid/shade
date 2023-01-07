@@ -23,11 +23,7 @@ import type {
   Settings,
 } from "lib/types";
 
-interface SettingsProps {
-  settings?: Settings;
-}
-
-export default function Settings({ settings }: SettingsProps) {
+export default function Settings() {
   const [mainDimensions, setMainDimensions] = useState<{
     height: number;
     width: number;

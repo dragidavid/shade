@@ -13,27 +13,18 @@ import { hslToHsla as adjustLightness } from "lib/colors/conversions";
 import { exists } from "lib/exists";
 
 import type { Extension } from "@codemirror/state";
-import type { Snippet } from "lib/types";
 
 interface CodeProps {
-  snippet?: Snippet;
   editAllowed?: boolean;
 }
 
-export default function Code({ snippet, editAllowed }: CodeProps) {
+export default function Code({ editAllowed }: CodeProps) {
   const [selectedLanguage, setSelectedLanguage] = useState<Extension | null>(
     null
   );
 
   const { code, setCode, language, theme, fontStyle, lineNumbers, padding } =
     useStateContext();
-
-  useEffect(() => {
-    if (snippet) {
-      setCode(snippet.content || code);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [snippet]);
 
   useEffect(() => {
     async function loadLanguage() {

@@ -29,11 +29,18 @@ export default function SingleSnippetPage({
   snippet,
   editAllowed,
 }: SingleSnippetPageProps) {
-  const { setLanguage, setTheme, setFontStyle, setLineNumbers, setPadding } =
-    useStateContext();
+  const {
+    setCode,
+    setLanguage,
+    setTheme,
+    setFontStyle,
+    setLineNumbers,
+    setPadding,
+  } = useStateContext();
 
   useEffect(() => {
-    if (exists(snippet) && exists(snippet.settings)) {
+    if (exists(snippet)) {
+      setCode(snippet.code);
       setLanguage(find(SUPPORTED_LANGUAGES, snippet.settings.language));
       setTheme(find(SUPPORTED_THEMES, snippet.settings.theme));
       setFontStyle(find(SUPPORTED_FONT_STYLES, snippet.settings.fontStyle));
@@ -45,7 +52,7 @@ export default function SingleSnippetPage({
 
   return (
     <>
-      <Code snippet={snippet} editAllowed={editAllowed} />
+      <Code editAllowed={editAllowed} />
 
       {editAllowed && <Settings />}
     </>
