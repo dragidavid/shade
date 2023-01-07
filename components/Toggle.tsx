@@ -2,17 +2,22 @@ import { memo } from "react";
 import clsx from "clsx";
 import { Switch } from "@headlessui/react";
 
+import { useStateContext } from "contexts/State";
+
 interface ToggleProps {
-  initialValue: boolean;
-  setValue: (_: boolean) => void;
+  type: "lineNumbers";
 }
 
-export default memo(function Toggle({ initialValue, setValue }: ToggleProps) {
+export default memo(function Toggle({ type }: ToggleProps) {
+  const { state, setState } = useStateContext();
+
   return (
     <div className="flex h-[34px] items-center">
       <Switch
-        checked={initialValue}
-        onChange={setValue}
+        checked={state[type]}
+        onChange={(value: boolean) =>
+          setState({ ...state, lineNumbers: value })
+        }
         className={clsx(
           "flex h-5 w-9 cursor-pointer rounded-full p-1",
           "transition-colors duration-200 ease-in-out",

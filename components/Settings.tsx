@@ -16,13 +16,6 @@ import Select from "components/Select";
 import Toggle from "components/Toggle";
 import Choices from "components/Choices";
 
-import type {
-  FontDefinition,
-  LanguageDefinition,
-  ThemeDefinition,
-  Settings,
-} from "lib/types";
-
 export default function Settings() {
   const [mainDimensions, setMainDimensions] = useState<{
     height: number;
@@ -35,18 +28,7 @@ export default function Settings() {
     bottom: number;
   }>({ top: 0, left: 0, right: 0, bottom: 0 });
 
-  const {
-    language,
-    setLanguage,
-    theme,
-    setTheme,
-    fontStyle,
-    setFontStyle,
-    lineNumbers,
-    setLineNumbers,
-    padding,
-    setPadding,
-  } = useStateContext();
+  const { state, setState } = useStateContext();
   const dragControls = useDragControls();
   const animationControls = useAnimationControls();
 
@@ -142,54 +124,23 @@ export default function Settings() {
       >
         <div>
           <label htmlFor="language">Language</label>
-          <Select
-            type="language"
-            initialValue={language}
-            setValue={
-              setLanguage as (
-                _: LanguageDefinition | ThemeDefinition | FontDefinition
-              ) => void
-            }
-            options={SUPPORTED_LANGUAGES}
-          />
+          <Select type="language" options={SUPPORTED_LANGUAGES} />
         </div>
         <div>
           <label htmlFor="theme">Theme</label>
-          <Select
-            type="theme"
-            initialValue={theme}
-            setValue={
-              setTheme as (
-                _: LanguageDefinition | ThemeDefinition | FontDefinition
-              ) => void
-            }
-            options={SUPPORTED_THEMES}
-          />
+          <Select type="theme" options={SUPPORTED_THEMES} />
         </div>
         <div>
           <label htmlFor="font">Font</label>
-          <Select
-            type="font"
-            initialValue={fontStyle}
-            setValue={
-              setFontStyle as (
-                _: LanguageDefinition | ThemeDefinition | FontDefinition
-              ) => void
-            }
-            options={SUPPORTED_FONT_STYLES}
-          />
+          <Select type="fontStyle" options={SUPPORTED_FONT_STYLES} />
         </div>
         <div>
           <label htmlFor="lineNumbers">Line numbers</label>
-          <Toggle initialValue={lineNumbers} setValue={setLineNumbers} />
+          <Toggle type="lineNumbers" />
         </div>
         <div>
           <label htmlFor="padding">Padding</label>
-          <Choices
-            initialValue={padding}
-            setValue={setPadding}
-            choices={SUPPORTED_PADDING_CHOICES}
-          />
+          <Choices type="padding" choices={SUPPORTED_PADDING_CHOICES} />
         </div>
       </div>
     </motion.div>

@@ -23,21 +23,20 @@ export default function Code({ editAllowed }: CodeProps) {
     null
   );
 
-  const { code, setCode, language, theme, fontStyle, lineNumbers, padding } =
-    useStateContext();
+  const { state, setState } = useStateContext();
 
   useEffect(() => {
     async function loadLanguage() {
-      const lang = await language.extension();
+      const lang = await state.language.extension();
 
       setSelectedLanguage(lang);
     }
 
     loadLanguage();
-  }, [language]);
+  }, [state.language]);
 
   const onChange = useCallback((value: string) => {
-    setCode(value);
+    setState({ ...state, code: value });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -62,18 +61,18 @@ export default function Code({ editAllowed }: CodeProps) {
 
   const customFontStyle = EditorView.theme({
     ".cm-content *": {
-      fontFamily: fontStyle.variable,
+      fontFamily: state.fontStyle.variable,
       fontVariantLigatures: "normal",
     },
     ".cm-gutters": {
-      fontFamily: fontStyle.variable,
+      fontFamily: state.fontStyle.variable,
       fontVariantLigatures: "normal",
     },
   });
 
   const lineWrapping = EditorView.lineWrapping;
 
-  const c = theme.generatedColors;
+  const c = state.theme.generatedColors;
 
   const editorTheme = createTheme({
     theme: "dark",
@@ -177,9 +176,9 @@ export default function Code({ editAllowed }: CodeProps) {
       layout
       className={clsx(
         "relative z-0 w-auto min-w-[512px] max-w-5xl",
-        padding.class,
+        state.padding.class,
         "bg-gradient-to-br",
-        theme.class,
+        state.theme.class,
         "transition-all duration-200 ease-in-out"
       )}
     >
@@ -197,7 +196,7 @@ export default function Code({ editAllowed }: CodeProps) {
             className={clsx(
               "absolute inset-0 z-[3] rounded-xl",
               "bg-gradient-to-br",
-              theme.class
+              state.theme.class
             )}
           />
         </div>
@@ -205,7 +204,7 @@ export default function Code({ editAllowed }: CodeProps) {
           {selectedLanguage && (
             <CodeMirror
               editable={exists(editAllowed) && editAllowed}
-              value={code}
+              value={state.code}
               onChange={onChange}
               extensions={[
                 selectedLanguage,
@@ -214,7 +213,7 @@ export default function Code({ editAllowed }: CodeProps) {
                 lineWrapping,
               ]}
               basicSetup={{
-                lineNumbers: lineNumbers,
+                lineNumbers: state.lineNumbers,
                 foldGutter: false,
                 autocompletion: false,
                 indentOnInput: false,

@@ -3,6 +3,8 @@ import clsx from "clsx";
 import { Listbox, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 
+import { useStateContext } from "contexts/State";
+
 import type {
   LanguageDefinition,
   ThemeDefinition,
@@ -18,25 +20,25 @@ function ThemeBubble({ color }: { color: string }) {
 }
 
 interface SelectProps<T> {
-  type: "language" | "theme" | "font";
-  initialValue: T;
-  setValue: (_: T) => void;
+  type: "language" | "theme" | "fontStyle";
   options: T[];
 }
 
 export default memo(function Select<
   T extends LanguageDefinition | ThemeDefinition | FontDefinition
->({ type, initialValue, setValue, options }: SelectProps<T>) {
+>({ type, options }: SelectProps<T>) {
+  const { state, setState } = useStateContext();
+
   const getInitialValue = (type: string) => {
     switch (type) {
       case "language":
-        return <span>{(initialValue as LanguageDefinition).label}</span>;
+        return <span>{state.language.label}</span>;
       case "theme":
-        return <ThemeBubble color={(initialValue as ThemeDefinition).class} />;
-      case "font":
+        return <ThemeBubble color={state.theme.class} />;
+      case "fontStyle":
         return (
-          <span className={clsx((initialValue as FontDefinition).class)}>
-            {(initialValue as FontDefinition).label}
+          <span className={clsx(state.fontStyle.class)}>
+            {state.fontStyle.label}
           </span>
         );
 
@@ -65,7 +67,7 @@ export default memo(function Select<
             </span>
           </>
         );
-      case "font":
+      case "fontStyle":
         return (
           <span
             className={clsx(
@@ -82,7 +84,10 @@ export default memo(function Select<
   };
 
   return (
-    <Listbox value={initialValue} onChange={setValue}>
+    <Listbox
+      value={state[type]}
+      onChange={(value: T) => setState({ ...state, [type]: value })}
+    >
       <div className="relative">
         <Listbox.Button
           className={clsx(
@@ -91,7 +96,7 @@ export default memo(function Select<
             "transition-colors duration-200 ease-in-out",
             "hover:cursor-pointer hover:bg-white/20 focus:outline-none",
             type === "language" && "w-32",
-            type === "font" && "w-40"
+            type === "fontStyle" && "w-40"
           )}
         >
           {getInitialValue(type)}

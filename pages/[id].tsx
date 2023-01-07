@@ -29,23 +29,18 @@ export default function SingleSnippetPage({
   snippet,
   editAllowed,
 }: SingleSnippetPageProps) {
-  const {
-    setCode,
-    setLanguage,
-    setTheme,
-    setFontStyle,
-    setLineNumbers,
-    setPadding,
-  } = useStateContext();
+  const { setState } = useStateContext();
 
   useEffect(() => {
     if (exists(snippet)) {
-      setCode(snippet.code);
-      setLanguage(find(SUPPORTED_LANGUAGES, snippet.settings.language));
-      setTheme(find(SUPPORTED_THEMES, snippet.settings.theme));
-      setFontStyle(find(SUPPORTED_FONT_STYLES, snippet.settings.fontStyle));
-      setLineNumbers(snippet.settings.lineNumbers);
-      setPadding(find(SUPPORTED_PADDING_CHOICES, snippet.settings.padding));
+      setState({
+        code: snippet.code,
+        language: find(SUPPORTED_LANGUAGES, snippet.settings.language),
+        theme: find(SUPPORTED_THEMES, snippet.settings.theme),
+        fontStyle: find(SUPPORTED_FONT_STYLES, snippet.settings.fontStyle),
+        lineNumbers: snippet.settings.lineNumbers,
+        padding: find(SUPPORTED_PADDING_CHOICES, snippet.settings.padding),
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [snippet]);
