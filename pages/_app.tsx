@@ -13,7 +13,7 @@ import {
 
 import Top from "components/Top";
 
-import { SettingsProvider } from "contexts/SettingsContext";
+import { StateProvider } from "contexts/State";
 
 import type { AppProps } from "next/app";
 
@@ -62,7 +62,7 @@ export default function App({
 }: AppProps) {
   return (
     <SessionProvider session={session}>
-      <SettingsProvider>
+      <StateProvider>
         <div
           className={clsx(
             inter.variable,
@@ -86,7 +86,7 @@ export default function App({
             <Component {...pageProps} />
           </motion.div>
         </div>
-      </SettingsProvider>
+      </StateProvider>
     </SessionProvider>
   );
 }

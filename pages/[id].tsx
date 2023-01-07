@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import Code from "components/Code";
 import Settings from "components/Settings";
 
-import { useSettingsContext } from "contexts/SettingsContext";
+import { useStateContext } from "contexts/State";
 
 import {
   SUPPORTED_LANGUAGES,
@@ -30,7 +30,7 @@ export default function SingleSnippetPage({
   editAllowed,
 }: SingleSnippetPageProps) {
   const { setLanguage, setTheme, setFontStyle, setLineNumbers, setPadding } =
-    useSettingsContext();
+    useStateContext();
 
   useEffect(() => {
     if (exists(snippet) && exists(snippet.settings)) {

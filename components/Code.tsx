@@ -7,7 +7,7 @@ import { EditorView } from "@codemirror/view";
 import { createTheme } from "@uiw/codemirror-themes";
 import { tags as t } from "@lezer/highlight";
 
-import { useSettingsContext } from "contexts/SettingsContext";
+import { useStateContext } from "contexts/State";
 
 import { hslToHsla as adjustLightness } from "lib/colors/conversions";
 import { exists } from "lib/exists";
@@ -24,31 +24,15 @@ export default function Code({ snippet, editAllowed }: CodeProps) {
   const [selectedLanguage, setSelectedLanguage] = useState<Extension | null>(
     null
   );
-  const [code, setCode] = useState<string>(`interface ShadeProps {
-  yourCode: string;
-  isInShade: boolean;
-}
 
-// Example code
-export default function Shade({ yourCode, isInShade }: ShadeProps) {
-  if (isInShade) {
-    return <h1>{yourCode} is looking sick! 🔥</h1>;
-  }
-
-  return <h1>meh.. 🥱</h1>;
-}`);
-
-  const { language, theme, fontStyle, lineNumbers, padding } =
-    useSettingsContext();
-
-  const onChange = useCallback((value: string) => {
-    setCode(value);
-  }, []);
+  const { code, setCode, language, theme, fontStyle, lineNumbers, padding } =
+    useStateContext();
 
   useEffect(() => {
     if (snippet) {
-      setCode(snippet.content || "");
+      setCode(snippet.content || code);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [snippet]);
 
   useEffect(() => {
@@ -60,6 +44,11 @@ export default function Shade({ yourCode, isInShade }: ShadeProps) {
 
     loadLanguage();
   }, [language]);
+
+  const onChange = useCallback((value: string) => {
+    setCode(value);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const customStyles = EditorView.baseTheme({
     "&.cm-editor": {

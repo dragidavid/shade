@@ -3,7 +3,7 @@ import clsx from "clsx";
 import { motion, useDragControls, useAnimationControls } from "framer-motion";
 import { DragHandleDots2Icon } from "@radix-ui/react-icons";
 
-import { useSettingsContext } from "contexts/SettingsContext";
+import { useStateContext } from "contexts/State";
 
 import {
   SUPPORTED_LANGUAGES,
@@ -50,7 +50,7 @@ export default function Settings({ settings }: SettingsProps) {
     setLineNumbers,
     padding,
     setPadding,
-  } = useSettingsContext();
+  } = useStateContext();
   const dragControls = useDragControls();
   const animationControls = useAnimationControls();
 
