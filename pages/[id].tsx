@@ -1,55 +1,28 @@
-import { useEffect } from "react";
-
 import Code from "components/Code";
+import Save from "components/Save";
 import Settings from "components/Settings";
-
-import { useStateContext } from "contexts/State";
-
-import {
-  SUPPORTED_LANGUAGES,
-  SUPPORTED_THEMES,
-  SUPPORTED_FONT_STYLES,
-  SUPPORTED_PADDING_CHOICES,
-} from "lib/values";
 
 import prisma from "lib/prisma";
 import { getServerSession } from "lib/auth";
 import { exists } from "lib/exists";
-import { find } from "lib/find";
 
 import type { GetServerSidePropsContext } from "next";
 import type { Snippet } from "lib/types";
 
 interface SingleSnippetPageProps {
-  snippet: Snippet;
   editAllowed: boolean;
 }
 
 export default function SingleSnippetPage({
-  snippet,
   editAllowed,
 }: SingleSnippetPageProps) {
-  const { setState } = useStateContext();
-
-  useEffect(() => {
-    if (exists(snippet)) {
-      setState({
-        code: snippet.code,
-        language: find(SUPPORTED_LANGUAGES, snippet.settings.language),
-        theme: find(SUPPORTED_THEMES, snippet.settings.theme),
-        fontStyle: find(SUPPORTED_FONT_STYLES, snippet.settings.fontStyle),
-        lineNumbers: snippet.settings.lineNumbers,
-        padding: find(SUPPORTED_PADDING_CHOICES, snippet.settings.padding),
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [snippet]);
-
   return (
     <>
       <Code editAllowed={editAllowed} />
 
       {editAllowed && <Settings />}
+
+      <Save />
     </>
   );
 }
@@ -81,7 +54,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   return {
     props: {
-      snippet: JSON.parse(JSON.stringify(snippet)),
+      snippet: JSON.parse(JSON.stringify(snippet)) as Snippet,
       editAllowed,
     },
   };

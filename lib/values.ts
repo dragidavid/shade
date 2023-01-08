@@ -15,19 +15,7 @@ const importLegacy = () =>
     };
   });
 
-export const INITIAL_CODE = `interface ShadeProps {
-  yourCode: string;
-  isInShade: boolean;
-}
-
-// Example code
-export default function Shade({ yourCode, isInShade }: ShadeProps) {
-  if (isInShade) {
-    return <h1>{yourCode} is looking sick! 🔥</h1>;
-  }
-
-  return <h1>meh.. 🥱</h1>;
-}`;
+export const INITIAL_CODE = `// Write some code here`;
 
 export const SUPPORTED_LANGUAGES: LanguageDefinition[] = [
   {

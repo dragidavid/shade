@@ -10,23 +10,11 @@ import {
   SUPPORTED_PADDING_CHOICES,
 } from "lib/values";
 
-import type {
-  LanguageDefinition,
-  ThemeDefinition,
-  FontDefinition,
-  ChoiceDefinition,
-} from "lib/types";
+import type { State } from "lib/types";
 
 interface StateContextProps {
-  state: {
-    code: string;
-    language: LanguageDefinition;
-    theme: ThemeDefinition;
-    fontStyle: FontDefinition;
-    lineNumbers: boolean;
-    padding: ChoiceDefinition;
-  };
-  setState: (_: StateContextProps["state"]) => void;
+  state: State;
+  setState: (_: State) => void;
 }
 
 const StateContext = createContext<StateContextProps>({} as StateContextProps);
@@ -34,11 +22,12 @@ const StateContext = createContext<StateContextProps>({} as StateContextProps);
 const useStateContext = () => useContext(StateContext);
 
 type StateProviderProps = {
+  value: StateContextProps["state"] | null;
   children: ReactNode;
 };
 
-const StateProvider: FC<StateProviderProps> = ({ children }) => {
-  const [state, setState] = useState<StateContextProps["state"]>({
+const StateProvider: FC<StateProviderProps> = ({ value, children }) => {
+  const [state, setState] = useState<State>({
     code: INITIAL_CODE,
     language: SUPPORTED_LANGUAGES.at(0)!,
     theme: SUPPORTED_THEMES.at(-1)!,
@@ -50,7 +39,7 @@ const StateProvider: FC<StateProviderProps> = ({ children }) => {
   return (
     <StateContext.Provider
       value={{
-        state,
+        state: value ?? state,
         setState,
       }}
     >

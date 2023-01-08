@@ -15,7 +15,18 @@ import Top from "components/Top";
 
 import { StateProvider } from "contexts/State";
 
+import {
+  SUPPORTED_LANGUAGES,
+  SUPPORTED_THEMES,
+  SUPPORTED_FONT_STYLES,
+  SUPPORTED_PADDING_CHOICES,
+} from "lib/values";
+
+import { find } from "lib/find";
+import { exists } from "lib/exists";
+
 import type { AppProps } from "next/app";
+import type { State } from "lib/types";
 
 import "styles/globals.css";
 
@@ -60,9 +71,29 @@ export default function App({
   Component,
   pageProps: { session, ...pageProps },
 }: AppProps) {
+  const initialState = exists(pageProps.snippet)
+    ? {
+        code: pageProps.snippet.code,
+        language: find(
+          SUPPORTED_LANGUAGES,
+          pageProps.snippet.settings.language
+        ),
+        theme: find(SUPPORTED_THEMES, pageProps.snippet.settings.theme),
+        fontStyle: find(
+          SUPPORTED_FONT_STYLES,
+          pageProps.snippet.settings.fontStyle
+        ),
+        lineNumbers: pageProps.snippet.settings.lineNumbers,
+        padding: find(
+          SUPPORTED_PADDING_CHOICES,
+          pageProps.snippet.settings.padding
+        ),
+      }
+    : null;
+
   return (
     <SessionProvider session={session}>
-      <StateProvider>
+      <StateProvider value={initialState}>
         <div
           className={clsx(
             inter.variable,
@@ -80,7 +111,7 @@ export default function App({
             id="main"
             animate={{ opacity: 1 }}
             initial={{ opacity: 0 }}
-            transition={{ duration: 0.2, delay: 0.3 }}
+            transition={{ duration: 0.2 }}
             className={clsx("flex flex-col items-center justify-center")}
           >
             <Component {...pageProps} />
