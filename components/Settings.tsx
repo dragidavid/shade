@@ -19,7 +19,7 @@ export default function Settings() {
     height: number;
     width: number;
   }>({ height: 0, width: 0 });
-  const [constraints, setConstraints] = useState<{
+  const [dragConstraints, setDragConstraints] = useState<{
     top: number;
     left: number;
     right: number;
@@ -62,8 +62,8 @@ export default function Settings() {
   useEffect(() => {
     const settings = document.getElementById("settings");
 
-    setConstraints({
-      top: -settings!.offsetTop + 24,
+    setDragConstraints({
+      top: -settings!.offsetTop + 88,
       left:
         -mainDimensions.width +
         settings!.offsetWidth +
@@ -89,7 +89,7 @@ export default function Settings() {
       dragListener={false}
       dragMomentum={false}
       dragControls={dragControls}
-      dragConstraints={constraints}
+      dragConstraints={dragConstraints}
       animate={animationControls}
       className={clsx(
         "fixed bottom-32 z-10 rounded-xl p-5 text-xs",

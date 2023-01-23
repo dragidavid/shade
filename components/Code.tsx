@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import clsx from "clsx";
 import { motion } from "framer-motion";
 
@@ -34,11 +34,6 @@ export default function Code({ editAllowed }: CodeProps) {
 
     loadLanguage();
   }, [state.language]);
-
-  const onChange = useCallback((value: string) => {
-    setState({ ...state, code: value });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const customStyles = EditorView.baseTheme({
     "&.cm-editor": {
@@ -205,7 +200,7 @@ export default function Code({ editAllowed }: CodeProps) {
             <CodeMirror
               editable={exists(editAllowed) && editAllowed}
               value={state.code}
-              onChange={onChange}
+              onChange={(value) => setState({ ...state, code: value })}
               extensions={[
                 selectedLanguage,
                 customStyles,
