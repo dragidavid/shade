@@ -3,8 +3,6 @@ import clsx from "clsx";
 import { motion, useDragControls, useAnimationControls } from "framer-motion";
 import { DragHandleDots2Icon } from "@radix-ui/react-icons";
 
-import { useStateContext } from "contexts/State";
-
 import {
   SUPPORTED_LANGUAGES,
   SUPPORTED_THEMES,
@@ -27,8 +25,6 @@ export default function Settings() {
     right: number;
     bottom: number;
   }>({ top: 0, left: 0, right: 0, bottom: 0 });
-
-  const { state, setState } = useStateContext();
   const dragControls = useDragControls();
   const animationControls = useAnimationControls();
 

@@ -71,7 +71,7 @@ export default function App({
   Component,
   pageProps: { session, ...pageProps },
 }: AppProps) {
-  const initialState = exists(pageProps.snippet)
+  const initialState: State | null = exists(pageProps.snippet)
     ? {
         code: pageProps.snippet.code,
         language: find(
@@ -93,7 +93,7 @@ export default function App({
 
   return (
     <SessionProvider session={session}>
-      <StateProvider value={initialState}>
+      <StateProvider initialState={initialState}>
         <div
           className={clsx(
             inter.variable,
