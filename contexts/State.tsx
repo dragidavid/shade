@@ -1,7 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
-import type { FC, ReactNode } from "react";
-
 import {
   INITIAL_CODE,
   SUPPORTED_LANGUAGES,
@@ -10,6 +8,9 @@ import {
   SUPPORTED_PADDING_CHOICES,
 } from "lib/values";
 
+import { exists } from "lib/exists";
+
+import type { FC, ReactNode } from "react";
 import type { State } from "lib/types";
 
 interface StateContextProps {
@@ -27,21 +28,25 @@ type StateProviderProps = {
 };
 
 const StateProvider: FC<StateProviderProps> = ({ initialState, children }) => {
-  const [state, setState] = useState<State>(
-    initialState ?? {
-      code: INITIAL_CODE,
-      language: SUPPORTED_LANGUAGES.at(0)!,
-      theme: SUPPORTED_THEMES.at(-1)!,
-      fontStyle: SUPPORTED_FONT_STYLES.at(0)!,
-      lineNumbers: true,
-      padding: SUPPORTED_PADDING_CHOICES.at(1)!,
+  const [state, setState] = useState<State>({
+    code: INITIAL_CODE,
+    language: SUPPORTED_LANGUAGES.at(0)!,
+    theme: SUPPORTED_THEMES.at(-1)!,
+    fontStyle: SUPPORTED_FONT_STYLES.at(0)!,
+    lineNumbers: true,
+    padding: SUPPORTED_PADDING_CHOICES.at(1)!,
+  });
+
+  useEffect(() => {
+    if (exists(initialState)) {
+      setState(initialState);
     }
-  );
+  }, [initialState]);
 
   return (
     <StateContext.Provider
       value={{
-        state: state,
+        state,
         setState,
       }}
     >

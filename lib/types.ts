@@ -27,11 +27,11 @@ export type ChoiceDefinition = {
 };
 
 export type Settings = {
-  language: LanguageDefinition;
-  theme: ThemeDefinition;
-  fontStyle: FontDefinition;
+  language: string;
+  theme: string;
+  fontStyle: string;
   lineNumbers: boolean;
-  padding: ChoiceDefinition;
+  padding: string;
 };
 
 export type Snippet = {
@@ -46,4 +46,9 @@ export type Snippet = {
 
 export type State = {
   code: string;
-} & Settings;
+  language: LanguageDefinition;
+  theme: ThemeDefinition;
+  fontStyle: FontDefinition;
+  lineNumbers: boolean;
+  padding: ChoiceDefinition;
+};
