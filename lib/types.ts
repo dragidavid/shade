@@ -54,3 +54,5 @@ export type State = {
   lineNumbers: boolean;
   padding: ChoiceDefinition;
 };
+
+export type SaveState = "IDLE" | "PENDING" | "SUCCESS" | "ERROR";
