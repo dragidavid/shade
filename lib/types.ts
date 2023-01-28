@@ -45,6 +45,8 @@ export type Snippet = {
 };
 
 export type State = {
+  id: string | null;
+  title: string | null;
   code: string;
   language: LanguageDefinition;
   theme: ThemeDefinition;

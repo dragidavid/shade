@@ -1,12 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-
-import {
-  INITIAL_CODE,
-  SUPPORTED_LANGUAGES,
-  SUPPORTED_THEMES,
-  SUPPORTED_FONT_STYLES,
-  SUPPORTED_PADDING_CHOICES,
-} from "lib/values";
+import isEqual from "lodash.isequal";
 
 import { exists } from "lib/exists";
 
@@ -16,6 +9,8 @@ import type { State } from "lib/types";
 interface StateContextProps {
   state: State;
   setState: (_: State) => void;
+  saveState: boolean;
+  setSaveState: (_: boolean) => void;
 }
 
 const StateContext = createContext<StateContextProps>({} as StateContextProps);
@@ -23,31 +18,28 @@ const StateContext = createContext<StateContextProps>({} as StateContextProps);
 const useStateContext = () => useContext(StateContext);
 
 type StateProviderProps = {
-  initialState: StateContextProps["state"] | null;
+  initialState: StateContextProps["state"];
   children: ReactNode;
 };
 
 const StateProvider: FC<StateProviderProps> = ({ initialState, children }) => {
-  const [state, setState] = useState<State>({
-    code: INITIAL_CODE,
-    language: SUPPORTED_LANGUAGES.at(0)!,
-    theme: SUPPORTED_THEMES.at(-1)!,
-    fontStyle: SUPPORTED_FONT_STYLES.at(0)!,
-    lineNumbers: true,
-    padding: SUPPORTED_PADDING_CHOICES.at(1)!,
-  });
+  const [state, setState] = useState<State>(initialState);
+  const [saveState, setSaveState] = useState<boolean>(false);
 
   useEffect(() => {
-    if (exists(initialState)) {
+    if (!isEqual(state, initialState) && exists(initialState.id)) {
       setState(initialState);
     }
-  }, [initialState]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialState.id]);
 
   return (
     <StateContext.Provider
       value={{
         state,
         setState,
+        saveState,
+        setSaveState,
       }}
     >
       {children}

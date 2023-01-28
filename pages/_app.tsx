@@ -16,6 +16,7 @@ import Top from "components/Top";
 import { StateProvider } from "contexts/State";
 
 import {
+  INITIAL_CODE,
   SUPPORTED_LANGUAGES,
   SUPPORTED_THEMES,
   SUPPORTED_FONT_STYLES,
@@ -71,8 +72,10 @@ export default function App({
   Component,
   pageProps: { session, ...pageProps },
 }: AppProps) {
-  const initialState: State | null = exists(pageProps.snippet)
+  const initialState: State = exists(pageProps.snippet)
     ? {
+        id: pageProps.snippet.id,
+        title: pageProps.snippet.title,
         code: pageProps.snippet.code,
         language: find(
           SUPPORTED_LANGUAGES,
@@ -89,7 +92,16 @@ export default function App({
           pageProps.snippet.settings.padding
         ),
       }
-    : null;
+    : {
+        id: null,
+        title: null,
+        code: INITIAL_CODE,
+        language: SUPPORTED_LANGUAGES.at(0)!,
+        theme: SUPPORTED_THEMES.at(-1)!,
+        fontStyle: SUPPORTED_FONT_STYLES.at(0)!,
+        lineNumbers: true,
+        padding: SUPPORTED_PADDING_CHOICES.at(1)!,
+      };
 
   return (
     <SessionProvider session={session}>
