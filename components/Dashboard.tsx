@@ -2,8 +2,8 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import useSWR from "swr";
-import { useSession } from "next-auth/react";
 import useSWRMutation from "swr/mutation";
+import { useSession } from "next-auth/react";
 import clsx from "clsx";
 import {
   PlusIcon,
@@ -32,6 +32,7 @@ export default function Dashboard() {
   const [buttonIcon, setButtonIcon] = useState<JSX.Element>(
     <PlusIcon className="h-3 w-3" aria-hidden="true" />
   );
+
   const router = useRouter();
   const { data: session, status } = useSession();
 
