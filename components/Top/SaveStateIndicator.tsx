@@ -62,7 +62,7 @@ export default function SaveStateIndicator() {
   return (
     <div className="absolute left-1/2 -translate-x-1/2">
       <AnimatePresence mode="wait">
-        {showMessage && <Wrapper content={content} key="end" />}
+        {showMessage && <Wrapper content={content!} key="end" />}
         {saveState === "PENDING" && !showMessage && (
           <Wrapper content={CONTENT["PENDING"]} key="pending" />
         )}
