@@ -70,9 +70,9 @@ model VerificationToken {
 }
 
 model Snippet {
-  id        String    @id @default(cuid())
+  id        String    @id       @default(cuid())
   title     String?
-  code      String    @default("// Write some code here")
+  code      String    @db.Text  @default("// Write some code here")
   settings  Json?     @default("{ \"language\": \"typescript\", \"theme\": \"salem\", \"fontStyle\": \"fira_code\", \"lineNumbers\": true, \"padding\": \"md\" }")
   createdAt DateTime  @default(now()) @map(name: "created_at")
   updatedAt DateTime  @default(now()) @map(name: "updated_at")

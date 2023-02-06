@@ -1,4 +1,5 @@
-import { useCallback, useEffect } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useCallback, useEffect, useRef } from "react";
 import useSWRMutation from "swr/mutation";
 import debounce from "lodash.debounce";
 import isEqual from "lodash.isequal";
@@ -8,7 +9,8 @@ import { useStateContext } from "contexts/State";
 import { exists } from "lib/exists";
 
 export default function Save() {
-  const { state, setSaveState } = useStateContext();
+  const { state, saveState, setSaveState } = useStateContext();
+  const prevStateRef = useRef(state);
 
   const { trigger } = useSWRMutation(
     "/api/snippets/update",
@@ -35,11 +37,10 @@ export default function Save() {
     }
   );
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedSave = useCallback(
     debounce(async (changes) => {
       if (!isEqual(state, changes)) {
-        setSaveState("PENDING");
+        if (saveState !== "PENDING") setSaveState("PENDING");
 
         await trigger(changes);
       } else {
@@ -49,14 +50,34 @@ export default function Save() {
     [state.id]
   );
 
+  /**
+   * 1. If the save was successful, update the previous state to the current state
+   * 2. Reset the save state to IDLE
+   */
   useEffect(() => {
-    if (exists(state.id)) {
+    if (saveState === "SUCCESS") {
+      prevStateRef.current = state;
+
+      setSaveState("IDLE");
+    }
+  }, [state, saveState, setSaveState]);
+
+  /**
+   * This should only run if the state id changes which means we're on a new snippet
+   */
+  useEffect(() => {
+    prevStateRef.current = state;
+
+    setSaveState("IDLE");
+  }, [state.id]);
+
+  useEffect(() => {
+    if (exists(state.id) && !isEqual(prevStateRef.current, state)) {
       setSaveState("PENDING");
 
       debouncedSave(state);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state, debouncedSave]);
+  }, [state, setSaveState, debouncedSave]);
 
   return null;
 }

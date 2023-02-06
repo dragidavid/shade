@@ -55,4 +55,4 @@ export type State = {
   padding: ChoiceDefinition;
 };
 
-export type SaveState = "IDLE" | "PENDING" | "SUCCESS" | "ERROR";
+export type SaveState = "SUCCESS" | "ERROR" | "PENDING" | "IDLE";
