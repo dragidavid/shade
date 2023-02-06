@@ -4,14 +4,16 @@ import { useSession } from "next-auth/react";
 import clsx from "clsx";
 import { ArrowLeftIcon } from "@radix-ui/react-icons";
 
+import Logo from "components/Top/Logo";
+
 import { exists } from "lib/exists";
 
-export default function DashboardLink() {
+export default function HomeLink() {
   const { pathname } = useRouter();
   const { data: session, status } = useSession();
 
   if (pathname === "/" || !exists(session) || status === "unauthenticated")
-    return <div />;
+    return <Logo />;
 
   return (
     <div>
