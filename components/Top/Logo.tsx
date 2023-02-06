@@ -42,10 +42,7 @@ export default function Logo() {
     >
       <span>sha</span>
       <motion.span variants={movingSection}>
-        <motion.span
-          variants={invisibleSection}
-          className="w-max text-white/60"
-        >
+        <motion.span variants={invisibleSection} className=" text-white/60">
           re your co
         </motion.span>
         de.

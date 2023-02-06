@@ -8,7 +8,7 @@ export default function Top() {
   return (
     <div
       className={clsx(
-        "relative flex h-16 items-center justify-between px-[18px]",
+        "sticky top-0 z-50 flex h-16 items-center justify-between px-[18px]",
         "border-b-[1px] border-white/20 bg-black text-white/70 shadow-xl"
       )}
     >

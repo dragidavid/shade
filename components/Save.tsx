@@ -10,7 +10,8 @@ import { exists } from "lib/exists";
 
 export default function Save() {
   const { state, saveState, setSaveState } = useStateContext();
-  const prevStateRef = useRef(state);
+  const prevStateRef = useRef<typeof state | null>(null);
+  const shouldUpdate = useRef(false);
 
   const { trigger } = useSWRMutation(
     "/api/snippets/update",
@@ -47,20 +48,22 @@ export default function Save() {
         setSaveState("IDLE");
       }
     }, 3000),
-    [state.id]
+    [state.id, shouldUpdate.current]
   );
 
   /**
    * 1. If the save was successful, update the previous state to the current state
-   * 2. Reset the save state to IDLE
+   * 2. Flip the shouldUpdate ref so that the debouncedSave function will run
+   * 3. Reset the save state to IDLE
    */
   useEffect(() => {
     if (saveState === "SUCCESS") {
       prevStateRef.current = state;
+      shouldUpdate.current = !shouldUpdate.current;
 
       setSaveState("IDLE");
     }
-  }, [state, saveState, setSaveState]);
+  }, [state, saveState]);
 
   /**
    * This should only run if the state id changes which means we're on a new snippet
@@ -77,7 +80,7 @@ export default function Save() {
 
       debouncedSave(state);
     }
-  }, [state, setSaveState, debouncedSave]);
+  }, [state]);
 
   return null;
 }
