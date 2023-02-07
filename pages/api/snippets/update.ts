@@ -23,8 +23,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     },
   });
 
-  console.log(snippet);
-
   // TODO - capture the error on the client side and display an error message
   if (!exists(snippet.id)) {
     res.status(400).json({ error: "Unable to save changes to this snippet." });

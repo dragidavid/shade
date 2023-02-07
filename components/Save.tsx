@@ -8,10 +8,13 @@ import { useStateContext } from "contexts/State";
 
 import { exists } from "lib/exists";
 
+import type { State } from "lib/types";
+
 export default function Save() {
-  const { state, saveState, setSaveState } = useStateContext();
-  const prevStateRef = useRef<typeof state | null>(null);
+  const prevStateRef = useRef<State | null>(null);
   const shouldUpdate = useRef(false);
+
+  const { state, saveState, setSaveState } = useStateContext();
 
   const { trigger } = useSWRMutation(
     "/api/snippets/update",

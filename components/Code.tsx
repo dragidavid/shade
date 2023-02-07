@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import clsx from "clsx";
 import { motion } from "framer-motion";
 
@@ -23,7 +24,10 @@ export default function Code({ editAllowed }: CodeProps) {
     null
   );
 
+  const { pathname } = useRouter();
   const { state, setState } = useStateContext();
+
+  const isEditable = (exists(editAllowed) && editAllowed) || pathname === "/";
 
   useEffect(() => {
     async function loadLanguage() {
@@ -198,7 +202,7 @@ export default function Code({ editAllowed }: CodeProps) {
         <div className="relative z-[4] rounded-xl bg-black/70 p-4">
           {selectedLanguage && (
             <CodeMirror
-              editable={exists(editAllowed) && editAllowed}
+              editable={isEditable}
               value={state.code}
               onChange={(value) => setState({ ...state, code: value })}
               extensions={[

@@ -31,12 +31,12 @@ const CONTENT = {
 };
 
 export default function SaveStateIndicator() {
-  const { saveState } = useStateContext();
   const [showMessage, setShowMessage] = useState(false);
   const [content, setContent] = useState<JSX.Element | null>(null);
 
   const { pathname } = useRouter();
   const { data: session, status } = useSession();
+  const { saveState } = useStateContext();
 
   useEffect(() => {
     if (saveState === "SUCCESS" || saveState === "ERROR") {
