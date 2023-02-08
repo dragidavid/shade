@@ -78,12 +78,26 @@ export default function Save() {
   }, [state.id]);
 
   useEffect(() => {
+    /**
+     * If the save state is pending and the previous state is equal to the current state,
+     * cancel the debouncedSave function and reset the save state to IDLE
+     */
+    if (saveState === "PENDING" && isEqual(prevStateRef.current, state)) {
+      debouncedSave.cancel();
+
+      setSaveState("IDLE");
+    }
+
+    /**
+     * If the state id exists and the previous state is not equal to the current state,
+     * set the save state to PENDING and run the debouncedSave function
+     */
     if (exists(state.id) && !isEqual(prevStateRef.current, state)) {
       setSaveState("PENDING");
 
       debouncedSave(state);
     }
-  }, [state]);
+  }, [state, saveState]);
 
   return null;
 }
