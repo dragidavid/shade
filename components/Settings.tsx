@@ -3,49 +3,28 @@ import clsx from "clsx";
 import { motion, useDragControls, useAnimationControls } from "framer-motion";
 import { DragHandleDots2Icon } from "@radix-ui/react-icons";
 
-import { useSettingsContext } from "contexts/SettingsContext";
-
 import {
   SUPPORTED_LANGUAGES,
   SUPPORTED_THEMES,
-  SUPPORTED_PADDING_CHOICES,
   SUPPORTED_FONT_STYLES,
+  SUPPORTED_PADDING_CHOICES,
 } from "lib/values";
 
 import Select from "components/Select";
 import Toggle from "components/Toggle";
 import Choices from "components/Choices";
 
-import type {
-  FontDefinition,
-  LanguageDefinition,
-  ThemeDefinition,
-} from "lib/types";
-
 export default function Settings() {
   const [mainDimensions, setMainDimensions] = useState<{
     height: number;
     width: number;
   }>({ height: 0, width: 0 });
-  const [constraints, setConstraints] = useState<{
+  const [dragConstraints, setDragConstraints] = useState<{
     top: number;
     left: number;
     right: number;
     bottom: number;
   }>({ top: 0, left: 0, right: 0, bottom: 0 });
-
-  const {
-    language,
-    setLanguage,
-    theme,
-    setTheme,
-    fontStyle,
-    setFontStyle,
-    lineNumbers,
-    setLineNumbers,
-    padding,
-    setPadding,
-  } = useSettingsContext();
   const dragControls = useDragControls();
   const animationControls = useAnimationControls();
 
@@ -74,6 +53,7 @@ export default function Settings() {
 
     return () => {
       clearTimeout(timeoutId);
+
       window.removeEventListener("resize", handleResize);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -82,8 +62,8 @@ export default function Settings() {
   useEffect(() => {
     const settings = document.getElementById("settings");
 
-    setConstraints({
-      top: -settings!.offsetTop + 24,
+    setDragConstraints({
+      top: -settings!.offsetTop + 88,
       left:
         -mainDimensions.width +
         settings!.offsetWidth +
@@ -103,13 +83,13 @@ export default function Settings() {
   }, [mainDimensions.height, mainDimensions.width]);
 
   return (
-    <motion.section
+    <motion.div
       id="settings"
       drag
       dragListener={false}
       dragMomentum={false}
       dragControls={dragControls}
-      dragConstraints={constraints}
+      dragConstraints={dragConstraints}
       animate={animationControls}
       className={clsx(
         "fixed bottom-32 z-10 rounded-xl p-5 text-xs",
@@ -140,56 +120,25 @@ export default function Settings() {
       >
         <div>
           <label htmlFor="language">Language</label>
-          <Select
-            type="language"
-            initialValue={language}
-            setValue={
-              setLanguage as (
-                _: LanguageDefinition | ThemeDefinition | FontDefinition
-              ) => void
-            }
-            options={SUPPORTED_LANGUAGES}
-          />
+          <Select type="language" options={SUPPORTED_LANGUAGES} />
         </div>
         <div>
           <label htmlFor="theme">Theme</label>
-          <Select
-            type="theme"
-            initialValue={theme}
-            setValue={
-              setTheme as (
-                _: LanguageDefinition | ThemeDefinition | FontDefinition
-              ) => void
-            }
-            options={SUPPORTED_THEMES}
-          />
+          <Select type="theme" options={SUPPORTED_THEMES} />
         </div>
         <div>
           <label htmlFor="font">Font</label>
-          <Select
-            type="font"
-            initialValue={fontStyle}
-            setValue={
-              setFontStyle as (
-                _: LanguageDefinition | ThemeDefinition | FontDefinition
-              ) => void
-            }
-            options={SUPPORTED_FONT_STYLES}
-          />
+          <Select type="fontStyle" options={SUPPORTED_FONT_STYLES} />
         </div>
         <div>
           <label htmlFor="lineNumbers">Line numbers</label>
-          <Toggle initialValue={lineNumbers} setValue={setLineNumbers} />
+          <Toggle type="lineNumbers" />
         </div>
         <div>
           <label htmlFor="padding">Padding</label>
-          <Choices
-            initialValue={padding}
-            setValue={setPadding}
-            choices={SUPPORTED_PADDING_CHOICES}
-          />
+          <Choices type="padding" choices={SUPPORTED_PADDING_CHOICES} />
         </div>
       </div>
-    </motion.section>
+    </motion.div>
   );
 }

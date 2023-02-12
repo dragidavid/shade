@@ -1,4 +1,5 @@
-import { useCallback, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import clsx from "clsx";
 import { motion } from "framer-motion";
 
@@ -7,46 +8,36 @@ import { EditorView } from "@codemirror/view";
 import { createTheme } from "@uiw/codemirror-themes";
 import { tags as t } from "@lezer/highlight";
 
-import { useSettingsContext } from "contexts/SettingsContext";
+import { useStateContext } from "contexts/State";
 
 import { hslToHsla as adjustLightness } from "lib/colors/conversions";
+import { exists } from "lib/exists";
 
 import type { Extension } from "@codemirror/state";
 
-export default function Code() {
+interface CodeProps {
+  editAllowed?: boolean;
+}
+
+export default function Code({ editAllowed }: CodeProps) {
   const [selectedLanguage, setSelectedLanguage] = useState<Extension | null>(
     null
   );
-  const [code, setCode] = useState<string>(`interface ShadeProps {
-  yourCode: string;
-  isInShade: boolean;
-}
 
-// Example code
-export default function Shade({ yourCode, isInShade }: ShadeProps) {
-  if (isInShade) {
-    return <h1>{yourCode} is looking sick! 🔥</h1>;
-  }
+  const { pathname } = useRouter();
+  const { state, setState } = useStateContext();
 
-  return <h1>meh.. 🥱</h1>;
-}`);
-
-  const { language, theme, fontStyle, lineNumbers, padding } =
-    useSettingsContext();
-
-  const onChange = useCallback((value: string) => {
-    setCode(value);
-  }, []);
+  const isEditable = (exists(editAllowed) && editAllowed) || pathname === "/";
 
   useEffect(() => {
     async function loadLanguage() {
-      const lang = await language.extension();
+      const lang = await state.language.extension();
 
       setSelectedLanguage(lang);
     }
 
     loadLanguage();
-  }, [language]);
+  }, [state.language]);
 
   const customStyles = EditorView.baseTheme({
     "&.cm-editor": {
@@ -69,18 +60,18 @@ export default function Shade({ yourCode, isInShade }: ShadeProps) {
 
   const customFontStyle = EditorView.theme({
     ".cm-content *": {
-      fontFamily: fontStyle.variable,
+      fontFamily: state.fontStyle.variable,
       fontVariantLigatures: "normal",
     },
     ".cm-gutters": {
-      fontFamily: fontStyle.variable,
+      fontFamily: state.fontStyle.variable,
       fontVariantLigatures: "normal",
     },
   });
 
   const lineWrapping = EditorView.lineWrapping;
 
-  const c = theme.generatedColors;
+  const c = state.theme.generatedColors;
 
   const editorTheme = createTheme({
     theme: "dark",
@@ -184,9 +175,9 @@ export default function Shade({ yourCode, isInShade }: ShadeProps) {
       layout
       className={clsx(
         "relative z-0 w-auto min-w-[512px] max-w-5xl",
-        padding.class,
+        state.padding.class,
         "bg-gradient-to-br",
-        theme.class,
+        state.theme.class,
         "transition-all duration-200 ease-in-out"
       )}
     >
@@ -204,16 +195,16 @@ export default function Shade({ yourCode, isInShade }: ShadeProps) {
             className={clsx(
               "absolute inset-0 z-[3] rounded-xl",
               "bg-gradient-to-br",
-              theme.class
+              state.theme.class
             )}
           />
         </div>
         <div className="relative z-[4] rounded-xl bg-black/70 p-4">
           {selectedLanguage && (
             <CodeMirror
-              // autoFocus={true}
-              value={code}
-              onChange={onChange}
+              editable={isEditable}
+              value={state.code}
+              onChange={(value) => setState({ ...state, code: value })}
               extensions={[
                 selectedLanguage,
                 customStyles,
@@ -221,7 +212,7 @@ export default function Shade({ yourCode, isInShade }: ShadeProps) {
                 lineWrapping,
               ]}
               basicSetup={{
-                lineNumbers: lineNumbers,
+                lineNumbers: state.lineNumbers,
                 foldGutter: false,
                 autocompletion: false,
                 indentOnInput: false,

@@ -2,21 +2,25 @@ import { memo } from "react";
 import clsx from "clsx";
 import { RadioGroup } from "@headlessui/react";
 
+import { useStateContext } from "contexts/State";
+
 import type { ChoiceDefinition } from "lib/types";
 
 interface ChoicesProps {
-  initialValue: ChoiceDefinition;
-  setValue: (_: ChoiceDefinition) => void;
+  type: "padding";
   choices: ChoiceDefinition[];
 }
 
-export default memo(function Choices({
-  initialValue,
-  setValue,
-  choices,
-}: ChoicesProps) {
+export default memo(function Choices({ type, choices }: ChoicesProps) {
+  const { state, setState } = useStateContext();
+
   return (
-    <RadioGroup value={initialValue} onChange={setValue}>
+    <RadioGroup
+      value={state[type]}
+      onChange={(value: ChoiceDefinition) =>
+        setState({ ...state, padding: value })
+      }
+    >
       <div className="flex gap-3 py-[7px] text-sm">
         {choices.map((choice) => (
           <RadioGroup.Option

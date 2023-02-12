@@ -15,6 +15,8 @@ const importLegacy = () =>
     };
   });
 
+export const INITIAL_CODE = `// Write some code here`;
+
 export const SUPPORTED_LANGUAGES: LanguageDefinition[] = [
   {
     id: "typescript",
@@ -157,13 +159,6 @@ export const SUPPORTED_THEMES: ThemeDefinition[] = [
   },
 ];
 
-export const SUPPORTED_PADDING_CHOICES: ChoiceDefinition[] = [
-  { id: "sm", label: "16", class: "p-4" },
-  { id: "md", label: "32", class: "p-8" },
-  { id: "lg", label: "64", class: "p-16" },
-  { id: "xl", label: "128", class: "p-32" },
-];
-
 export const SUPPORTED_FONT_STYLES: FontDefinition[] = [
   {
     id: "fira_code",
@@ -195,4 +190,11 @@ export const SUPPORTED_FONT_STYLES: FontDefinition[] = [
     variable: "var(--font-ibm-plex-mono)",
     class: "font-ibm-plex-mono",
   },
+];
+
+export const SUPPORTED_PADDING_CHOICES: ChoiceDefinition[] = [
+  { id: "sm", label: "16", class: "p-4" },
+  { id: "md", label: "32", class: "p-8" },
+  { id: "lg", label: "64", class: "p-16" },
+  { id: "xl", label: "128", class: "p-32" },
 ];

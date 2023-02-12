@@ -3,6 +3,8 @@ import clsx from "clsx";
 import { Listbox, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 
+import { useStateContext } from "contexts/State";
+
 import type {
   LanguageDefinition,
   ThemeDefinition,
@@ -18,25 +20,25 @@ function ThemeBubble({ color }: { color: string }) {
 }
 
 interface SelectProps<T> {
-  type: "language" | "theme" | "font";
-  initialValue: T;
-  setValue: (_: T) => void;
+  type: "language" | "theme" | "fontStyle";
   options: T[];
 }
 
 export default memo(function Select<
   T extends LanguageDefinition | ThemeDefinition | FontDefinition
->({ type, initialValue, setValue, options }: SelectProps<T>) {
+>({ type, options }: SelectProps<T>) {
+  const { state, setState } = useStateContext();
+
   const getInitialValue = (type: string) => {
     switch (type) {
       case "language":
-        return <span>{(initialValue as LanguageDefinition).label}</span>;
+        return <span>{state.language.label}</span>;
       case "theme":
-        return <ThemeBubble color={(initialValue as ThemeDefinition).class} />;
-      case "font":
+        return <ThemeBubble color={state.theme.class} />;
+      case "fontStyle":
         return (
-          <span className={clsx((initialValue as FontDefinition).class)}>
-            {(initialValue as FontDefinition).label}
+          <span className={clsx(state.fontStyle.class)}>
+            {state.fontStyle.label}
           </span>
         );
 
@@ -65,7 +67,7 @@ export default memo(function Select<
             </span>
           </>
         );
-      case "font":
+      case "fontStyle":
         return (
           <span
             className={clsx(
@@ -82,7 +84,10 @@ export default memo(function Select<
   };
 
   return (
-    <Listbox value={initialValue} onChange={setValue}>
+    <Listbox
+      value={state[type]}
+      onChange={(value: T) => setState({ ...state, [type]: value })}
+    >
       <div className="relative">
         <Listbox.Button
           className={clsx(
@@ -91,7 +96,7 @@ export default memo(function Select<
             "transition-colors duration-200 ease-in-out",
             "hover:cursor-pointer hover:bg-white/20 focus:outline-none",
             type === "language" && "w-32",
-            type === "font" && "w-40"
+            type === "fontStyle" && "w-40"
           )}
         >
           {getInitialValue(type)}
@@ -102,16 +107,16 @@ export default memo(function Select<
         </Listbox.Button>
         <Transition
           as={Fragment}
-          enter="transition-all transform ease-in-out duration-200"
-          enterFrom="opacity-0 scale-90"
-          enterTo="opacity-100"
-          leave="transition-all transform ease-in-out duration-200"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0 scale-90"
+          enter="transition ease-out duration-100"
+          enterFrom="transform opacity-0 scale-95"
+          enterTo="transform opacity-100 scale-100"
+          leave="transition ease-in duration-75"
+          leaveFrom="transform opacity-100 scale-100"
+          leaveTo="transform opacity-0 scale-95"
         >
           <Listbox.Options
             className={clsx(
-              "absolute z-10 max-h-80 -translate-x-1/4 -translate-y-3/4 space-y-1 overflow-auto rounded-xl p-2",
+              "absolute z-10 max-h-80 origin-bottom -translate-x-1/4 -translate-y-3/4 space-y-1 overflow-auto rounded-xl p-2",
               "border-[1px] border-white/20 bg-black",
               "focus:outline-none"
             )}
