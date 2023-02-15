@@ -5,19 +5,13 @@ import { ChevronDownIcon } from "@radix-ui/react-icons";
 
 import { useStateContext } from "contexts/State";
 
+import ThemeBubble from "components/common/ThemeBubble";
+
 import type {
   LanguageDefinition,
   ThemeDefinition,
   FontDefinition,
 } from "lib/types";
-
-function ThemeBubble({ color }: { color: string }) {
-  return (
-    <span
-      className={clsx("block h-4 w-4 rounded-full bg-gradient-to-br", color)}
-    />
-  );
-}
 
 interface SelectProps<T> {
   type: "language" | "theme" | "fontStyle";
@@ -34,7 +28,7 @@ export default memo(function Select<
       case "language":
         return <span>{state.language.label}</span>;
       case "theme":
-        return <ThemeBubble color={state.theme.class} />;
+        return <ThemeBubble colors={state.theme.class} />;
       case "fontStyle":
         return (
           <span className={clsx(state.fontStyle.class)}>
@@ -61,7 +55,7 @@ export default memo(function Select<
       case "theme":
         return (
           <>
-            <ThemeBubble color={(option as ThemeDefinition).class} />
+            <ThemeBubble colors={(option as ThemeDefinition).class} />
             <span className="block truncate">
               {(option as ThemeDefinition).label}
             </span>

@@ -42,6 +42,7 @@ export default function Code({ editAllowed }: CodeProps) {
   const customStyles = EditorView.baseTheme({
     "&.cm-editor": {
       fontSize: "0.9375rem",
+      fontWeight: 600,
     },
     "&.cm-editor.cm-focused": {
       outline: "none",

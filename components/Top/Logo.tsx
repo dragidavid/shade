@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 
 const movingSection = {
   base: {
-    marginLeft: "-79px",
+    marginLeft: "-86.5px",
     transition: {
       duration: 0.2,
       delay: 0.2,
@@ -38,12 +38,12 @@ export default function Logo() {
       initial="base"
       whileHover="hover"
       animate="base"
-      className="relative select-none bg-gradient-to-br from-fuchsia-500 to-indigo-600 bg-clip-text font-black text-transparent"
+      className="relative select-none bg-gradient-to-br from-purple-400 to-violet-500 bg-clip-text font-black text-transparent"
     >
       <span>sha</span>
       <motion.span variants={movingSection}>
-        <motion.span variants={invisibleSection} className=" text-white/60">
-          re your co
+        <motion.span variants={invisibleSection} className="text-white/60">
+          re some co
         </motion.span>
         de.
       </motion.span>

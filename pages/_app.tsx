@@ -68,6 +68,11 @@ const ibmPlexMono = IBM_Plex_Mono({
   variable: "--font-ibm-plex-mono",
 });
 
+// background-color: black;
+// background-image: linear-gradient(to right, #0F0F0F 1px,transparent 1px),linear-gradient(to bottom, #0f0f0f 1px,transparent 1px);
+// background-position: calc(50% - 4rem/2) calc(50% - 4rem/2);
+// background-size: 4rem 4rem;
+
 export default function App({
   Component,
   pageProps: { session, ...pageProps },

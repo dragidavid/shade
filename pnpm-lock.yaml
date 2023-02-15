@@ -42,6 +42,7 @@ specifiers:
   framer-motion: ^9.0.2
   lodash.debounce: ^4.0.8
   lodash.isequal: ^4.5.0
+  lucide-react: ^0.113.0
   next: 13.1.6
   next-auth: ^4.19.2
   postcss: ^8.4.21
@@ -88,6 +89,7 @@ dependencies:
   '@uiw/react-codemirror': 4.19.7_nsxz34yecjgxpjl266mwtk4xki
   clsx: 1.2.1
   framer-motion: 9.0.2_biqbaboplfbrettd7655fr4n2y
+  lucide-react: 0.113.0_react@18.2.0
   next: 13.1.6_biqbaboplfbrettd7655fr4n2y
   next-auth: 4.19.2_3vryta7zmbcsw4rrqf4axjqggm
   react: 18.2.0
@@ -2604,6 +2606,14 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       yallist: 4.0.0
+
+  /lucide-react/0.113.0_react@18.2.0:
+    resolution: {integrity: sha512-2v4v+or80vCHxjzxKvxfwrmeDzqGt3qs/wRe1JVRIxE4heyOkq4mdbW4WDRDzB0n4gN4HHaU9mzZmkY/QS7ZGQ==}
+    peerDependencies:
+      react: ^16.5.1 || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.2.0
+    dev: false
 
   /merge2/1.4.1:
     resolution: {integrity: sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==}
