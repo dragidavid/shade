@@ -1,7 +1,5 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
-import Link from "next/link";
-import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
 import { useSession } from "next-auth/react";
 import clsx from "clsx";
@@ -12,9 +10,7 @@ import {
   Cross2Icon,
 } from "@radix-ui/react-icons";
 
-import fetcher from "lib/fetcher";
-
-import type { Snippet } from "lib/types";
+import Content from "components/Dashboard/Content";
 
 const BUTTON_COLORS = {
   DEFAULT:
@@ -42,15 +38,6 @@ export default function Dashboard() {
       setButtonIcon(<PlusIcon className="h-3 w-3" aria-hidden="true" />);
     }, 3000);
   };
-
-  const {
-    data: snippets,
-    error,
-    isLoading,
-  } = useSWR<Snippet[]>(
-    session?.user?.id ? `/api/snippets/get-all?id=${session.user.id}` : null,
-    fetcher
-  );
 
   const { trigger, isMutating } = useSWRMutation(
     "/api/snippets/create",
@@ -80,45 +67,6 @@ export default function Dashboard() {
       },
     }
   );
-
-  const getContent = () => {
-    if (error) {
-      return <p>Something went wrong...</p>;
-    }
-
-    if (isLoading) {
-      return <p>Hang on there...</p>;
-    }
-
-    if (snippets?.length === 0) {
-      return <p>No snippets found...</p>;
-    }
-
-    return (
-      <ul className="grid w-full grid-cols-2 gap-3">
-        {snippets?.map((snippet) => (
-          <Link
-            href={`/${snippet.id}`}
-            key={snippet.id}
-            className={clsx(
-              "flex w-full items-center justify-between gap-2 rounded-lg p-2 text-xs",
-              "border-[1px] border-white/20 bg-black",
-              "transition-all duration-200 ease-in-out",
-              "hover:cursor-pointer hover:border-white hover:bg-white/20 hover:text-white",
-              "focus:outline-none focus:ring-1 focus:ring-white",
-              "active:bg-white/10"
-            )}
-          >
-            <li key={snippet.id}>
-              <span className="pointer-events-none">
-                {snippet.title ?? "Untitled"}
-              </span>
-            </li>
-          </Link>
-        ))}
-      </ul>
-    );
-  };
 
   if (status === "loading") {
     return <p>Hang on there...</p>;
@@ -157,7 +105,7 @@ export default function Dashboard() {
         </button>
       </div>
 
-      {getContent()}
+      <Content />
     </section>
   );
 }
