@@ -2,7 +2,7 @@ import Link from "next/link";
 import useSWR from "swr";
 import { useSession } from "next-auth/react";
 import clsx from "clsx";
-import { Loader2, AlertCircle } from "lucide-react";
+import { Loader2, X } from "lucide-react";
 
 import ThemeBubble from "components/common/ThemeBubble";
 
@@ -34,8 +34,8 @@ export default function Content() {
   if (e) {
     return (
       <div className="flex items-center justify-center gap-2 py-4 text-sm text-red-500">
-        <AlertCircle size={18} />
-        <span>{e.message}</span>
+        <X size={18} />
+        <span>{e?.message ?? "An error has occured."}</span>
       </div>
     );
   }

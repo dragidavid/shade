@@ -1,41 +1,44 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 import useSWRMutation from "swr/mutation";
-import { useSession } from "next-auth/react";
 import clsx from "clsx";
-import {
-  PlusIcon,
-  ReloadIcon,
-  CheckIcon,
-  Cross2Icon,
-} from "@radix-ui/react-icons";
+import { Loader2, Plus, Check, X } from "lucide-react";
 
 import Content from "components/Dashboard/Content";
 
-const BUTTON_COLORS = {
-  DEFAULT:
-    "border-white/20 bg-black hover:bg-white/20 hover:text-white hover:border-white focus:ring-white active:bg-white/10",
-  SUCCESS:
-    "border-green-400/20 text-green-400 bg-green-500/20 focus:ring-green-400 active:bg-green-400/10",
-  ERROR:
-    "border-red-400/20 text-red-400 bg-red-500/20 focus:ring-red-400 active:bg-red-400/10",
+type ButtonState = {
+  color: string;
+  icon: JSX.Element;
+};
+
+const BUTTON_STATES: Record<string, ButtonState> = {
+  DEFAULT: {
+    color:
+      "border-white/20 bg-black hover:bg-white/20 hover:text-white hover:border-white focus:ring-white active:bg-white/10",
+    icon: <Plus size={14} aria-hidden="true" />,
+  },
+  SUCCESS: {
+    color:
+      "border-green-400/20 text-green-400 bg-green-500/20 focus:ring-green-400 active:bg-green-400/10",
+    icon: <Check size={14} aria-hidden="true" />,
+  },
+  ERROR: {
+    color:
+      "border-red-400/20 text-red-400 bg-red-500/20 focus:ring-red-400 active:bg-red-400/10",
+    icon: <X size={14} aria-hidden="true" />,
+  },
 };
 
 export default function Dashboard() {
-  const [buttonColors, setButtonColors] = useState<string>(
-    BUTTON_COLORS.DEFAULT
-  );
-  const [buttonIcon, setButtonIcon] = useState<JSX.Element>(
-    <PlusIcon className="h-3 w-3" aria-hidden="true" />
+  const [buttonState, setButtonState] = useState<ButtonState>(
+    BUTTON_STATES.DEFAULT
   );
 
   const router = useRouter();
-  const { data: session, status } = useSession();
 
   const resetButton = () => {
     setTimeout(() => {
-      setButtonColors(BUTTON_COLORS.DEFAULT);
-      setButtonIcon(<PlusIcon className="h-3 w-3" aria-hidden="true" />);
+      setButtonState(BUTTON_STATES.DEFAULT);
     }, 3000);
   };
 
@@ -48,8 +51,7 @@ export default function Dashboard() {
           return;
         }
 
-        setButtonColors(BUTTON_COLORS.SUCCESS);
-        setButtonIcon(<CheckIcon className="h-3 w-3" aria-hidden="true" />);
+        setButtonState(BUTTON_STATES.SUCCESS);
 
         const { id } = await data.json();
 
@@ -59,18 +61,13 @@ export default function Dashboard() {
         // TODO - Handle error
         console.log(error);
 
-        setButtonColors(BUTTON_COLORS.ERROR);
-        setButtonIcon(<Cross2Icon className="h-3 w-3" aria-hidden="true" />);
+        setButtonState(BUTTON_STATES.ERROR);
 
         // Reset the button after 3 seconds
         resetButton();
       },
     }
   );
-
-  if (status === "loading") {
-    return <p>Hang on there...</p>;
-  }
 
   return (
     <section
@@ -91,14 +88,14 @@ export default function Dashboard() {
             "transition-all duration-200 ease-in-out",
             "hover:cursor-pointer",
             "focus:outline-none focus:ring-1",
-            buttonColors
+            buttonState.color
           )}
         >
           <span className="pointer-events-none">
             {isMutating ? (
-              <ReloadIcon className="h-3 w-3 animate-spin" aria-hidden="true" />
+              <Loader2 size={14} className="animate-spin" aria-hidden="true" />
             ) : (
-              buttonIcon
+              buttonState.icon
             )}
           </span>
           New
