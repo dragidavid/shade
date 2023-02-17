@@ -6,26 +6,36 @@ import { Loader2, Plus, Check, X } from "lucide-react";
 
 import Content from "components/Dashboard/Content";
 
+import { fetcher } from "lib/fetcher";
+
 type ButtonState = {
-  color: string;
+  id: string;
+  text: string;
   icon: JSX.Element;
+  color: string;
 };
 
 const BUTTON_STATES: Record<string, ButtonState> = {
   DEFAULT: {
+    id: "default",
+    text: "New",
+    icon: <Plus size={14} aria-hidden="true" />,
     color:
       "border-white/20 bg-black hover:bg-white/20 hover:text-white hover:border-white focus:ring-white active:bg-white/10",
-    icon: <Plus size={14} aria-hidden="true" />,
   },
   SUCCESS: {
+    id: "success",
+    text: "Success",
+    icon: <Check size={14} aria-hidden="true" />,
     color:
       "border-green-400/20 text-green-400 bg-green-500/20 focus:ring-green-400 active:bg-green-400/10",
-    icon: <Check size={14} aria-hidden="true" />,
   },
   ERROR: {
+    id: "error",
+    text: "Error",
+    icon: <X size={14} aria-hidden="true" />,
     color:
       "border-red-400/20 text-red-400 bg-red-500/20 focus:ring-red-400 active:bg-red-400/10",
-    icon: <X size={14} aria-hidden="true" />,
   },
 };
 
@@ -36,38 +46,30 @@ export default function Dashboard() {
 
   const router = useRouter();
 
-  const resetButton = () => {
+  const { trigger, isMutating } = useSWRMutation(
+    "/api/snippets/create",
+    (url) => fetcher(url)
+  );
+
+  const reset = () => {
     setTimeout(() => {
       setButtonState(BUTTON_STATES.DEFAULT);
     }, 3000);
   };
 
-  const { trigger, isMutating } = useSWRMutation(
-    "/api/snippets/create",
-    (url) => fetch(url),
-    {
-      onSuccess: async (data) => {
-        if (!data.ok) {
-          return;
-        }
+  const handleButtonClick = async () => {
+    try {
+      const { id } = await trigger();
 
-        setButtonState(BUTTON_STATES.SUCCESS);
+      setButtonState(BUTTON_STATES.SUCCESS);
 
-        const { id } = await data.json();
+      router.push(`/${id}`);
+    } catch (e) {
+      setButtonState(BUTTON_STATES.ERROR);
 
-        router.push(`/${id}`);
-      },
-      onError: (error) => {
-        // TODO - Handle error
-        console.log(error);
-
-        setButtonState(BUTTON_STATES.ERROR);
-
-        // Reset the button after 3 seconds
-        resetButton();
-      },
+      reset();
     }
-  );
+  };
 
   return (
     <section
@@ -81,7 +83,8 @@ export default function Dashboard() {
 
         <button
           type="button"
-          onClick={() => trigger()}
+          onClick={handleButtonClick}
+          disabled={isMutating || buttonState.id !== "default"}
           className={clsx(
             "flex w-auto select-none items-center justify-between gap-2 rounded-lg p-2 text-xs",
             "border-[1px]",
@@ -98,7 +101,7 @@ export default function Dashboard() {
               buttonState.icon
             )}
           </span>
-          New
+          {buttonState.text}
         </button>
       </div>
 

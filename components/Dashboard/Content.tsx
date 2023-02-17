@@ -9,6 +9,7 @@ import ThemeBubble from "components/common/ThemeBubble";
 import { SUPPORTED_THEMES } from "lib/values";
 
 import { find } from "lib/find";
+import { fetcher } from "lib/fetcher";
 
 import type { Snippet } from "lib/types";
 
@@ -20,7 +21,8 @@ export default function Content() {
     error: e,
     isLoading: snippetsLoading,
   } = useSWR<Snippet[]>(
-    session?.user?.id ? `/api/snippets/get-all?id=${session.user.id}` : null
+    session?.user?.id ? `/api/snippets/get-all?id=${session.user.id}` : null,
+    fetcher
   );
 
   if (sessionStatus === "loading" || snippetsLoading) {
