@@ -15,7 +15,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
     res.status(200).json(snippets);
   } catch (e) {
-    res.status(400).json({ message: "Unable to retrieve snippets." });
+    res.status(500).json({ message: "Unable to retrieve snippets." });
   }
 }
 
