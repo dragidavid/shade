@@ -1,4 +1,3 @@
-import { SWRConfig } from "swr";
 import clsx from "clsx";
 import { motion } from "framer-motion";
 import { SessionProvider } from "next-auth/react";
@@ -26,7 +25,6 @@ import {
 
 import { find } from "lib/find";
 import { exists } from "lib/exists";
-import { fetcher } from "lib/fetcher";
 
 import type { AppProps } from "next/app";
 import type { State } from "lib/types";
@@ -111,40 +109,32 @@ export default function App({
       };
 
   return (
-    <SWRConfig
-      value={{
-        fetcher,
-        revalidateOnFocus: false,
-        shouldRetryOnError: false,
-      }}
-    >
-      <SessionProvider session={session}>
-        <StateProvider initialState={initialState}>
-          <div
-            className={clsx(
-              inter.variable,
-              firaCode.variable,
-              jetBrainsMono.variable,
-              inconsolata.variable,
-              sourceCodePro.variable,
-              ibmPlexMono.variable,
-              "grid min-h-screen grid-rows-[auto,1fr]",
-              "font-sans"
-            )}
+    <SessionProvider session={session}>
+      <StateProvider initialState={initialState}>
+        <div
+          className={clsx(
+            inter.variable,
+            firaCode.variable,
+            jetBrainsMono.variable,
+            inconsolata.variable,
+            sourceCodePro.variable,
+            ibmPlexMono.variable,
+            "grid min-h-screen grid-rows-[auto,1fr]",
+            "font-sans"
+          )}
+        >
+          <Top />
+          <motion.div
+            id="main"
+            animate={{ opacity: 1 }}
+            initial={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className={clsx("flex flex-col items-center justify-center")}
           >
-            <Top />
-            <motion.div
-              id="main"
-              animate={{ opacity: 1 }}
-              initial={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className={clsx("flex flex-col items-center justify-center")}
-            >
-              <Component {...pageProps} />
-            </motion.div>
-          </div>
-        </StateProvider>
-      </SessionProvider>
-    </SWRConfig>
+            <Component {...pageProps} />
+          </motion.div>
+        </div>
+      </StateProvider>
+    </SessionProvider>
   );
 }
