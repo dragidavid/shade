@@ -5,7 +5,7 @@ import { ChevronDownIcon } from "@radix-ui/react-icons";
 
 import { useStateContext } from "contexts/State";
 
-import ThemeBubble from "components/common/ThemeBubble";
+import ThemeBubble from "components/ui/ThemeBubble";
 
 import type {
   LanguageDefinition,

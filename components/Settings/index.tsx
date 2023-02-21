@@ -10,9 +10,9 @@ import {
   SUPPORTED_PADDING_CHOICES,
 } from "lib/values";
 
-import Select from "components/Select";
-import Toggle from "components/Toggle";
-import Choices from "components/Choices";
+import Select from "components/Settings/Select";
+import Toggle from "components/Settings/Toggle";
+import Choices from "components/Settings/Choices";
 
 export default function Settings() {
   const [mainDimensions, setMainDimensions] = useState<{
@@ -93,7 +93,7 @@ export default function Settings() {
       animate={animationControls}
       className={clsx(
         "fixed bottom-32 z-10 rounded-xl p-5 text-xs",
-        "transition-opacity duration-200 ease-in-out will-change-transform",
+        "transition-opacity will-change-transform duration-200 ease-in-out",
         "border-[1px] border-white/20 bg-black text-white/70 opacity-50 shadow-xl",
         "focus-within:opacity-100 hover:opacity-100"
       )}
@@ -106,7 +106,7 @@ export default function Settings() {
         className={clsx(
           "absolute -top-[10px] left-1/2 py-[1px] px-[6px]",
           "rounded-md border-[1px] border-white/20 bg-black",
-          "transition-all duration-200 ease-in-out will-change-transform",
+          "transition-all will-change-transform duration-200 ease-in-out",
           "hover:scale-150 hover:cursor-grab hover:bg-gray-800 focus:outline-none"
         )}
       >
