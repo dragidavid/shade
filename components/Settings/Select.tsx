@@ -1,11 +1,21 @@
-import { Fragment, memo } from "react";
-import clsx from "clsx";
-import { Listbox, Transition } from "@headlessui/react";
-import { ChevronDownIcon } from "@radix-ui/react-icons";
+import { memo } from "react";
+
+import * as SelectPrimitive from "@radix-ui/react-select";
+
+import { ChevronDown } from "lucide-react";
+
+import ThemeBubble from "components/ui/ThemeBubble";
 
 import { useStateContext } from "contexts/State";
 
-import ThemeBubble from "components/ui/ThemeBubble";
+import {
+  SUPPORTED_LANGUAGES,
+  SUPPORTED_THEMES,
+  SUPPORTED_FONT_STYLES,
+} from "lib/values";
+
+import { cn } from "lib/cn";
+import { find } from "lib/find";
 
 import type {
   LanguageDefinition,
@@ -23,116 +33,103 @@ export default memo(function Select<
 >({ type, options }: SelectProps<T>) {
   const { state, setState } = useStateContext();
 
-  const getInitialValue = (type: string) => {
-    switch (type) {
-      case "language":
-        return <span>{state.language.label}</span>;
-      case "theme":
-        return <ThemeBubble colors={state.theme.class} />;
-      case "fontStyle":
-        return (
-          <span className={clsx(state.fontStyle.class)}>
-            {state.fontStyle.label}
+  const get = {
+    language: {
+      initialValue: <span>{state.language.label}</span>,
+      optionContent: (option: T) => (
+        <span className={cn("block truncate pr-11")}>
+          {(option as LanguageDefinition).label}
+        </span>
+      ),
+      valueForKey: (key: string) => find(SUPPORTED_LANGUAGES, key),
+    },
+    theme: {
+      initialValue: (
+        <ThemeBubble colors={state.theme.class} additionalClasses="p-[2px]" />
+      ),
+      optionContent: (option: T) => (
+        <div className={cn("flex items-center gap-3")}>
+          <ThemeBubble colors={(option as ThemeDefinition).class} />
+          <span className={cn("block truncate")}>
+            {(option as ThemeDefinition).label}
           </span>
-        );
-
-      default:
-        return null;
-    }
-  };
-
-  const getOptionContent = (
-    type: string,
-    option: LanguageDefinition | ThemeDefinition | FontDefinition
-  ) => {
-    switch (type) {
-      case "language":
-        return (
-          <span className="block truncate pr-9">
-            {(option as LanguageDefinition).label}
-          </span>
-        );
-      case "theme":
-        return (
-          <>
-            <ThemeBubble colors={(option as ThemeDefinition).class} />
-            <span className="block truncate">
-              {(option as ThemeDefinition).label}
-            </span>
-          </>
-        );
-      case "fontStyle":
-        return (
-          <span
-            className={clsx(
-              "block truncate pr-9",
-              (option as FontDefinition).class
-            )}
-          >
-            {(option as FontDefinition).label}
-          </span>
-        );
-      default:
-        return null;
-    }
+        </div>
+      ),
+      valueForKey: (key: string) => find(SUPPORTED_THEMES, key),
+    },
+    fontStyle: {
+      initialValue: (
+        <span className={state.fontStyle.class}>{state.fontStyle.label}</span>
+      ),
+      optionContent: (option: T) => (
+        <span
+          className={cn(
+            "block truncate pr-12",
+            (option as FontDefinition).class
+          )}
+        >
+          {(option as FontDefinition).label}
+        </span>
+      ),
+      valueForKey: (key: string) => find(SUPPORTED_FONT_STYLES, key),
+    },
   };
 
   return (
-    <Listbox
-      value={state[type]}
-      onChange={(value: T) => setState({ ...state, [type]: value })}
+    <SelectPrimitive.Root
+      defaultValue={state[type].id}
+      value={state[type].id}
+      onValueChange={(value: string) =>
+        setState({ ...state, [type]: get[type].valueForKey(value) })
+      }
     >
-      <div className="relative">
-        <Listbox.Button
-          className={clsx(
-            "flex w-auto select-none items-center justify-between gap-3 rounded-lg p-2 text-xs",
-            "border-[1px] border-white/20 bg-black",
-            "transition-colors duration-200 ease-in-out",
-            "hover:cursor-pointer hover:bg-white/20 focus:outline-none",
-            type === "language" && "w-32",
-            type === "fontStyle" && "w-40"
-          )}
-        >
-          {getInitialValue(type)}
+      <SelectPrimitive.Trigger
+        className={cn(
+          "flex w-auto items-center justify-between gap-2 rounded-md p-2",
+          "select-none outline-none",
+          "border-[1px] border-white/20 bg-black",
+          "transition-all duration-100 ease-in-out",
+          "hover:border-white hover:bg-white/10 hover:text-white",
+          "focus:border-white focus:bg-white/10 focus:text-white",
+          type === "language" && "w-32",
+          type === "fontStyle" && "w-48"
+        )}
+      >
+        <SelectPrimitive.Value>{get[type].initialValue}</SelectPrimitive.Value>
+        <SelectPrimitive.Icon>
+          <ChevronDown size={16} aria-hidden="true" />
+        </SelectPrimitive.Icon>
+      </SelectPrimitive.Trigger>
 
-          <span className="pointer-events-none">
-            <ChevronDownIcon className="h-3 w-3 " aria-hidden="true" />
-          </span>
-        </Listbox.Button>
-        <Transition
-          as={Fragment}
-          enter="transition ease-out duration-100"
-          enterFrom="transform opacity-0 scale-95"
-          enterTo="transform opacity-100 scale-100"
-          leave="transition ease-in duration-75"
-          leaveFrom="transform opacity-100 scale-100"
-          leaveTo="transform opacity-0 scale-95"
-        >
-          <Listbox.Options
-            className={clsx(
-              "absolute z-10 max-h-80 origin-bottom -translate-x-1/4 -translate-y-3/4 space-y-1 overflow-auto rounded-xl p-2",
-              "border-[1px] border-white/20 bg-black",
-              "focus:outline-none"
-            )}
-          >
-            {options.map((option) => (
-              <Listbox.Option
-                key={`${type}-${option.id}`}
-                value={option}
-                className={clsx(
-                  "flex items-center gap-3 rounded-lg p-2 text-xs",
-                  "cursor-pointer select-none",
-                  "transition-colors duration-200 ease-in-out",
-                  "ui-active:bg-white/20 ui-active:text-white",
-                  "ui-selected:bg-white/20 ui-selected:text-white"
-                )}
-              >
-                {getOptionContent(type, option)}
-              </Listbox.Option>
-            ))}
-          </Listbox.Options>
-        </Transition>
-      </div>
-    </Listbox>
+      <SelectPrimitive.Content
+        position="popper"
+        sideOffset={-100}
+        align="center"
+        className={cn(
+          "relative z-10 overflow-hidden rounded-lg shadow-md",
+          "border-[1px] border-white/20 bg-black",
+          "animate-in fade-in zoom-in-75 duration-100 ease-in-out"
+        )}
+      >
+        <SelectPrimitive.Viewport className="p-1">
+          {options.map((option) => (
+            <SelectPrimitive.Item
+              key={`${type}-${option.id}`}
+              value={option.id}
+              className={cn(
+                "items-center rounded-md p-2",
+                "select-none outline-none",
+                "transition-all duration-100 ease-in-out",
+                "radix-highlighted:bg-white/20 radix-highlighted:text-white"
+              )}
+            >
+              <SelectPrimitive.ItemText>
+                {get[type].optionContent(option as T)}
+              </SelectPrimitive.ItemText>
+            </SelectPrimitive.Item>
+          ))}
+        </SelectPrimitive.Viewport>
+      </SelectPrimitive.Content>
+    </SelectPrimitive.Root>
   );
 });

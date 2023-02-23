@@ -119,8 +119,7 @@ export default function App({
             inconsolata.variable,
             sourceCodePro.variable,
             ibmPlexMono.variable,
-            "grid min-h-screen grid-rows-[auto,1fr]",
-            "font-sans"
+            "grid min-h-screen grid-rows-[auto,1fr]"
           )}
         >
           <Top />
@@ -131,6 +130,11 @@ export default function App({
             transition={{ duration: 0.2 }}
             className={clsx("flex flex-col items-center justify-center")}
           >
+            <style jsx global>{`
+              html {
+                font-family: ${inter.style.fontFamily};
+              }
+            `}</style>
             <Component {...pageProps} />
           </motion.div>
         </div>
