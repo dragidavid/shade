@@ -5,10 +5,11 @@ import Settings from "components/Settings";
 import CodeBackup from "components/CodeBackup";
 
 import prisma from "lib/prisma";
-import { getServerSession } from "lib/auth";
 import { exists } from "lib/exists";
+import { getSession } from "lib/auth";
 
 import type { GetServerSidePropsContext } from "next";
+
 import type { Snippet } from "lib/types";
 
 interface SingleSnippetPageProps {
@@ -30,7 +31,7 @@ export default function SingleSnippetPage({
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const session = await getServerSession(context.req, context.res);
+  const session = await getSession(context.req, context.res);
   const { id } = context.query;
 
   let editAllowed = false;

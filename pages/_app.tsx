@@ -1,4 +1,3 @@
-import clsx from "clsx";
 import { motion } from "framer-motion";
 import { SessionProvider } from "next-auth/react";
 
@@ -23,10 +22,12 @@ import {
   SUPPORTED_PADDING_CHOICES,
 } from "lib/values";
 
+import { cn } from "lib/cn";
 import { find } from "lib/find";
 import { exists } from "lib/exists";
 
 import type { AppProps } from "next/app";
+
 import type { State } from "lib/types";
 
 import "styles/globals.css";
@@ -112,14 +113,14 @@ export default function App({
     <SessionProvider session={session}>
       <StateProvider initialState={initialState}>
         <div
-          className={clsx(
+          className={cn(
+            "grid min-h-screen grid-rows-[auto,1fr]",
             inter.variable,
             firaCode.variable,
             jetBrainsMono.variable,
             inconsolata.variable,
             sourceCodePro.variable,
-            ibmPlexMono.variable,
-            "grid min-h-screen grid-rows-[auto,1fr]"
+            ibmPlexMono.variable
           )}
         >
           <Top />
@@ -128,7 +129,7 @@ export default function App({
             animate={{ opacity: 1 }}
             initial={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className={clsx("flex flex-col items-center justify-center")}
+            className={cn("flex flex-col items-center justify-center")}
           >
             <style jsx global>{`
               html {

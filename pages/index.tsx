@@ -5,7 +5,7 @@ import Dashboard from "components/Dashboard";
 import CodeBackup from "components/CodeBackup";
 
 import { exists } from "lib/exists";
-import { getServerSession } from "lib/auth";
+import { getSession } from "lib/auth";
 
 import type { GetServerSidePropsContext } from "next";
 import type { Session } from "next-auth";
@@ -39,7 +39,7 @@ export default function HomePage({ s }: HomePageProps) {
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const session = await getServerSession(context.req, context.res);
+  const session = await getSession(context.req, context.res);
 
   return {
     props: {

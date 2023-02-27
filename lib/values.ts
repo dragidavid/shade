@@ -1,6 +1,7 @@
 import { generateColors } from "lib/colors";
 
 import type { LanguageSupport as LS, StreamParser } from "@codemirror/language";
+
 import type {
   LanguageDefinition,
   ThemeDefinition,
