@@ -91,7 +91,7 @@ export default function Dashboard() {
             "select-none outline-none",
             "border-[1px]",
             "transition-all duration-100 ease-in-out",
-            "focus:outline-1 focus:outline-offset-2 focus:outline-white",
+            "focus:ring-1 focus:ring-white focus:ring-offset-2 focus:ring-offset-black",
             buttonState.additionalClasses
           )}
         >

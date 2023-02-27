@@ -39,7 +39,7 @@ export default memo(function Choices({ type, choices }: ChoicesProps) {
               "select-none outline-none",
               "transition-all duration-100 ease-in-out",
               "hover:text-white",
-              "focus:text-white focus:outline-1 focus:outline-offset-2 focus:outline-white",
+              "focus:text-white focus:ring-1 focus:ring-white focus:ring-offset-2 focus:ring-offset-black",
               "radix-state-checked:bg-white/20 radix-state-checked:text-white"
             )}
           >

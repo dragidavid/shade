@@ -28,7 +28,7 @@ export default function Auth() {
               "rounded-full",
               "outline-none",
               "transition-all duration-100 ease-in-out",
-              "focus:outline-1 focus:outline-offset-2 focus:outline-white"
+              "focus:ring-1 focus:ring-white focus:ring-offset-2 focus:ring-offset-black"
             )}
             aria-label="avatar"
           >
@@ -97,7 +97,7 @@ export default function Auth() {
           "select-none outline-none",
           "transition-all duration-100 ease-in-out",
           "hover:bg-white/10 hover:text-white",
-          "focus:text-white focus:outline-1 focus:outline-offset-2 focus:outline-white",
+          "focus:text-white focus:ring-1 focus:ring-white focus:ring-offset-2 focus:ring-offset-black",
           "active:bg-white/20"
         )}
       >

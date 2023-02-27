@@ -2,6 +2,8 @@ import Code from "components/Code";
 import Settings from "components/Settings";
 import Dashboard from "components/Dashboard";
 
+import CodeBackup from "components/CodeBackup";
+
 import { exists } from "lib/exists";
 import { getServerSession } from "lib/auth";
 
@@ -29,7 +31,7 @@ export default function HomePage({ s }: HomePageProps) {
    */
   return (
     <>
-      <Code />
+      <CodeBackup />
 
       <Settings />
     </>

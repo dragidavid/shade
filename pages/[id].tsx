@@ -2,6 +2,8 @@ import Code from "components/Code";
 import Save from "components/Save";
 import Settings from "components/Settings";
 
+import CodeBackup from "components/CodeBackup";
+
 import prisma from "lib/prisma";
 import { getServerSession } from "lib/auth";
 import { exists } from "lib/exists";
@@ -18,7 +20,7 @@ export default function SingleSnippetPage({
 }: SingleSnippetPageProps) {
   return (
     <>
-      <Code editAllowed={editAllowed} />
+      <CodeBackup editAllowed={editAllowed} />
 
       {editAllowed && <Settings />}
 

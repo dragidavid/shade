@@ -11,6 +11,7 @@ import { exists } from "lib/exists";
 
 export default function HomeLink() {
   const { pathname } = useRouter();
+
   const { data: session, status: sessionStatus } = useSession();
 
   if (
@@ -29,7 +30,7 @@ export default function HomeLink() {
           "select-none outline-none",
           "transition-all duration-100 ease-in-out",
           "hover:bg-white/10 hover:text-white",
-          "focus:text-white focus:outline-1 focus:outline-offset-2 focus:outline-white",
+          "focus:text-white focus:ring-1 focus:ring-white focus:ring-offset-2 focus:ring-offset-black",
           "active:bg-white/20"
         )}
       >

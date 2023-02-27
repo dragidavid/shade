@@ -25,7 +25,7 @@ export default memo(function Switch({ type }: SwitchProps) {
           "outline-none",
           "border-[1px] border-white/20",
           "transition-all duration-100 ease-in-out",
-          "focus:outline-1 focus:outline-offset-2 focus:outline-white",
+          "focus:ring-1 focus:ring-white focus:ring-offset-2 focus:ring-offset-black",
           "radix-state-checked:border-transparent radix-state-checked:bg-white/20 radix-state-unchecked:bg-black"
         )}
       >

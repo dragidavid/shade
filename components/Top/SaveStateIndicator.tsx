@@ -42,7 +42,9 @@ export default function SaveStateIndicator() {
   const [content, setContent] = useState<ContentState | null>(null);
 
   const { pathname } = useRouter();
+
   const { data: session, status: sessionStatus } = useSession();
+
   const { saveState } = useStateContext();
 
   useEffect(() => {

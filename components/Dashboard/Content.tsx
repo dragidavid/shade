@@ -70,7 +70,7 @@ export default function Content() {
                 "border-[1px] border-white/20 bg-black",
                 "transition-all duration-100 ease-in-out",
                 "hover:border-white hover:bg-white/10 hover:text-white",
-                "focus:outline-1 focus:outline-offset-2 focus:outline-white",
+                "focus:ring-1 focus:ring-white focus:ring-offset-2 focus:ring-offset-black",
                 "active:bg-white/20"
               )}
             >
