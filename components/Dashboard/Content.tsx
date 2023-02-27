@@ -1,13 +1,14 @@
 import Link from "next/link";
 import useSWR from "swr";
 import { useSession } from "next-auth/react";
-import clsx from "clsx";
+
 import { Loader2, X } from "lucide-react";
 
-import ThemeBubble from "components/common/ThemeBubble";
+import ThemeBubble from "components/ui/ThemeBubble";
 
 import { SUPPORTED_THEMES } from "lib/values";
 
+import { cn } from "lib/cn";
 import { find } from "lib/find";
 import { fetcher } from "lib/fetcher";
 
@@ -27,16 +28,21 @@ export default function Content() {
 
   if (sessionStatus === "loading" || snippetsLoading) {
     return (
-      <div className="flex items-center justify-center py-4">
-        <Loader2 size={18} className="animate-spin" />
+      <div className={cn("flex items-center justify-center py-4")}>
+        <Loader2 size={16} className="animate-spin" aria-hidden="true" />
       </div>
     );
   }
 
   if (e) {
     return (
-      <div className="flex items-center justify-center gap-2 py-4 text-sm text-red-500">
-        <X size={18} />
+      <div
+        className={cn(
+          "flex items-center justify-center gap-2 py-4 text-sm",
+          "text-red-500"
+        )}
+      >
+        <X size={16} aria-hidden="true" />
         <span>{e?.message ?? "An error has occured."}</span>
       </div>
     );
@@ -44,7 +50,7 @@ export default function Content() {
 
   if (!snippets?.length) {
     return (
-      <div className="flex items-center justify-center py-4 text-sm">
+      <div className={cn("flex items-center justify-center py-4 text-sm")}>
         <span>No snippets found.</span>
       </div>
     );
@@ -52,32 +58,34 @@ export default function Content() {
 
   return (
     <div>
-      <ul className="grid grid-cols-2 gap-3">
+      <ul className={cn("grid grid-cols-2 gap-3")}>
         {snippets?.map((snippet) => (
           <li key={snippet.id}>
             <Link
               href={`/${snippet.id}`}
               key={snippet.id}
-              className={clsx(
-                "flex w-full flex-col gap-2 rounded-lg p-3 text-sm",
+              className={cn(
+                "flex w-full flex-col gap-2 rounded-lg p-3 text-sm font-medium",
+                "select-none outline-none",
                 "border-[1px] border-white/20 bg-black",
-                "transition-all duration-200 ease-in-out",
-                "hover:cursor-pointer hover:border-white hover:bg-white/20 hover:text-white",
-                "focus:outline-none focus:ring-1 focus:ring-white",
-                "active:bg-white/10"
+                "transition-all duration-100 ease-in-out",
+                "hover:border-white hover:bg-white/10 hover:text-white",
+                "focus:ring-1 focus:ring-white focus:ring-offset-2 focus:ring-offset-black",
+                "active:bg-white/20"
               )}
             >
-              <div className="flex items-center gap-2">
+              <div className={cn("flex items-center gap-2")}>
                 <ThemeBubble
                   colors={find(SUPPORTED_THEMES, snippet.settings.theme).class}
+                  aria-hidden="true"
                 />
 
-                <span className="pointer-events-none grow truncate">
+                <span className={cn("grow truncate")}>
                   {snippet.title ?? "Untitled"}
                 </span>
               </div>
 
-              <span className="pointer-events-none text-xs">
+              <span className="text-xs">
                 {Intl.DateTimeFormat("en-US", {
                   year: "numeric",
                   month: "short",

@@ -1,4 +1,4 @@
-import { unstable_getServerSession } from "next-auth/next";
+import { getServerSession } from "next-auth/next";
 
 import { authOptions } from "pages/api/auth/[...nextauth]";
 
@@ -12,16 +12,16 @@ import type {
 } from "next";
 import type { Session } from "next-auth";
 
-export async function getServerSession(
+export async function getSession(
   req: NextApiRequest | GetServerSidePropsContext["req"],
   res: NextApiResponse | GetServerSidePropsContext["res"]
 ) {
-  return (await unstable_getServerSession(req, res, authOptions)) as Session;
+  return (await getServerSession(req, res, authOptions)) as Session;
 }
 
 export function withAuthentication(handler: NextApiHandler) {
   return async function (req: NextApiRequest, res: NextApiResponse) {
-    const session = await getServerSession(req, res);
+    const session = await getServerSession(req, res, authOptions);
 
     if (!session || !exists(session.user.id)) {
       return res.status(403).end();

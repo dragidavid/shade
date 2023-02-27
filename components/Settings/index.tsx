@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
-import clsx from "clsx";
 import { motion, useDragControls, useAnimationControls } from "framer-motion";
-import { DragHandleDots2Icon } from "@radix-ui/react-icons";
+
+import { GripHorizontal } from "lucide-react";
+
+import { cn } from "lib/cn";
 
 import {
   SUPPORTED_LANGUAGES,
@@ -11,20 +13,33 @@ import {
 } from "lib/values";
 
 import Select from "components/Settings/Select";
-import Toggle from "components/Settings/Toggle";
+import Switch from "components/Settings/Switch";
 import Choices from "components/Settings/Choices";
 
+interface Dimensions {
+  height: number;
+  width: number;
+}
+
+interface DragConstraints {
+  top: number;
+  left: number;
+  right: number;
+  bottom: number;
+}
+
 export default function Settings() {
-  const [mainDimensions, setMainDimensions] = useState<{
-    height: number;
-    width: number;
-  }>({ height: 0, width: 0 });
-  const [dragConstraints, setDragConstraints] = useState<{
-    top: number;
-    left: number;
-    right: number;
-    bottom: number;
-  }>({ top: 0, left: 0, right: 0, bottom: 0 });
+  const [mainDimensions, setMainDimensions] = useState<Dimensions>({
+    height: 0,
+    width: 0,
+  });
+  const [dragConstraints, setDragConstraints] = useState<DragConstraints>({
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  });
+
   const dragControls = useDragControls();
   const animationControls = useAnimationControls();
 
@@ -91,11 +106,12 @@ export default function Settings() {
       dragControls={dragControls}
       dragConstraints={dragConstraints}
       animate={animationControls}
-      className={clsx(
-        "fixed bottom-32 z-10 rounded-xl p-5 text-xs",
-        "transition-opacity will-change-transform duration-200 ease-in-out",
-        "border-[1px] border-white/20 bg-black text-white/70 opacity-50 shadow-xl",
-        "focus-within:opacity-100 hover:opacity-100"
+      className={cn(
+        "fixed bottom-32 z-10 rounded-xl p-4 text-sm font-medium shadow-xl",
+        "border-[1px] border-white/20 bg-black text-white/70 opacity-30",
+        "transition-opacity duration-100 ease-in-out",
+        "hover:opacity-100",
+        "focus-within:opacity-100"
       )}
     >
       <motion.div
@@ -103,19 +119,23 @@ export default function Settings() {
         whileTap={{
           cursor: "grabbing",
         }}
-        className={clsx(
-          "absolute -top-[10px] left-1/2 py-[1px] px-[6px]",
-          "rounded-md border-[1px] border-white/20 bg-black",
-          "transition-all will-change-transform duration-200 ease-in-out",
-          "hover:scale-150 hover:cursor-grab hover:bg-gray-800 focus:outline-none"
+        tabIndex={-1}
+        className={cn(
+          "absolute -top-[12px] left-1/2 rounded-md py-1 px-2",
+          "select-none outline-none",
+          "border-[1px] border-white/20 bg-black",
+          "transition-all duration-100 ease-in-out",
+          "hover:scale-125 hover:cursor-grab hover:border-white",
+          "active:scale-125 active:border-white"
         )}
       >
-        <DragHandleDots2Icon className="rotate-90" />
+        <GripHorizontal size={16} aria-hidden={true} />
       </motion.div>
       <div
-        className={clsx(
+        className={cn(
           "flex gap-8",
-          "[&>div>label]:font-bold [&>div]:relative [&>div]:flex [&>div]:min-w-max [&>div]:flex-col [&>div]:gap-2"
+          "[&>div]:relative [&>div]:flex [&>div]:min-w-max [&>div]:flex-col [&>div]:gap-3",
+          "[&>div>label]:text-xs [&>div>label]:font-bold"
         )}
       >
         <div>
@@ -132,7 +152,7 @@ export default function Settings() {
         </div>
         <div>
           <label htmlFor="lineNumbers">Line numbers</label>
-          <Toggle type="lineNumbers" />
+          <Switch type="lineNumbers" />
         </div>
         <div>
           <label htmlFor="padding">Padding</label>

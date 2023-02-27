@@ -26,5 +26,5 @@ module.exports = {
       "ibm-plex-mono": ["var(--font-ibm-plex-mono)", ...fontFamily.mono],
     },
   },
-  plugins: [require("@headlessui/tailwindcss")],
+  plugins: [require("tailwindcss-animate"), require("tailwindcss-radix")],
 };

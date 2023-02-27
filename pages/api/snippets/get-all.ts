@@ -1,10 +1,10 @@
 import prisma from "lib/prisma";
-import { getServerSession, withAuthentication } from "lib/auth";
+import { getSession, withAuthentication } from "lib/auth";
 
 import type { NextApiRequest, NextApiResponse } from "next";
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const session = await getServerSession(req, res);
+  const session = await getSession(req, res);
 
   try {
     const snippets = await prisma.snippet.findMany({

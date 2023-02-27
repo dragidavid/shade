@@ -1,8 +1,13 @@
 import { memo } from "react";
-import clsx from "clsx";
-import { RadioGroup } from "@headlessui/react";
+
+import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
 
 import { useStateContext } from "contexts/State";
+
+import { SUPPORTED_PADDING_CHOICES } from "lib/values";
+
+import { cn } from "lib/cn";
+import { find } from "lib/find";
 
 import type { ChoiceDefinition } from "lib/types";
 
@@ -15,34 +20,33 @@ export default memo(function Choices({ type, choices }: ChoicesProps) {
   const { state, setState } = useStateContext();
 
   return (
-    <RadioGroup
-      value={state[type]}
-      onChange={(value: ChoiceDefinition) =>
-        setState({ ...state, padding: value })
+    <RadioGroupPrimitive.Root
+      defaultValue={state[type].id}
+      value={state[type].id}
+      onValueChange={(value: string) =>
+        setState({ ...state, [type]: find(SUPPORTED_PADDING_CHOICES, value) })
       }
+      className={cn("flex h-full items-center justify-center")}
     >
-      <div className="flex gap-3 py-[7px] text-sm">
+      <div className={cn("flex gap-3")}>
         {choices.map((choice) => (
-          <RadioGroup.Option
+          <RadioGroupPrimitive.Item
             key={choice.id}
-            value={choice}
-            className={clsx(
-              "cursor-pointer select-none rounded-md",
-              "ui-active:text-white ui-active:outline-none"
+            id={choice.id}
+            value={choice.id}
+            className={cn(
+              "flex items-center justify-center rounded-md py-1 px-2",
+              "select-none outline-none",
+              "transition-all duration-100 ease-in-out",
+              "hover:text-white",
+              "focus:text-white focus:ring-1 focus:ring-white focus:ring-offset-2 focus:ring-offset-black",
+              "radix-state-checked:bg-white/20 radix-state-checked:text-white"
             )}
           >
-            <span
-              className={clsx(
-                "rounded-md py-1 px-2",
-                "transition-colors duration-100 ease-in-out",
-                "ui-checked:bg-white/20 ui-checked:text-white"
-              )}
-            >
-              {choice.label}
-            </span>
-          </RadioGroup.Option>
+            {choice.label}
+          </RadioGroupPrimitive.Item>
         ))}
       </div>
-    </RadioGroup>
+    </RadioGroupPrimitive.Root>
   );
 });

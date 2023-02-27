@@ -1,41 +1,42 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 import useSWRMutation from "swr/mutation";
-import clsx from "clsx";
+
 import { Loader2, Plus, Check, X } from "lucide-react";
 
 import Content from "components/Dashboard/Content";
 
+import { cn } from "lib/cn";
 import { fetcher } from "lib/fetcher";
 
-type ButtonState = {
+interface ButtonState {
   id: string;
   text: string;
   icon: JSX.Element;
-  color: string;
-};
+  additionalClasses: string;
+}
 
 const BUTTON_STATES: Record<string, ButtonState> = {
   DEFAULT: {
     id: "default",
     text: "New",
-    icon: <Plus size={14} aria-hidden="true" />,
-    color:
-      "border-white/20 bg-black hover:bg-white/20 hover:text-white hover:border-white focus:ring-white active:bg-white/10",
+    icon: <Plus size={16} aria-hidden="true" />,
+    additionalClasses:
+      "border-white/20 bg-black hover:bg-white/10 hover:text-white hover:border-white active:bg-white/20",
   },
   SUCCESS: {
     id: "success",
     text: "Success",
-    icon: <Check size={14} aria-hidden="true" />,
-    color:
-      "border-green-400/20 text-green-400 bg-green-500/20 focus:ring-green-400 active:bg-green-400/10",
+    icon: <Check size={16} aria-hidden="true" />,
+    additionalClasses:
+      "border-green-400/20 text-green-400 bg-green-500/20 active:bg-green-400/10",
   },
   ERROR: {
     id: "error",
     text: "Error",
-    icon: <X size={14} aria-hidden="true" />,
-    color:
-      "border-red-400/20 text-red-400 bg-red-500/20 focus:ring-red-400 active:bg-red-400/10",
+    icon: <X size={16} aria-hidden="true" />,
+    additionalClasses:
+      "border-red-400/20 text-red-400 bg-red-500/20 active:bg-red-400/10",
   },
 };
 
@@ -73,34 +74,32 @@ export default function Dashboard() {
 
   return (
     <section
-      className={clsx(
-        "flex w-[576px] flex-col gap-6 rounded-xl p-5",
-        "border-[1px] border-white/20 bg-black text-white/70 shadow-xl"
+      className={cn(
+        "flex w-[576px] flex-col gap-6 rounded-xl p-5 shadow-xl",
+        "border-[1px] border-white/20 bg-black text-white/70"
       )}
     >
-      <div className="flex w-full items-center justify-between">
-        <h2 className="text-xl font-black">Snippets</h2>
+      <div className={cn("flex w-full items-center justify-between")}>
+        <h2 className={cn("text-xl font-black")}>Snippets</h2>
 
         <button
           type="button"
           onClick={handleButtonClick}
           disabled={isMutating || buttonState.id !== "default"}
-          className={clsx(
-            "flex w-auto select-none items-center justify-between gap-2 rounded-lg p-2 text-xs",
+          className={cn(
+            "flex w-auto items-center justify-between gap-2 rounded-lg p-2 text-sm font-medium",
+            "select-none outline-none",
             "border-[1px]",
-            "transition-all duration-200 ease-in-out",
-            "hover:cursor-pointer",
-            "focus:outline-none focus:ring-1",
-            buttonState.color
+            "transition-all duration-100 ease-in-out",
+            "focus:ring-1 focus:ring-white focus:ring-offset-2 focus:ring-offset-black",
+            buttonState.additionalClasses
           )}
         >
-          <span className="pointer-events-none">
-            {isMutating ? (
-              <Loader2 size={14} className="animate-spin" aria-hidden="true" />
-            ) : (
-              buttonState.icon
-            )}
-          </span>
+          {isMutating ? (
+            <Loader2 size={16} className="animate-spin" aria-hidden="true" />
+          ) : (
+            buttonState.icon
+          )}
           {buttonState.text}
         </button>
       </div>
