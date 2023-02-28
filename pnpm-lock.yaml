@@ -43,6 +43,7 @@ specifiers:
   eslint-config-next: 13.1.6
   eslint-config-prettier: ^8.6.0
   framer-motion: ^9.1.7
+  immer: ^9.0.19
   lodash.debounce: ^4.0.8
   lodash.isequal: ^4.5.0
   lucide-react: ^0.113.0
@@ -60,6 +61,7 @@ specifiers:
   tailwindcss-animate: ^1.0.5
   tailwindcss-radix: ^2.7.0
   typescript: 4.9.5
+  zustand: ^4.3.4
 
 dependencies:
   '@codemirror/commands': 6.2.1
@@ -98,6 +100,7 @@ dependencies:
   '@uiw/react-codemirror': 4.19.9_6y5uraswnisp2ohux6ofv5jhoa
   clsx: 1.2.1
   framer-motion: 9.1.7_biqbaboplfbrettd7655fr4n2y
+  immer: 9.0.19
   lucide-react: 0.113.0_react@18.2.0
   next: 13.1.6_biqbaboplfbrettd7655fr4n2y
   next-auth: 4.19.2_3vryta7zmbcsw4rrqf4axjqggm
@@ -105,6 +108,7 @@ dependencies:
   react-dom: 18.2.0_react@18.2.0
   swr: 2.0.4_react@18.2.0
   typescript: 4.9.5
+  zustand: 4.3.4_immer@9.0.19+react@18.2.0
 
 devDependencies:
   '@types/lodash.debounce': 4.0.7
@@ -2744,6 +2748,10 @@ packages:
     engines: {node: '>= 4'}
     dev: true
 
+  /immer/9.0.19:
+    resolution: {integrity: sha512-eY+Y0qcsB4TZKwgQzLaE/lqYMlKhv5J9dyd2RhhtGhNo2njPXDqU9XPfcNfa3MIDsdtZt5KlkIsirlo4dHsWdQ==}
+    dev: false
+
   /import-fresh/3.3.0:
     resolution: {integrity: sha512-veYYhQa+D1QBKznvhUHxb8faxlrwUnxseDAbAp457E0wLNio2bOSKnjYDhMj+YiAq61xrMGhQk9iXVk5FzgQMw==}
     engines: {node: '>=6'}
@@ -4143,3 +4151,20 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
     dev: true
+
+  /zustand/4.3.4_immer@9.0.19+react@18.2.0:
+    resolution: {integrity: sha512-QSV8MF80I4yM9UCcBhIBr5OcQkiTbZdxDofg5R5vyX49QsEia7sK1iwOhFyH/0hyNVg+h+OzARM76G8MgMno0g==}
+    engines: {node: '>=12.7.0'}
+    peerDependencies:
+      immer: '>=9.0'
+      react: '>=16.8'
+    peerDependenciesMeta:
+      immer:
+        optional: true
+      react:
+        optional: true
+    dependencies:
+      immer: 9.0.19
+      react: 18.2.0
+      use-sync-external-store: 1.2.0_react@18.2.0
+    dev: false

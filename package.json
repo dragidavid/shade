@@ -45,13 +45,15 @@
     "@uiw/react-codemirror": "^4.19.9",
     "clsx": "^1.2.1",
     "framer-motion": "^9.1.7",
+    "immer": "^9.0.19",
     "lucide-react": "^0.113.0",
     "next": "13.1.6",
     "next-auth": "^4.19.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "swr": "^2.0.4",
-    "typescript": "4.9.5"
+    "typescript": "4.9.5",
+    "zustand": "^4.3.4"
   },
   "devDependencies": {
     "@types/lodash.debounce": "^4.0.7",
