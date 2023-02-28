@@ -5,10 +5,9 @@ import useSWRMutation from "swr/mutation";
 import debounce from "lodash.debounce";
 import isEqual from "lodash.isequal";
 
-import { useStateContext } from "contexts/State";
-
 import { exists } from "lib/exists";
 import { fetcher } from "lib/fetcher";
+import { useAppState } from "lib/store";
 
 import type { State } from "lib/types";
 
@@ -18,7 +17,9 @@ export default function Save() {
   const hasFailed = useRef(false);
   const cancellationTokenRef = useRef({ isCancelled: false });
 
-  const { state, saveState, setSaveState } = useStateContext();
+  const saveStatus = useAppState((state) => state.saveStatus);
+  const state = useAppState((state) => state.getEditorState());
+  const update = useAppState((state) => state.update);
 
   const { trigger } = useSWRMutation(
     "/api/snippets/update",
@@ -40,21 +41,21 @@ export default function Save() {
       }
 
       if (!isEqual(state, changes)) {
-        if (saveState !== "PENDING") setSaveState("PENDING");
+        if (saveStatus !== "PENDING") update("saveStatus", "PENDING");
 
         try {
           await trigger(changes);
 
           if (!cancellationToken.isCancelled) {
-            setSaveState("SUCCESS");
+            update("saveStatus", "SUCCESS");
           }
         } catch (e) {
           if (!cancellationToken.isCancelled) {
-            setSaveState("ERROR");
+            update("saveStatus", "ERROR");
           }
         }
       } else {
-        setSaveState("IDLE");
+        update("saveStatus", "IDLE");
       }
     }, 3000),
     [state.id, shouldUpdate.current]
@@ -67,24 +68,24 @@ export default function Save() {
   }, []);
 
   useEffect(() => {
-    if (saveState === "SUCCESS") {
+    if (saveStatus === "SUCCESS") {
       prevStateRef.current = state;
       shouldUpdate.current = !shouldUpdate.current;
 
-      setSaveState("IDLE");
+      update("saveStatus", "IDLE");
     }
 
-    if (saveState === "ERROR") {
+    if (saveStatus === "ERROR") {
       hasFailed.current = !hasFailed.current;
 
-      setSaveState("IDLE");
+      update("saveStatus", "IDLE");
     }
-  }, [state, saveState]);
+  }, [state, saveStatus]);
 
   useEffect(() => {
     prevStateRef.current = state;
 
-    setSaveState("IDLE");
+    update("saveStatus", "IDLE");
   }, [state.id]);
 
   useEffect(() => {
@@ -94,10 +95,10 @@ export default function Save() {
   }, [state]);
 
   useEffect(() => {
-    if (saveState === "PENDING" && isEqual(prevStateRef.current, state)) {
+    if (saveStatus === "PENDING" && isEqual(prevStateRef.current, state)) {
       debouncedSave.cancel();
 
-      setSaveState("IDLE");
+      update("saveStatus", "IDLE");
     }
 
     if (
@@ -108,11 +109,11 @@ export default function Save() {
       cancellationTokenRef.current.isCancelled = true;
       cancellationTokenRef.current = { isCancelled: false };
 
-      setSaveState("PENDING");
+      update("saveStatus", "PENDING");
 
       debouncedSave(state, cancellationTokenRef.current);
     }
-  }, [state, saveState]);
+  }, [state, saveStatus]);
 
   return null;
 }

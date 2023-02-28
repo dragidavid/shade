@@ -1,6 +1,6 @@
 import Auth from "components/Top/Auth";
 import HomeLink from "components/Top/HomeLink";
-import SaveStateIndicator from "components/Top/SaveStateIndicator";
+import SaveStatus from "components/Top/SaveStatus";
 
 import { cn } from "lib/cn";
 
@@ -14,7 +14,7 @@ export default function Top() {
     >
       <HomeLink />
 
-      <SaveStateIndicator />
+      <SaveStatus />
 
       <Auth />
     </div>

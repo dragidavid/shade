@@ -5,10 +5,9 @@ import { AnimatePresence, motion } from "framer-motion";
 
 import { Loader2, Check, X } from "lucide-react";
 
-import { useStateContext } from "contexts/State";
-
 import { cn } from "lib/cn";
 import { exists } from "lib/exists";
+import { useAppState } from "lib/store";
 
 interface ContentState {
   id: string;
@@ -37,7 +36,7 @@ const CONTENT_STATES: Record<string, ContentState> = {
   },
 };
 
-export default function SaveStateIndicator() {
+export default function SaveStatus() {
   const [showMessage, setShowMessage] = useState(false);
   const [content, setContent] = useState<ContentState | null>(null);
 
@@ -45,25 +44,25 @@ export default function SaveStateIndicator() {
 
   const { data: session, status: sessionStatus } = useSession();
 
-  const { saveState } = useStateContext();
+  const saveStatus = useAppState((state) => state.saveStatus);
 
   useEffect(() => {
-    if (saveState === "SUCCESS" || saveState === "ERROR") {
+    if (saveStatus === "SUCCESS" || saveStatus === "ERROR") {
       setShowMessage(true);
 
-      setContent(CONTENT_STATES[saveState]);
+      setContent(CONTENT_STATES[saveStatus]);
 
       setTimeout(() => {
         setShowMessage(false);
       }, 3000);
     }
-  }, [saveState]);
+  }, [saveStatus]);
 
   useEffect(() => {
-    if (saveState === "PENDING" && showMessage) {
+    if (saveStatus === "PENDING" && showMessage) {
       setShowMessage(false);
     }
-  }, [saveState, showMessage]);
+  }, [saveStatus, showMessage]);
 
   if (
     pathname === "/" ||
@@ -77,7 +76,7 @@ export default function SaveStateIndicator() {
       <AnimatePresence mode="wait">
         {showMessage && <Wrapper content={content!} key="idle" />}
 
-        {saveState === "PENDING" && !showMessage && (
+        {saveStatus === "PENDING" && !showMessage && (
           <Wrapper
             content={CONTENT_STATES["PENDING"]}
             key={CONTENT_STATES["PENDING"].id}

@@ -6,8 +6,6 @@ import { ChevronDown } from "lucide-react";
 
 import ThemeBubble from "components/ui/ThemeBubble";
 
-import { useStateContext } from "contexts/State";
-
 import {
   SUPPORTED_LANGUAGES,
   SUPPORTED_THEMES,
@@ -16,6 +14,7 @@ import {
 
 import { cn } from "lib/cn";
 import { find } from "lib/find";
+import { useAppState } from "lib/store";
 
 import type {
   LanguageDefinition,
@@ -31,11 +30,12 @@ interface SelectProps<T> {
 export default memo(function Select<
   T extends LanguageDefinition | ThemeDefinition | FontDefinition
 >({ type, options }: SelectProps<T>) {
-  const { state, setState } = useStateContext();
+  const value = useAppState((state) => state[type]);
+  const update = useAppState((state) => state.update);
 
   const get = {
     language: {
-      initialValue: <span>{state.language.label}</span>,
+      initialValue: <span>{value.label}</span>,
       optionContent: (option: T) => (
         <span className={cn("block truncate pr-11")}>
           {(option as LanguageDefinition).label}
@@ -45,7 +45,10 @@ export default memo(function Select<
     },
     theme: {
       initialValue: (
-        <ThemeBubble colors={state.theme.class} additionalClasses="p-[2px]" />
+        <ThemeBubble
+          colors={(value as ThemeDefinition).class}
+          additionalClasses="p-[2px]"
+        />
       ),
       optionContent: (option: T) => (
         <div className={cn("flex items-center gap-3")}>
@@ -59,7 +62,7 @@ export default memo(function Select<
     },
     fontStyle: {
       initialValue: (
-        <span className={state.fontStyle.class}>{state.fontStyle.label}</span>
+        <span className={(value as FontDefinition).class}>{value.label}</span>
       ),
       optionContent: (option: T) => (
         <span
@@ -77,10 +80,15 @@ export default memo(function Select<
 
   return (
     <SelectPrimitive.Root
-      defaultValue={state[type].id}
-      value={state[type].id}
+      defaultValue={value.id}
+      value={value.id}
       onValueChange={(value: string) =>
-        setState({ ...state, [type]: get[type].valueForKey(value) })
+        update(
+          type,
+          get[type].valueForKey(value) as LanguageDefinition &
+            ThemeDefinition &
+            FontDefinition
+        )
       }
     >
       <SelectPrimitive.Trigger

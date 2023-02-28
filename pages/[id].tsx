@@ -1,27 +1,38 @@
+import { useEffect } from "react";
+
 import Code from "components/Code";
 import Save from "components/Save";
 import Settings from "components/Settings";
 
-import CodeBackup from "components/CodeBackup";
-
 import prisma from "lib/prisma";
 import { exists } from "lib/exists";
 import { getSession } from "lib/auth";
+import { useAppState } from "lib/store";
 
 import type { GetServerSidePropsContext } from "next";
 
 import type { Snippet } from "lib/types";
 
 interface SingleSnippetPageProps {
+  snippet: Snippet;
   editAllowed: boolean;
 }
 
 export default function SingleSnippetPage({
+  snippet,
   editAllowed,
 }: SingleSnippetPageProps) {
+  const setEditorState = useAppState((state) => state.setEditorState);
+
+  useEffect(() => {
+    if (exists(snippet)) {
+      setEditorState(snippet);
+    }
+  }, []);
+
   return (
     <>
-      <CodeBackup editAllowed={editAllowed} />
+      <Code editAllowed={editAllowed} />
 
       {editAllowed && <Settings />}
 

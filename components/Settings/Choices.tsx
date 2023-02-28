@@ -2,12 +2,11 @@ import { memo } from "react";
 
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
 
-import { useStateContext } from "contexts/State";
-
 import { SUPPORTED_PADDING_CHOICES } from "lib/values";
 
 import { cn } from "lib/cn";
 import { find } from "lib/find";
+import { useAppState } from "lib/store";
 
 import type { ChoiceDefinition } from "lib/types";
 
@@ -17,14 +16,15 @@ interface ChoicesProps {
 }
 
 export default memo(function Choices({ type, choices }: ChoicesProps) {
-  const { state, setState } = useStateContext();
+  const value = useAppState((state) => state[type]);
+  const update = useAppState((state) => state.update);
 
   return (
     <RadioGroupPrimitive.Root
-      defaultValue={state[type].id}
-      value={state[type].id}
+      defaultValue={value.id}
+      value={value.id}
       onValueChange={(value: string) =>
-        setState({ ...state, [type]: find(SUPPORTED_PADDING_CHOICES, value) })
+        update(type, find(SUPPORTED_PADDING_CHOICES, value))
       }
       className={cn("flex h-full items-center justify-center")}
     >

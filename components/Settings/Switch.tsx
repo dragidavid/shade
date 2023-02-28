@@ -2,24 +2,22 @@ import { memo } from "react";
 
 import * as SwitchPrimitive from "@radix-ui/react-switch";
 
-import { useStateContext } from "contexts/State";
-
 import { cn } from "lib/cn";
+import { useAppState } from "lib/store";
 
 interface SwitchProps {
   type: "lineNumbers";
 }
 
 export default memo(function Switch({ type }: SwitchProps) {
-  const { state, setState } = useStateContext();
+  const value = useAppState((state) => state[type]);
+  const update = useAppState((state) => state.update);
 
   return (
     <div className={cn("flex h-full items-center")}>
       <SwitchPrimitive.Root
-        checked={state[type]}
-        onCheckedChange={(value: boolean) =>
-          setState({ ...state, [type]: value })
-        }
+        checked={value}
+        onCheckedChange={(value: boolean) => update(type, value)}
         className={cn(
           "inline-flex h-[24px] w-[44px] shrink-0 items-center rounded-full",
           "outline-none",

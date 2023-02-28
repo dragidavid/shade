@@ -12,23 +12,9 @@ import {
 
 import Top from "components/Top";
 
-import { StateProvider } from "contexts/State";
-
-import {
-  INITIAL_CODE,
-  SUPPORTED_LANGUAGES,
-  SUPPORTED_THEMES,
-  SUPPORTED_FONT_STYLES,
-  SUPPORTED_PADDING_CHOICES,
-} from "lib/values";
-
 import { cn } from "lib/cn";
-import { find } from "lib/find";
-import { exists } from "lib/exists";
 
 import type { AppProps } from "next/app";
-
-import type { State } from "lib/types";
 
 import "styles/globals.css";
 
@@ -78,68 +64,35 @@ export default function App({
   Component,
   pageProps: { session, ...pageProps },
 }: AppProps) {
-  const initialState: State = exists(pageProps.snippet)
-    ? {
-        id: pageProps.snippet.id,
-        title: pageProps.snippet.title,
-        code: pageProps.snippet.code,
-        language: find(
-          SUPPORTED_LANGUAGES,
-          pageProps.snippet.settings.language
-        ),
-        theme: find(SUPPORTED_THEMES, pageProps.snippet.settings.theme),
-        fontStyle: find(
-          SUPPORTED_FONT_STYLES,
-          pageProps.snippet.settings.fontStyle
-        ),
-        lineNumbers: pageProps.snippet.settings.lineNumbers,
-        padding: find(
-          SUPPORTED_PADDING_CHOICES,
-          pageProps.snippet.settings.padding
-        ),
-      }
-    : {
-        id: null,
-        title: null,
-        code: INITIAL_CODE,
-        language: SUPPORTED_LANGUAGES.at(0)!,
-        theme: SUPPORTED_THEMES.at(-1)!,
-        fontStyle: SUPPORTED_FONT_STYLES.at(0)!,
-        lineNumbers: true,
-        padding: SUPPORTED_PADDING_CHOICES.at(1)!,
-      };
-
   return (
     <SessionProvider session={session}>
-      <StateProvider initialState={initialState}>
-        <div
-          className={cn(
-            "grid min-h-screen grid-rows-[auto,1fr]",
-            inter.variable,
-            firaCode.variable,
-            jetBrainsMono.variable,
-            inconsolata.variable,
-            sourceCodePro.variable,
-            ibmPlexMono.variable
-          )}
+      <div
+        className={cn(
+          "grid min-h-screen grid-rows-[auto,1fr]",
+          inter.variable,
+          firaCode.variable,
+          jetBrainsMono.variable,
+          inconsolata.variable,
+          sourceCodePro.variable,
+          ibmPlexMono.variable
+        )}
+      >
+        <Top />
+        <motion.div
+          id="main"
+          animate={{ opacity: 1 }}
+          initial={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          className={cn("flex flex-col items-center justify-center")}
         >
-          <Top />
-          <motion.div
-            id="main"
-            animate={{ opacity: 1 }}
-            initial={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className={cn("flex flex-col items-center justify-center")}
-          >
-            <style jsx global>{`
-              html {
-                font-family: ${inter.style.fontFamily};
-              }
-            `}</style>
-            <Component {...pageProps} />
-          </motion.div>
-        </div>
-      </StateProvider>
+          <style jsx global>{`
+            html {
+              font-family: ${inter.style.fontFamily};
+            }
+          `}</style>
+          <Component {...pageProps} />
+        </motion.div>
+      </div>
     </SessionProvider>
   );
 }
