@@ -68,11 +68,6 @@ export default function Code({ editAllowed }: CodeProps) {
   });
   const lineWrapping = EditorView.lineWrapping;
   const setTabIndex = EditorView.contentAttributes.of({ tabindex: "-1" });
-  const logFocusChange = EditorView.focusChangeEffect.of((_, focusing) => {
-    console.log("focus change", focusing);
-
-    return null;
-  });
 
   const colors = theme.generatedColors;
 
@@ -198,7 +193,6 @@ export default function Code({ editAllowed }: CodeProps) {
       customFontStyle,
       lineWrapping,
       setTabIndex,
-      logFocusChange,
     ],
     theme: customEditorTheme,
   });
@@ -225,8 +219,6 @@ export default function Code({ editAllowed }: CodeProps) {
         !editorContainerRef.current?.contains(event.target as Node) &&
         view?.hasFocus
       ) {
-        console.log("we here? blurring and shit");
-
         view.contentDOM.blur();
       }
     }
