@@ -262,7 +262,12 @@ export default function Code({ editAllowed }: CodeProps) {
             )}
           />
         </div>
-        <div className={cn("relative z-[4] rounded-lg p-4", "bg-black/70")}>
+        <div
+          className={cn(
+            "relative z-[4] rounded-lg p-4",
+            "border-[1px] border-white/10 bg-black/70 shadow-xl"
+          )}
+        >
           {selectedLanguage && <div ref={editorRef} />}
         </div>
       </motion.div>

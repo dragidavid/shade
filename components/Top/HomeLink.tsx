@@ -31,10 +31,19 @@ export default function HomeLink() {
           "transition-all duration-100 ease-in-out",
           "hover:bg-white/10 hover:text-white",
           "focus:text-white focus:ring-1 focus:ring-white focus:ring-offset-2 focus:ring-offset-black",
-          "active:bg-white/20"
+          "active:bg-white/20",
+          "group"
         )}
       >
-        <ArrowLeft size={16} aria-hidden="true" />
+        <ArrowLeft
+          size={16}
+          className={cn(
+            "translate-x-0.5",
+            "transition-transform duration-100 ease-in-out",
+            "group-hover:translate-x-0"
+          )}
+          aria-hidden="true"
+        />
         Dashboard
       </Link>
     </div>
