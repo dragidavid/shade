@@ -6,7 +6,7 @@ import { cn } from "lib/cn";
 
 export default function Top() {
   return (
-    <div
+    <header
       className={cn(
         "sticky top-0 z-50 flex h-16 items-center justify-between px-[18px] text-sm font-medium shadow-xl",
         "border-b-[1px] border-white/20 bg-black text-white/70"
@@ -17,6 +17,6 @@ export default function Top() {
       <SaveStatus />
 
       <Auth />
-    </div>
+    </header>
   );
 }

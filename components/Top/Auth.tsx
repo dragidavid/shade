@@ -1,4 +1,4 @@
-import { useSession, signIn, signOut } from "next-auth/react";
+"use client";
 
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import * as AvatarPrimitive from "@radix-ui/react-avatar";
@@ -7,19 +7,32 @@ import { Loader2, Github, LogOut } from "lucide-react";
 
 import { cn } from "lib/cn";
 import { exists } from "lib/exists";
+import { useSupabase } from "contexts/Supabase";
 
 export default function Auth() {
-  const { data: session, status: sessionStatus } = useSession();
+  const { supabase, session } = useSupabase();
 
-  if (sessionStatus === "loading") {
-    return (
-      <div className="p-2">
-        <Loader2 size={18} className="animate-spin" aria-hidden="true" />
-      </div>
-    );
+  // if (sessionStatus === "loading") {
+  //   return (
+  //     <div className="p-2">
+  //       <Loader2 size={18} className="animate-spin" aria-hidden="true" />
+  //     </div>
+  //   );
+  // }
+
+  async function signInWithGitHub() {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: "github",
+    });
+
+    console.log(data, error);
   }
 
-  if (exists(session) && sessionStatus === "authenticated") {
+  async function signOut() {
+    await supabase.auth.signOut();
+  }
+
+  if (exists(session)) {
     return (
       <DropdownMenuPrimitive.Root>
         <DropdownMenuPrimitive.Trigger asChild>
@@ -40,20 +53,20 @@ export default function Auth() {
               )}
             >
               <AvatarPrimitive.Image
-                src={session?.user?.image!}
-                alt={session?.user?.name ?? "img"}
+                src={session?.user?.user_metadata.avatar_url}
+                alt={session?.user?.user_metadata.full_name ?? "img"}
                 className={cn("aspect-square h-full w-full")}
               />
               <AvatarPrimitive.Fallback
                 delayMs={600}
                 className={cn(
                   "flex h-full w-full items-center justify-center rounded-full",
-                  "bg-almost-white text-almost-black"
+                  "bg-almost-black text-almost-white"
                 )}
               >
-                {session?.user?.name
+                {session?.user?.user_metadata.full_name
                   ?.split(" ")
-                  .map((name) => name[0])
+                  .map((p: string) => p[0])
                   .join("") ?? "SH"}
               </AvatarPrimitive.Fallback>
             </AvatarPrimitive.Root>
@@ -91,7 +104,7 @@ export default function Auth() {
     <div>
       <button
         type="button"
-        onClick={() => signIn("github")}
+        onClick={() => signInWithGitHub()}
         className={cn(
           "flex items-center justify-between gap-2 rounded-lg p-2",
           "select-none outline-none",

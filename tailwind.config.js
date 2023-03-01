@@ -1,8 +1,9 @@
-const { fontFamily } = require("tailwindcss/defaultTheme");
+// const { fontFamily } = require("tailwindcss/defaultTheme");
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
+    "./app/**/*.{js,ts,jsx,tsx}",
     "./lib/**/*.{js,ts,jsx,tsx}",
     "./pages/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",
@@ -14,15 +15,15 @@ module.exports = {
         "almost-white": "#f2f2f2",
       },
       fontFamily: {
-        sans: ["var(--font-inter)", ...fontFamily.sans],
+        sans: ["var(--font-inter)"],
       },
     },
     fontFamily: {
-      "fira-code": ["var(--font-fira-code)", ...fontFamily.mono],
-      "jetbrains-mono": ["var(--font-jetbrains-mono)", ...fontFamily.mono],
-      inconsolata: ["var(--font-inconsolata)", ...fontFamily.mono],
-      "source-code-pro": ["var(--font-source-code-pro)", ...fontFamily.mono],
-      "ibm-plex-mono": ["var(--font-ibm-plex-mono)", ...fontFamily.mono],
+      "fira-code": ["var(--font-fira-code)"],
+      "jetbrains-mono": ["var(--font-jetbrains-mono)"],
+      inconsolata: ["var(--font-inconsolata)"],
+      "source-code-pro": ["var(--font-source-code-pro)"],
+      "ibm-plex-mono": ["var(--font-ibm-plex-mono)"],
     },
   },
   plugins: [require("tailwindcss-animate"), require("tailwindcss-radix")],

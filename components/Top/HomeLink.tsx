@@ -1,25 +1,23 @@
-import { useRouter } from "next/router";
+"use client";
+
+import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { useSession } from "next-auth/react";
 
 import { ArrowLeft } from "lucide-react";
 
 import Logo from "components/Top/Logo";
 
+import { useSupabase } from "contexts/Supabase";
+
 import { cn } from "lib/cn";
 import { exists } from "lib/exists";
 
 export default function HomeLink() {
-  const { pathname } = useRouter();
+  const pathname = usePathname();
 
-  const { data: session, status: sessionStatus } = useSession();
+  const { session } = useSupabase();
 
-  if (
-    pathname === "/" ||
-    !exists(session) ||
-    sessionStatus === "unauthenticated"
-  )
-    return <Logo />;
+  if (pathname === "/" || !exists(session)) return <Logo />;
 
   return (
     <div>
