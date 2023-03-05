@@ -1,6 +1,5 @@
 "use client";
 
-import { usePathname } from "next/navigation";
 import { useSession, signIn, signOut } from "next-auth/react";
 
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
@@ -11,24 +10,10 @@ import { Github, LogOut } from "lucide-react";
 import { cn } from "lib/cn";
 
 export default function Auth() {
-  const pathname = usePathname();
-
   const { data: session, status: sessionStatus } = useSession();
 
   if (sessionStatus === "loading") {
     return null;
-  }
-
-  if (pathname !== "/" && sessionStatus === "unauthenticated") {
-    return (
-      <div
-        className={cn(
-          "relative flex h-8 w-8 rounded-full",
-          "select-none",
-          "bg-almost-black"
-        )}
-      />
-    );
   }
 
   if (session && sessionStatus === "authenticated") {
