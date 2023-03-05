@@ -1,8 +1,4 @@
 import Link from "next/link";
-import useSWR from "swr";
-import { useSession } from "next-auth/react";
-
-import { Loader2, X } from "lucide-react";
 
 import ThemeBubble from "components/ui/ThemeBubble";
 
@@ -10,48 +6,26 @@ import { SUPPORTED_THEMES } from "lib/values";
 
 import { cn } from "lib/cn";
 import { find } from "lib/find";
-import { fetcher } from "lib/fetcher";
+import { prisma } from "lib/prisma";
+import { getSession } from "lib/auth";
 
-import type { Snippet } from "lib/types";
+async function getSnippets(userId: string) {
+  return await prisma.snippet.findMany({
+    where: {
+      userId,
+    },
+  });
+}
 
-export default function Content() {
-  const { data: session, status: sessionStatus } = useSession();
+export default async function Page() {
+  const session = await getSession();
 
-  const {
-    data: snippets,
-    error: e,
-    isLoading: snippetsLoading,
-  } = useSWR<Snippet[]>(
-    session?.user?.id ? `/api/snippets/get-all?id=${session.user.id}` : null,
-    fetcher
-  );
+  const snippets = await getSnippets(session.user.id);
 
-  if (sessionStatus === "loading" || snippetsLoading) {
+  if (!snippets.length) {
     return (
       <div className={cn("flex items-center justify-center py-4")}>
-        <Loader2 size={16} className="animate-spin" aria-hidden="true" />
-      </div>
-    );
-  }
-
-  if (e) {
-    return (
-      <div
-        className={cn(
-          "flex items-center justify-center gap-2 py-4 text-sm",
-          "text-red-500"
-        )}
-      >
-        <X size={16} aria-hidden="true" />
-        <span>{e?.message ?? "An error has occured."}</span>
-      </div>
-    );
-  }
-
-  if (!snippets?.length) {
-    return (
-      <div className={cn("flex items-center justify-center py-4 text-sm")}>
-        <span>No snippets found.</span>
+        <span>No snippets found</span>
       </div>
     );
   }
@@ -59,18 +33,19 @@ export default function Content() {
   return (
     <div>
       <ul className={cn("grid grid-cols-2 gap-3")}>
-        {snippets?.map((snippet) => (
+        {/* TODO replace any with type - fix schema for it first */}
+        {snippets.map((snippet: any) => (
           <li key={snippet.id}>
             <Link
               href={`/${snippet.id}`}
               key={snippet.id}
               className={cn(
-                "flex w-full flex-col gap-2 rounded-lg p-3 text-sm font-medium",
+                "flex w-full flex-col gap-2 rounded-lg p-3 font-medium",
                 "select-none outline-none",
                 "border-[1px] border-white/20 bg-black",
                 "transition-all duration-100 ease-in-out",
-                "hover:border-white hover:bg-white/10 hover:text-white",
-                "focus:ring-1 focus:ring-white focus:ring-offset-2 focus:ring-offset-black",
+                "hover:border-almost-white hover:bg-white/10 hover:text-almost-white",
+                "focus:ring-1 focus:ring-almost-white focus:ring-offset-2 focus:ring-offset-black",
                 "active:bg-white/20"
               )}
             >

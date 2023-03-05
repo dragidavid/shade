@@ -1,12 +1,13 @@
+"use client";
+
 import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
+import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { AnimatePresence, motion } from "framer-motion";
 
 import { Loader2, Check, X } from "lucide-react";
 
 import { cn } from "lib/cn";
-import { exists } from "lib/exists";
 import { useAppState } from "lib/store";
 
 interface ContentState {
@@ -40,9 +41,9 @@ export default function SaveStatus() {
   const [showMessage, setShowMessage] = useState(false);
   const [content, setContent] = useState<ContentState | null>(null);
 
-  const { pathname } = useRouter();
+  const pathname = usePathname();
 
-  const { data: session, status: sessionStatus } = useSession();
+  const { data: session } = useSession();
 
   const saveStatus = useAppState((state) => state.saveStatus);
 
@@ -64,12 +65,7 @@ export default function SaveStatus() {
     }
   }, [saveStatus, showMessage]);
 
-  if (
-    pathname === "/" ||
-    !exists(session) ||
-    sessionStatus === "unauthenticated"
-  )
-    return null;
+  if (pathname === "/dashboard" || !session) return null;
 
   return (
     <div className={cn("absolute left-1/2 -translate-x-1/2")}>

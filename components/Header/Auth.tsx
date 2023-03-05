@@ -1,25 +1,33 @@
+"use client";
+
+import { usePathname } from "next/navigation";
 import { useSession, signIn, signOut } from "next-auth/react";
 
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import * as AvatarPrimitive from "@radix-ui/react-avatar";
 
-import { Loader2, Github, LogOut } from "lucide-react";
+import { Github, LogOut } from "lucide-react";
 
 import { cn } from "lib/cn";
-import { exists } from "lib/exists";
 
 export default function Auth() {
+  const pathname = usePathname();
+
   const { data: session, status: sessionStatus } = useSession();
 
-  if (sessionStatus === "loading") {
+  if (sessionStatus === "loading" && pathname !== "/") {
     return (
-      <div className="p-2">
-        <Loader2 size={18} className="animate-spin" aria-hidden="true" />
-      </div>
+      <div
+        className={cn(
+          "relative flex h-8 w-8 rounded-full",
+          "select-none",
+          "bg-almost-black"
+        )}
+      />
     );
   }
 
-  if (exists(session) && sessionStatus === "authenticated") {
+  if (session && sessionStatus === "authenticated") {
     return (
       <DropdownMenuPrimitive.Root>
         <DropdownMenuPrimitive.Trigger asChild>
@@ -28,7 +36,7 @@ export default function Auth() {
               "rounded-full",
               "outline-none",
               "transition-all duration-100 ease-in-out",
-              "focus:ring-1 focus:ring-white focus:ring-offset-2 focus:ring-offset-black"
+              "focus:ring-1 focus:ring-almost-white focus:ring-offset-2 focus:ring-offset-black"
             )}
             aria-label="avatar"
           >
@@ -40,21 +48,20 @@ export default function Auth() {
               )}
             >
               <AvatarPrimitive.Image
-                src={session?.user?.image!}
-                alt={session?.user?.name ?? "img"}
+                src={session.user.image!}
+                alt={session.user.name ?? "img"}
                 className={cn("aspect-square h-full w-full")}
               />
               <AvatarPrimitive.Fallback
                 delayMs={600}
                 className={cn(
-                  "flex h-full w-full items-center justify-center rounded-full",
-                  "bg-almost-white text-almost-black"
+                  "flex h-full w-full items-center justify-center rounded-full"
                 )}
               >
-                {session?.user?.name
+                {session.user.name
                   ?.split(" ")
-                  .map((name) => name[0])
-                  .join("") ?? "SH"}
+                  .map((p: string) => p[0])
+                  .join("") ?? "🤓"}
               </AvatarPrimitive.Fallback>
             </AvatarPrimitive.Root>
           </button>
@@ -74,7 +81,7 @@ export default function Auth() {
               "relative flex items-center rounded-md py-1.5 px-2",
               "select-none outline-none",
               "transition-all duration-100 ease-in-out",
-              "focus:cursor-pointer focus:bg-white/20 focus:text-white"
+              "focus:cursor-pointer focus:bg-white/20 focus:text-almost-white"
             )}
           >
             <LogOut size={16} className="mr-2" aria-hidden="true" />
@@ -96,8 +103,8 @@ export default function Auth() {
           "flex items-center justify-between gap-2 rounded-lg p-2",
           "select-none outline-none",
           "transition-all duration-100 ease-in-out",
-          "hover:bg-white/10 hover:text-white",
-          "focus:text-white focus:ring-1 focus:ring-white focus:ring-offset-2 focus:ring-offset-black",
+          "hover:bg-white/10 hover:text-almost-white",
+          "focus:text-almost-white focus:ring-1 focus:ring-almost-white focus:ring-offset-2 focus:ring-offset-black",
           "active:bg-white/20"
         )}
       >

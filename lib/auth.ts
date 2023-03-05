@@ -13,9 +13,13 @@ import type {
 import type { Session } from "next-auth";
 
 export async function getSession(
-  req: NextApiRequest | GetServerSidePropsContext["req"],
-  res: NextApiResponse | GetServerSidePropsContext["res"]
+  req?: NextApiRequest | GetServerSidePropsContext["req"],
+  res?: NextApiResponse | GetServerSidePropsContext["res"]
 ) {
+  if (!req || !res) {
+    return (await getServerSession(authOptions)) as Session;
+  }
+
   return (await getServerSession(req, res, authOptions)) as Session;
 }
 

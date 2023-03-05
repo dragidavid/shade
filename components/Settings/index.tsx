@@ -3,6 +3,10 @@ import { motion, useDragControls, useAnimationControls } from "framer-motion";
 
 import { GripHorizontal } from "lucide-react";
 
+import Select from "components/Settings/Select";
+import Switch from "components/Settings/Switch";
+import Choices from "components/Settings/Choices";
+
 import { cn } from "lib/cn";
 
 import {
@@ -11,10 +15,6 @@ import {
   SUPPORTED_FONT_STYLES,
   SUPPORTED_PADDING_CHOICES,
 } from "lib/values";
-
-import Select from "components/Settings/Select";
-import Switch from "components/Settings/Switch";
-import Choices from "components/Settings/Choices";
 
 interface Dimensions {
   height: number;
@@ -29,7 +29,7 @@ interface DragConstraints {
 }
 
 export default function Settings() {
-  const [mainDimensions, setMainDimensions] = useState<Dimensions>({
+  const [editorDimensions, setEditorDimensions] = useState<Dimensions>({
     height: 0,
     width: 0,
   });
@@ -44,15 +44,15 @@ export default function Settings() {
   const animationControls = useAnimationControls();
 
   useEffect(() => {
-    const main = document.getElementById("main");
+    const editor = document.getElementById("editor");
     let timeoutId: NodeJS.Timeout;
 
     const handleResize = () => {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
-        setMainDimensions({
-          height: main!.offsetHeight,
-          width: main!.offsetWidth,
+        setEditorDimensions({
+          height: editor!.offsetHeight,
+          width: editor!.offsetWidth,
         });
 
         animationControls.start({
@@ -62,7 +62,10 @@ export default function Settings() {
       }, 500);
     };
 
-    setMainDimensions({ height: main!.offsetHeight, width: main!.offsetWidth });
+    setEditorDimensions({
+      height: editor!.offsetHeight,
+      width: editor!.offsetWidth,
+    });
 
     window.addEventListener("resize", handleResize);
 
@@ -78,24 +81,24 @@ export default function Settings() {
     const settings = document.getElementById("settings");
 
     setDragConstraints({
-      top: -settings!.offsetTop + 88,
+      top: -settings!.offsetTop + 88.6,
       left:
-        -mainDimensions.width +
+        -editorDimensions.width +
         settings!.offsetWidth +
         settings!.offsetLeft +
         24,
       right:
-        mainDimensions.width -
+        editorDimensions.width -
         settings!.offsetWidth -
         settings!.offsetLeft -
         24,
       bottom:
-        mainDimensions.height -
+        editorDimensions.height -
         settings!.offsetHeight -
-        settings!.offsetTop -
-        24,
+        settings!.offsetTop +
+        40.9,
     });
-  }, [mainDimensions.height, mainDimensions.width]);
+  }, [editorDimensions.height, editorDimensions.width]);
 
   return (
     <motion.div
@@ -107,8 +110,8 @@ export default function Settings() {
       dragConstraints={dragConstraints}
       animate={animationControls}
       className={cn(
-        "fixed bottom-32 z-10 rounded-xl p-4 text-sm font-medium shadow-xl",
-        "border-[1px] border-white/20 bg-black text-white/70 opacity-30",
+        "fixed bottom-32 z-10 rounded-xl p-4 font-medium shadow-xl",
+        "border-[1px] border-white/20 bg-black opacity-30",
         "transition-opacity duration-100 ease-in-out",
         "hover:opacity-100",
         "focus-within:opacity-100"
@@ -125,8 +128,8 @@ export default function Settings() {
           "select-none outline-none",
           "border-[1px] border-white/20 bg-black",
           "transition-all duration-100 ease-in-out",
-          "hover:scale-125 hover:cursor-grab hover:border-white",
-          "active:scale-125 active:border-white"
+          "hover:scale-125 hover:cursor-grab hover:border-almost-white",
+          "active:scale-125 active:border-almost-white"
         )}
       >
         <GripHorizontal size={16} aria-hidden={true} />

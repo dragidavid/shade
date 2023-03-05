@@ -10,12 +10,13 @@ import { useAppState } from "lib/store";
 
 import type { ChoiceDefinition } from "lib/types";
 
-interface ChoicesProps {
+export default memo(function Choices({
+  type,
+  choices,
+}: {
   type: "padding";
   choices: ChoiceDefinition[];
-}
-
-export default memo(function Choices({ type, choices }: ChoicesProps) {
+}) {
   const value = useAppState((state) => state[type]);
   const update = useAppState((state) => state.update);
 
@@ -38,9 +39,9 @@ export default memo(function Choices({ type, choices }: ChoicesProps) {
               "flex items-center justify-center rounded-md py-1 px-2",
               "select-none outline-none",
               "transition-all duration-100 ease-in-out",
-              "hover:text-white",
-              "focus:text-white focus:ring-1 focus:ring-white focus:ring-offset-2 focus:ring-offset-black",
-              "radix-state-checked:bg-white/20 radix-state-checked:text-white"
+              "hover:text-almost-white",
+              "focus:text-almost-white focus:ring-1 focus:ring-almost-white focus:ring-offset-2 focus:ring-offset-black",
+              "radix-state-checked:bg-white/20 radix-state-checked:text-almost-white"
             )}
           >
             {choice.label}
