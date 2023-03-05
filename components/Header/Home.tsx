@@ -13,12 +13,14 @@ import { cn } from "lib/cn";
 export default function Home() {
   const pathname = usePathname();
 
-  const { data: session, status: sessionStatus } = useSession();
+  const { status: sessionStatus } = useSession();
+
+  if (sessionStatus === "loading") return null;
 
   if (
     pathname === "/" ||
     pathname === "/dashboard" ||
-    (!session && sessionStatus !== "loading")
+    sessionStatus === "unauthenticated"
   ) {
     return <Logo />;
   }

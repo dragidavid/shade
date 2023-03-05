@@ -12,7 +12,7 @@ module.exports = {
     extend: {
       colors: {
         "almost-black": "#161616",
-        greyish: "#b0b0b0",
+        greyish: "#999999",
         "almost-white": "#efefef",
       },
       fontFamily: {

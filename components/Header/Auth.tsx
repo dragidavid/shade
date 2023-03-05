@@ -15,7 +15,11 @@ export default function Auth() {
 
   const { data: session, status: sessionStatus } = useSession();
 
-  if (sessionStatus === "loading" && pathname !== "/") {
+  if (sessionStatus === "loading") {
+    return null;
+  }
+
+  if (pathname !== "/" && sessionStatus === "unauthenticated") {
     return (
       <div
         className={cn(
