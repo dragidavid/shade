@@ -14,6 +14,7 @@ export default memo(function Switch({ type }: { type: "lineNumbers" }) {
       <SwitchPrimitive.Root
         checked={value}
         onCheckedChange={(value: boolean) => update(type, value)}
+        aria-label={`${type}-switch`}
         className={cn(
           "inline-flex h-[24px] w-[44px] shrink-0 items-center rounded-full",
           "outline-none",

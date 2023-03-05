@@ -12,8 +12,8 @@ module.exports = {
     extend: {
       colors: {
         "almost-black": "#161616",
-        greyish: "#a0a0a0",
-        "almost-white": "#ededed",
+        greyish: "#b0b0b0",
+        "almost-white": "#efefef",
       },
       fontFamily: {
         sans: ["var(--font-inter)"],

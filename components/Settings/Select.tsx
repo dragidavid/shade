@@ -93,6 +93,7 @@ export default memo(function Select<
       }
     >
       <SelectPrimitive.Trigger
+        aria-label={`${type}-select`}
         className={cn(
           "flex w-auto items-center justify-between gap-2 rounded-md p-2",
           "select-none outline-none",
