@@ -11,8 +11,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        "almost-black": "#0f0f0f",
-        "almost-white": "#f2f2f2",
+        "almost-black": "#161616",
+        greyish: "#a0a0a0",
+        "almost-white": "#ededed",
       },
       fontFamily: {
         sans: ["var(--font-inter)"],

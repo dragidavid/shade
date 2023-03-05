@@ -2,14 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { AnimatePresence, motion } from "framer-motion";
 
 import { Loader2, Check, X } from "lucide-react";
 
 import { cn } from "lib/cn";
-import { exists } from "lib/exists";
 import { useAppState } from "lib/store";
-import { useSupabase } from "contexts/Supabase";
 
 interface ContentState {
   id: string;
@@ -44,11 +43,9 @@ export default function SaveStatus() {
 
   const pathname = usePathname();
 
-  const { session } = useSupabase();
+  const { data: session } = useSession();
 
   const saveStatus = useAppState((state) => state.saveStatus);
-
-  if (pathname === "/" || !exists(session)) return null;
 
   useEffect(() => {
     if (saveStatus === "SUCCESS" || saveStatus === "ERROR") {
@@ -67,6 +64,8 @@ export default function SaveStatus() {
       setShowMessage(false);
     }
   }, [saveStatus, showMessage]);
+
+  if (pathname === "/dashboard" || !session) return null;
 
   return (
     <div className={cn("absolute left-1/2 -translate-x-1/2")}>

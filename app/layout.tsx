@@ -7,13 +7,11 @@ import {
   IBM_Plex_Mono,
 } from "next/font/google";
 
-import Top from "components/Top";
-import SupabaseListener from "components/SupabaseListener";
+import Header from "components/Header";
 
-import Supabase from "contexts/Supabase";
+import Auth from "contexts/Auth";
 
 import { cn } from "lib/cn";
-import { createClient } from "lib/supabase/server";
 
 import type { Metadata } from "next";
 
@@ -49,17 +47,11 @@ const ibmPlexMono = IBM_Plex_Mono({
   variable: "--font-ibm-plex-mono",
 });
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = createClient();
-
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
   return (
     <html
       lang="en"
@@ -74,17 +66,15 @@ export default async function RootLayout({
     >
       <body
         className={cn(
-          "grid min-h-screen grid-rows-[auto,1fr]",
-          "bg-almost-black text-almost-white"
+          "grid min-h-screen grid-rows-[auto,1fr] text-sm",
+          "bg-almost-black text-greyish"
         )}
       >
-        <Supabase session={session}>
-          <SupabaseListener serverAccessToken={session?.access_token} />
+        <Auth>
+          <Header />
 
-          <Top />
-
-          <main>{children}</main>
-        </Supabase>
+          <main className={cn("grid place-items-center")}>{children}</main>
+        </Auth>
       </body>
     </html>
   );

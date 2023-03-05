@@ -1,38 +1,33 @@
 "use client";
 
+import { usePathname } from "next/navigation";
+import { useSession, signIn, signOut } from "next-auth/react";
+
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import * as AvatarPrimitive from "@radix-ui/react-avatar";
 
-import { Loader2, Github, LogOut } from "lucide-react";
+import { Github, LogOut } from "lucide-react";
 
 import { cn } from "lib/cn";
-import { exists } from "lib/exists";
-import { useSupabase } from "contexts/Supabase";
 
 export default function Auth() {
-  const { supabase, session } = useSupabase();
+  const pathname = usePathname();
 
-  // if (sessionStatus === "loading") {
-  //   return (
-  //     <div className="p-2">
-  //       <Loader2 size={18} className="animate-spin" aria-hidden="true" />
-  //     </div>
-  //   );
-  // }
+  const { data: session, status: sessionStatus } = useSession();
 
-  async function signInWithGitHub() {
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: "github",
-    });
-
-    console.log(data, error);
+  if (sessionStatus === "loading" && pathname !== "/") {
+    return (
+      <div
+        className={cn(
+          "relative flex h-8 w-8 rounded-full",
+          "select-none",
+          "bg-almost-black"
+        )}
+      />
+    );
   }
 
-  async function signOut() {
-    await supabase.auth.signOut();
-  }
-
-  if (exists(session)) {
+  if (session && sessionStatus === "authenticated") {
     return (
       <DropdownMenuPrimitive.Root>
         <DropdownMenuPrimitive.Trigger asChild>
@@ -41,7 +36,7 @@ export default function Auth() {
               "rounded-full",
               "outline-none",
               "transition-all duration-100 ease-in-out",
-              "focus:ring-1 focus:ring-white focus:ring-offset-2 focus:ring-offset-black"
+              "focus:ring-1 focus:ring-almost-white focus:ring-offset-2 focus:ring-offset-black"
             )}
             aria-label="avatar"
           >
@@ -53,21 +48,20 @@ export default function Auth() {
               )}
             >
               <AvatarPrimitive.Image
-                src={session?.user?.user_metadata.avatar_url}
-                alt={session?.user?.user_metadata.full_name ?? "img"}
+                src={session.user.image!}
+                alt={session.user.name ?? "img"}
                 className={cn("aspect-square h-full w-full")}
               />
               <AvatarPrimitive.Fallback
                 delayMs={600}
                 className={cn(
-                  "flex h-full w-full items-center justify-center rounded-full",
-                  "bg-almost-black text-almost-white"
+                  "flex h-full w-full items-center justify-center rounded-full"
                 )}
               >
-                {session?.user?.user_metadata.full_name
+                {session.user.name
                   ?.split(" ")
                   .map((p: string) => p[0])
-                  .join("") ?? "SH"}
+                  .join("") ?? "🤓"}
               </AvatarPrimitive.Fallback>
             </AvatarPrimitive.Root>
           </button>
@@ -87,7 +81,7 @@ export default function Auth() {
               "relative flex items-center rounded-md py-1.5 px-2",
               "select-none outline-none",
               "transition-all duration-100 ease-in-out",
-              "focus:cursor-pointer focus:bg-white/20 focus:text-white"
+              "focus:cursor-pointer focus:bg-white/20 focus:text-almost-white"
             )}
           >
             <LogOut size={16} className="mr-2" aria-hidden="true" />
@@ -104,13 +98,13 @@ export default function Auth() {
     <div>
       <button
         type="button"
-        onClick={() => signInWithGitHub()}
+        onClick={() => signIn("github")}
         className={cn(
           "flex items-center justify-between gap-2 rounded-lg p-2",
           "select-none outline-none",
           "transition-all duration-100 ease-in-out",
-          "hover:bg-white/10 hover:text-white",
-          "focus:text-white focus:ring-1 focus:ring-white focus:ring-offset-2 focus:ring-offset-black",
+          "hover:bg-white/10 hover:text-almost-white",
+          "focus:text-almost-white focus:ring-1 focus:ring-almost-white focus:ring-offset-2 focus:ring-offset-black",
           "active:bg-white/20"
         )}
       >

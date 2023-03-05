@@ -1,10 +1,10 @@
+"use client";
+
 import { useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import useSWRMutation from "swr/mutation";
 
 import { Loader2, Plus, Check, X } from "lucide-react";
-
-import Content from "components/Dashboard/Content";
 
 import { cn } from "lib/cn";
 import { fetcher } from "lib/fetcher";
@@ -22,7 +22,7 @@ const BUTTON_STATES: Record<string, ButtonState> = {
     text: "New",
     icon: <Plus size={16} aria-hidden="true" />,
     additionalClasses:
-      "border-white/20 bg-black hover:bg-white/10 hover:text-white hover:border-white active:bg-white/20",
+      "border-white/20 bg-black hover:bg-white/10 hover:text-almost-white hover:border-almost-white active:bg-white/20",
   },
   SUCCESS: {
     id: "success",
@@ -40,14 +40,14 @@ const BUTTON_STATES: Record<string, ButtonState> = {
   },
 };
 
-export default function Dashboard() {
+export default function Button() {
   const [buttonState, setButtonState] = useState<ButtonState>(
     BUTTON_STATES.DEFAULT
   );
 
   const router = useRouter();
 
-  const { trigger, isMutating } = useSWRMutation(
+  const { trigger: create, isMutating: loading } = useSWRMutation(
     "/api/snippets/create",
     (url) => fetcher(url)
   );
@@ -60,51 +60,38 @@ export default function Dashboard() {
 
   const handleButtonClick = async () => {
     try {
-      const { id } = await trigger();
+      const { id } = await create();
 
       setButtonState(BUTTON_STATES.SUCCESS);
 
       router.push(`/${id}`);
     } catch (e) {
       setButtonState(BUTTON_STATES.ERROR);
-
+    } finally {
       reset();
     }
   };
 
   return (
-    <section
+    <button
+      type="button"
+      onClick={handleButtonClick}
+      disabled={loading || buttonState.id !== "default"}
       className={cn(
-        "flex w-[576px] flex-col gap-6 rounded-xl p-5 shadow-xl",
-        "border-[1px] border-white/20 bg-black text-white/70"
+        "flex w-auto items-center justify-between gap-2 rounded-lg p-2 font-medium",
+        "select-none outline-none",
+        "border-[1px]",
+        "transition-all duration-100 ease-in-out",
+        "focus:ring-1 focus:ring-almost-white focus:ring-offset-2 focus:ring-offset-black",
+        buttonState.additionalClasses
       )}
     >
-      <div className={cn("flex w-full items-center justify-between")}>
-        <h2 className={cn("text-xl font-black")}>Snippets</h2>
-
-        <button
-          type="button"
-          onClick={handleButtonClick}
-          disabled={isMutating || buttonState.id !== "default"}
-          className={cn(
-            "flex w-auto items-center justify-between gap-2 rounded-lg p-2 text-sm font-medium",
-            "select-none outline-none",
-            "border-[1px]",
-            "transition-all duration-100 ease-in-out",
-            "focus:ring-1 focus:ring-white focus:ring-offset-2 focus:ring-offset-black",
-            buttonState.additionalClasses
-          )}
-        >
-          {isMutating ? (
-            <Loader2 size={16} className="animate-spin" aria-hidden="true" />
-          ) : (
-            buttonState.icon
-          )}
-          {buttonState.text}
-        </button>
-      </div>
-
-      <Content />
-    </section>
+      {loading ? (
+        <Loader2 size={16} className="animate-spin" aria-hidden="true" />
+      ) : (
+        buttonState.icon
+      )}
+      {buttonState.text}
+    </button>
   );
 }

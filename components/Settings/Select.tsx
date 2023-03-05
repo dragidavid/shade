@@ -22,14 +22,15 @@ import type {
   FontDefinition,
 } from "lib/types";
 
-interface SelectProps<T> {
-  type: "language" | "theme" | "fontStyle";
-  options: T[];
-}
-
 export default memo(function Select<
   T extends LanguageDefinition | ThemeDefinition | FontDefinition
->({ type, options }: SelectProps<T>) {
+>({
+  type,
+  options,
+}: {
+  type: "language" | "theme" | "fontStyle";
+  options: T[];
+}) {
   const value = useAppState((state) => state[type]);
   const update = useAppState((state) => state.update);
 
@@ -97,8 +98,8 @@ export default memo(function Select<
           "select-none outline-none",
           "border-[1px] border-white/20 bg-black",
           "transition-all duration-100 ease-in-out",
-          "hover:border-white hover:bg-white/10 hover:text-white",
-          "focus:border-white focus:bg-white/10 focus:text-white",
+          "hover:border-almost-white hover:bg-white/10 hover:text-almost-white",
+          "focus:border-almost-white focus:bg-white/10 focus:text-almost-white",
           type === "language" && "w-32",
           type === "fontStyle" && "w-48"
         )}
@@ -128,7 +129,7 @@ export default memo(function Select<
                 "items-center rounded-md p-2",
                 "select-none outline-none",
                 "transition-all duration-100 ease-in-out",
-                "radix-highlighted:bg-white/20 radix-highlighted:text-white"
+                "radix-highlighted:bg-white/20 radix-highlighted:text-almost-white"
               )}
             >
               <SelectPrimitive.ItemText>

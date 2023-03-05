@@ -1,34 +1,38 @@
 "use client";
 
-import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 import { ArrowLeft } from "lucide-react";
 
-import Logo from "components/Top/Logo";
-
-import { useSupabase } from "contexts/Supabase";
+import Logo from "components/Header/Logo";
 
 import { cn } from "lib/cn";
-import { exists } from "lib/exists";
 
-export default function HomeLink() {
+export default function Home() {
   const pathname = usePathname();
 
-  const { session } = useSupabase();
+  const { data: session, status: sessionStatus } = useSession();
 
-  if (pathname === "/" || !exists(session)) return <Logo />;
+  if (
+    pathname === "/" ||
+    pathname === "/dashboard" ||
+    (!session && sessionStatus !== "loading")
+  ) {
+    return <Logo />;
+  }
 
   return (
     <div>
       <Link
-        href="/"
+        href="/dashboard"
         className={cn(
           "flex items-center justify-between gap-2 rounded-lg p-2",
           "select-none outline-none",
           "transition-all duration-100 ease-in-out",
-          "hover:bg-white/10 hover:text-white",
-          "focus:text-white focus:ring-1 focus:ring-white focus:ring-offset-2 focus:ring-offset-black",
+          "hover:bg-white/10 hover:text-almost-white",
+          "focus:text-almost-white focus:ring-1 focus:ring-almost-white focus:ring-offset-2 focus:ring-offset-black",
           "active:bg-white/20",
           "group"
         )}

@@ -1,5 +1,6 @@
+"use client";
+
 import { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/router";
 import { motion } from "framer-motion";
 
 import { useCodeMirror } from "@uiw/react-codemirror";
@@ -8,24 +9,17 @@ import { createTheme } from "@uiw/codemirror-themes";
 import { tags as t } from "@lezer/highlight";
 
 import { cn } from "lib/cn";
-import { exists } from "lib/exists";
 import { useAppState } from "lib/store";
 import { hslToHsla as adjustLightness } from "lib/colors/conversions";
 
 import type { Extension } from "@codemirror/state";
 
-interface CodeProps {
-  editAllowed?: boolean;
-}
-
-export default function Code({ editAllowed }: CodeProps) {
+export default function Code({ editable = false }: { editable: boolean }) {
   const [selectedLanguage, setSelectedLanguage] = useState<Extension | null>(
     null
   );
   const editorContainerRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<HTMLDivElement>(null);
-
-  const { pathname } = useRouter();
 
   const code = useAppState((state) => state.code);
   const language = useAppState((state) => state.language);
@@ -34,8 +28,6 @@ export default function Code({ editAllowed }: CodeProps) {
   const lineNumbers = useAppState((state) => state.lineNumbers);
   const padding = useAppState((state) => state.padding);
   const update = useAppState((state) => state.update);
-
-  const isEditable = (exists(editAllowed) && editAllowed) || pathname === "/";
 
   const customStyles = EditorView.baseTheme({
     "&.cm-editor": {
@@ -76,7 +68,7 @@ export default function Code({ editAllowed }: CodeProps) {
     settings: {
       background: "transparent",
       foreground: "white",
-      caret: colors.at(0),
+      caret: editable ? colors.at(0) : "transparent",
       selection: adjustLightness(colors.at(0)!, 0.1),
       selectionMatch: adjustLightness(colors.at(0)!, 0.2),
       lineHighlight: "transparent",
@@ -173,7 +165,7 @@ export default function Code({ editAllowed }: CodeProps) {
     value: code,
     onChange: (value) => update("code", value),
     autoFocus: false,
-    editable: isEditable,
+    editable,
     basicSetup: {
       lineNumbers: lineNumbers,
       foldGutter: false,
@@ -208,7 +200,7 @@ export default function Code({ editAllowed }: CodeProps) {
   }, [language]);
 
   useEffect(() => {
-    if (editorRef.current && !exists(container) && exists(selectedLanguage)) {
+    if (editorRef.current && !container && selectedLanguage) {
       setContainer(editorRef.current);
     }
   }, [selectedLanguage, container, setContainer]);
@@ -230,12 +222,23 @@ export default function Code({ editAllowed }: CodeProps) {
     };
   }, [view]);
 
+  if (!selectedLanguage) {
+    return null;
+  }
+
   return (
     <motion.div
       ref={editorContainerRef}
       layout
+      animate={{
+        opacity: 1,
+        transition: { duration: 0.1 },
+      }}
+      initial={{
+        opacity: 0,
+      }}
       className={cn(
-        "relative z-0 w-auto min-w-[512px] max-w-5xl rounded-xl",
+        "relative z-0 w-auto min-w-[512px] max-w-5xl rounded-xl shadow-xl",
         padding.class,
         "bg-gradient-to-br",
         theme.class,
@@ -264,11 +267,11 @@ export default function Code({ editAllowed }: CodeProps) {
         </div>
         <div
           className={cn(
-            "relative z-[4] rounded-lg p-4",
-            "border-[1px] border-white/10 bg-black/70 shadow-xl"
+            "relative z-[4] min-h-[64px] rounded-lg p-4",
+            "bg-black/70"
           )}
         >
-          {selectedLanguage && <div ref={editorRef} />}
+          <div ref={editorRef} />
         </div>
       </motion.div>
     </motion.div>

@@ -11,7 +11,7 @@ import { useAppState } from "lib/store";
 
 import type { State } from "lib/types";
 
-export default function Save() {
+export default function ChangeListener() {
   const prevStateRef = useRef<State | null>(null);
   const shouldUpdate = useRef(false);
   const hasFailed = useRef(false);
