@@ -222,6 +222,16 @@ export default function Code({ editable = false }: { editable: boolean }) {
     };
   }, [view]);
 
+  useEffect(() => {
+    if (editorRef.current) {
+      const textboxElement = document.querySelector('[role="textbox"]');
+
+      if (textboxElement) {
+        textboxElement.ariaLabel = "code-editor";
+      }
+    }
+  }, [editorRef.current]);
+
   if (!selectedLanguage) {
     return null;
   }

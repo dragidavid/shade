@@ -56,7 +56,7 @@ export const useAppState = create<AppState>()(
     title: null,
     code: INITIAL_CODE,
     language: SUPPORTED_LANGUAGES.at(0)!,
-    theme: SUPPORTED_THEMES.at(2)!,
+    theme: SUPPORTED_THEMES.at(0)!,
     fontStyle: SUPPORTED_FONT_STYLES.at(0)!,
     lineNumbers: true,
     padding: SUPPORTED_PADDING_CHOICES.at(1)!,
