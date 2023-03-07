@@ -25,23 +25,18 @@ export const metadata: Metadata = {
 const inter = Inter({
   variable: "--font-inter",
 });
-
 const firaCode = Fira_Code({
   variable: "--font-fira-code",
 });
-
 const jetBrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",
 });
-
 const inconsolata = Inconsolata({
   variable: "--font-inconsolata",
 });
-
 const sourceCodePro = Source_Code_Pro({
   variable: "--font-source-code-pro",
 });
-
 const ibmPlexMono = IBM_Plex_Mono({
   weight: "400",
   variable: "--font-ibm-plex-mono",

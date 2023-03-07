@@ -23,14 +23,20 @@ async function getSnippet(id: string) {
 export default async function Page({ params }: { params: { id: string } }) {
   const session = await getSession();
 
-  const snippet = await getSnippet(params.id);
+  const partialSnippet = await getSnippet(params.id);
 
-  const editable = session?.user?.id === snippet?.userId;
+  const editable = session?.user?.id === partialSnippet?.userId;
   const signedIn = !!session;
 
-  if (!snippet) {
+  if (!partialSnippet) {
     notFound();
   }
 
-  return <Editor snippet={snippet} editable={editable} signedIn={signedIn} />;
+  return (
+    <Editor
+      partialSnippet={partialSnippet}
+      editable={editable}
+      signedIn={signedIn}
+    />
+  );
 }

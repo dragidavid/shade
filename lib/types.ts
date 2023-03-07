@@ -1,3 +1,4 @@
+import type { Prisma, Snippet } from "@prisma/client";
 import type { Extension } from "@codemirror/state";
 
 export type LanguageDefinition = {
@@ -26,27 +27,9 @@ export type ChoiceDefinition = {
   class: string;
 };
 
-export type Settings = {
-  language: string;
-  theme: string;
-  fontStyle: string;
-  lineNumbers: boolean;
-  padding: string;
-};
-
-export type Snippet = {
-  id: string;
-  title: string | null;
-  code: string;
-  settings: Settings;
-  createdAt: Date;
-  updatedAt: Date;
-  userId: string;
-};
-
 export type State = {
   id: string | null;
-  title: string | null;
+  title: string;
   code: string;
   language: LanguageDefinition;
   theme: ThemeDefinition;
@@ -55,4 +38,31 @@ export type State = {
   padding: ChoiceDefinition;
 };
 
+export interface SnippetSettings extends Prisma.JsonObject {
+  language: string;
+  theme: string;
+  fontStyle: string;
+  lineNumbers: boolean;
+  padding: string;
+}
+
 export type SaveStatus = "SUCCESS" | "ERROR" | "PENDING" | "IDLE";
+
+export interface Store extends State {
+  saveStatus: SaveStatus;
+  update: <
+    T extends string,
+    V extends
+      | string
+      | boolean
+      | LanguageDefinition
+      | ThemeDefinition
+      | FontDefinition
+      | ChoiceDefinition
+  >(
+    type: T,
+    value: V
+  ) => void;
+  setEditorState: (partialSnippet: Partial<Snippet>) => void;
+  getEditorState: () => State;
+}

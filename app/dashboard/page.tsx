@@ -9,6 +9,8 @@ import { find } from "lib/find";
 import { prisma } from "lib/prisma";
 import { getSession } from "lib/auth";
 
+import type { SnippetSettings } from "lib/types";
+
 async function getSnippets(userId: string) {
   return await prisma.snippet.findMany({
     where: {
@@ -33,12 +35,11 @@ export default async function Page() {
   return (
     <div>
       <ul className={cn("grid grid-cols-2 gap-3")}>
-        {/* TODO replace any with type - fix schema for it first */}
-        {snippets.map((snippet: any) => (
-          <li key={snippet.id}>
+        {snippets.map(({ id, title, settings, createdAt }) => (
+          <li key={id}>
             <Link
-              href={`/${snippet.id}`}
-              key={snippet.id}
+              href={`/${id}`}
+              key={id}
               className={cn(
                 "flex w-full flex-col gap-2 rounded-lg p-3 font-medium",
                 "select-none outline-none",
@@ -51,13 +52,14 @@ export default async function Page() {
             >
               <div className={cn("flex items-center gap-2")}>
                 <ThemeBubble
-                  colors={find(SUPPORTED_THEMES, snippet.settings.theme).class}
+                  colors={
+                    find(SUPPORTED_THEMES, (settings as SnippetSettings).theme)
+                      .class
+                  }
                   aria-hidden="true"
                 />
 
-                <span className={cn("grow truncate")}>
-                  {snippet.title ?? "Untitled"}
-                </span>
+                <span className={cn("grow truncate")}>{title}</span>
               </div>
 
               <span className="text-xs">
@@ -65,7 +67,7 @@ export default async function Page() {
                   year: "numeric",
                   month: "short",
                   day: "numeric",
-                }).format(new Date(snippet.createdAt))}
+                }).format(new Date(createdAt))}
               </span>
             </Link>
           </li>

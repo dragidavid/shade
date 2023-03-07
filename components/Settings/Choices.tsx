@@ -6,7 +6,7 @@ import { SUPPORTED_PADDING_CHOICES } from "lib/values";
 
 import { cn } from "lib/cn";
 import { find } from "lib/find";
-import { useAppState } from "lib/store";
+import { useStore } from "lib/store";
 
 import type { ChoiceDefinition } from "lib/types";
 
@@ -17,8 +17,8 @@ export default memo(function Choices({
   type: "padding";
   choices: ChoiceDefinition[];
 }) {
-  const value = useAppState((state) => state[type]);
-  const update = useAppState((state) => state.update);
+  const value = useStore((state) => state[type]);
+  const update = useStore((state) => state.update);
 
   return (
     <RadioGroupPrimitive.Root

@@ -2,8 +2,6 @@ import { getServerSession } from "next-auth/next";
 
 import { authOptions } from "pages/api/auth/[...nextauth]";
 
-import { exists } from "lib/exists";
-
 import type {
   GetServerSidePropsContext,
   NextApiHandler,
@@ -27,7 +25,7 @@ export function withAuthentication(handler: NextApiHandler) {
   return async function (req: NextApiRequest, res: NextApiResponse) {
     const session = await getServerSession(req, res, authOptions);
 
-    if (!session || !exists(session.user.id)) {
+    if (!session || !session.user.id) {
       return res.status(403).end();
     }
 

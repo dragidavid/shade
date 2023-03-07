@@ -16,7 +16,9 @@ const importLegacy = () =>
     };
   });
 
-export const INITIAL_CODE = `// Write some code here`;
+export const INITIAL_TITLE = "Untitled";
+
+export const INITIAL_CODE = "// Write some code here";
 
 export const SUPPORTED_LANGUAGES: LanguageDefinition[] = [
   {

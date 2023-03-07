@@ -9,7 +9,7 @@ import { createTheme } from "@uiw/codemirror-themes";
 import { tags as t } from "@lezer/highlight";
 
 import { cn } from "lib/cn";
-import { useAppState } from "lib/store";
+import { useStore } from "lib/store";
 import { hslToHsla as adjustLightness } from "lib/colors/conversions";
 
 import type { Extension } from "@codemirror/state";
@@ -21,13 +21,13 @@ export default function Code({ editable = false }: { editable: boolean }) {
   const editorContainerRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<HTMLDivElement>(null);
 
-  const code = useAppState((state) => state.code);
-  const language = useAppState((state) => state.language);
-  const theme = useAppState((state) => state.theme);
-  const fontStyle = useAppState((state) => state.fontStyle);
-  const lineNumbers = useAppState((state) => state.lineNumbers);
-  const padding = useAppState((state) => state.padding);
-  const update = useAppState((state) => state.update);
+  const code = useStore((state) => state.code);
+  const language = useStore((state) => state.language);
+  const theme = useStore((state) => state.theme);
+  const fontStyle = useStore((state) => state.fontStyle);
+  const lineNumbers = useStore((state) => state.lineNumbers);
+  const padding = useStore((state) => state.padding);
+  const update = useStore((state) => state.update);
 
   const customStyles = EditorView.baseTheme({
     "&.cm-editor": {

@@ -5,9 +5,8 @@ import useSWRMutation from "swr/mutation";
 import debounce from "lodash.debounce";
 import isEqual from "lodash.isequal";
 
-import { exists } from "lib/exists";
 import { fetcher } from "lib/fetcher";
-import { useAppState } from "lib/store";
+import { useStore } from "lib/store";
 
 import type { State } from "lib/types";
 
@@ -17,9 +16,9 @@ export default function ChangeListener() {
   const hasFailed = useRef(false);
   const cancellationTokenRef = useRef({ isCancelled: false });
 
-  const saveStatus = useAppState((state) => state.saveStatus);
-  const state = useAppState((state) => state.getEditorState());
-  const update = useAppState((state) => state.update);
+  const saveStatus = useStore((state) => state.saveStatus);
+  const state = useStore((state) => state.getEditorState());
+  const update = useStore((state) => state.update);
 
   const { trigger } = useSWRMutation(
     "/api/snippets/update",
@@ -102,7 +101,7 @@ export default function ChangeListener() {
     }
 
     if (
-      exists(state.id) &&
+      state.id &&
       !isEqual(prevStateRef.current, state) &&
       !hasFailed.current
     ) {

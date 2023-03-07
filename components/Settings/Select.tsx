@@ -14,7 +14,7 @@ import {
 
 import { cn } from "lib/cn";
 import { find } from "lib/find";
-import { useAppState } from "lib/store";
+import { useStore } from "lib/store";
 
 import type {
   LanguageDefinition,
@@ -31,8 +31,8 @@ export default memo(function Select<
   type: "language" | "theme" | "fontStyle";
   options: T[];
 }) {
-  const value = useAppState((state) => state[type]);
-  const update = useAppState((state) => state.update);
+  const value = useStore((state) => state[type]);
+  const update = useStore((state) => state.update);
 
   const get = {
     language: {

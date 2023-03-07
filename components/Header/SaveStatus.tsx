@@ -8,7 +8,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Loader2, Check, X } from "lucide-react";
 
 import { cn } from "lib/cn";
-import { useAppState } from "lib/store";
+import { useStore } from "lib/store";
 
 interface ContentState {
   id: string;
@@ -45,7 +45,7 @@ export default function SaveStatus() {
 
   const { data: session } = useSession();
 
-  const saveStatus = useAppState((state) => state.saveStatus);
+  const saveStatus = useStore((state) => state.saveStatus);
 
   useEffect(() => {
     if (saveStatus === "SUCCESS" || saveStatus === "ERROR") {

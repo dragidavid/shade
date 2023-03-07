@@ -5,22 +5,23 @@ import Settings from "components/Settings";
 import ChangeListener from "components/Editor/ChangeListener";
 
 import { cn } from "lib/cn";
-import { useAppState } from "lib/store";
+import { useStore } from "lib/store";
 
-// TODO FIX TYPE
+import type { Snippet } from "@prisma/client";
+
 export default function Editor({
-  snippet,
+  partialSnippet,
   editable,
   signedIn,
 }: {
-  snippet?: any;
+  partialSnippet?: Partial<Snippet>;
   editable: boolean;
   signedIn: boolean;
 }) {
-  const setEditorState = useAppState((state) => state.setEditorState);
+  const setEditorState = useStore((state) => state.setEditorState);
 
-  if (snippet) {
-    setEditorState(snippet);
+  if (partialSnippet) {
+    setEditorState(partialSnippet);
   }
 
   return (

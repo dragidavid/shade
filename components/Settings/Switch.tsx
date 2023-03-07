@@ -3,11 +3,11 @@ import { memo } from "react";
 import * as SwitchPrimitive from "@radix-ui/react-switch";
 
 import { cn } from "lib/cn";
-import { useAppState } from "lib/store";
+import { useStore } from "lib/store";
 
 export default memo(function Switch({ type }: { type: "lineNumbers" }) {
-  const value = useAppState((state) => state[type]);
-  const update = useAppState((state) => state.update);
+  const value = useStore((state) => state[type]);
+  const update = useStore((state) => state.update);
 
   return (
     <div className={cn("flex h-full items-center")}>
