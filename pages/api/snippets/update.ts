@@ -10,7 +10,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         id: req.body.id,
       },
       data: {
-        title: req.body.title,
+        title:
+          req.body.title && req.body.title.trim() !== ""
+            ? req.body.title.trim()
+            : null,
         code: req.body.code,
         settings: {
           language: req.body.language.id,
