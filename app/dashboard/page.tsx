@@ -59,7 +59,9 @@ export default async function Page() {
                   aria-hidden="true"
                 />
 
-                <span className={cn("grow truncate")}>{title}</span>
+                <span className={cn("grow truncate")}>
+                  {title ?? "Untitled"}
+                </span>
               </div>
 
               <span className="text-xs">
