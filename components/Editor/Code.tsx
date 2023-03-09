@@ -8,6 +8,8 @@ import { EditorView } from "@codemirror/view";
 import { createTheme } from "@uiw/codemirror-themes";
 import { tags as t } from "@lezer/highlight";
 
+import TitleBar from "components/Editor/TitleBar";
+
 import { cn } from "lib/cn";
 import { useStore } from "lib/store";
 import { hslToHsla as adjustLightness } from "lib/colors/conversions";
@@ -21,6 +23,7 @@ export default function Code({ editable = false }: { editable: boolean }) {
   const editorContainerRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<HTMLDivElement>(null);
 
+  const title = useStore((state) => state.title);
   const code = useStore((state) => state.code);
   const language = useStore((state) => state.language);
   const theme = useStore((state) => state.theme);
@@ -230,7 +233,7 @@ export default function Code({ editable = false }: { editable: boolean }) {
         textboxElement.ariaLabel = "code-editor";
       }
     }
-  }, [editorRef.current]);
+  }, [editorRef]);
 
   if (!selectedLanguage) {
     return null;
@@ -275,13 +278,12 @@ export default function Code({ editable = false }: { editable: boolean }) {
             )}
           />
         </div>
-        <div
-          className={cn(
-            "relative z-[4] min-h-[64px] rounded-lg p-4",
-            "bg-black/70"
-          )}
-        >
-          <div ref={editorRef} />
+        <div className={cn("relative z-[4] rounded-lg", "bg-black/70")}>
+          <TitleBar />
+
+          <div className={cn("rounded-lg p-3")}>
+            <div ref={editorRef} />
+          </div>
         </div>
       </motion.div>
     </motion.div>
