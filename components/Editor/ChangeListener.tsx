@@ -14,7 +14,6 @@ export default function ChangeListener() {
   const prevStateRef = useRef<State | null>(null);
   const shouldUpdate = useRef(false);
   const hasFailed = useRef(false);
-  const cancellationTokenRef = useRef({ isCancelled: false });
 
   const saveStatus = useStore((state) => state.saveStatus);
   const state = useStore((state) => state.getEditorState());
@@ -33,25 +32,24 @@ export default function ChangeListener() {
     }
   );
 
-  const debouncedSave = useCallback(
-    debounce(async (changes, cancellationToken) => {
-      if (cancellationToken.isCancelled) {
-        return;
-      }
+  const resetFailedSaveRef = useCallback(
+    debounce(() => {
+      hasFailed.current = false;
+    }, 0),
+    []
+  );
 
-      if (!isEqual(state, changes)) {
+  const debouncedSave = useCallback(
+    debounce(async (changes) => {
+      if (!isEqual(state, changes) && !hasFailed.current) {
         if (saveStatus !== "PENDING") update("saveStatus", "PENDING");
 
         try {
           await trigger(changes);
 
-          if (!cancellationToken.isCancelled) {
-            update("saveStatus", "SUCCESS");
-          }
+          update("saveStatus", "SUCCESS");
         } catch (e) {
-          if (!cancellationToken.isCancelled) {
-            update("saveStatus", "ERROR");
-          }
+          update("saveStatus", "ERROR");
         }
       } else {
         update("saveStatus", "IDLE");
@@ -60,12 +58,14 @@ export default function ChangeListener() {
     [state.id, shouldUpdate.current]
   );
 
+  // When a new snippet is viewed, set the previous state to the current state
   useEffect(() => {
-    return () => {
-      cancellationTokenRef.current.isCancelled = true;
-    };
-  }, []);
+    prevStateRef.current = state;
 
+    update("saveStatus", "IDLE");
+  }, [state.id]);
+
+  // Handle success and error states
   useEffect(() => {
     if (saveStatus === "SUCCESS") {
       prevStateRef.current = state;
@@ -75,29 +75,24 @@ export default function ChangeListener() {
     }
 
     if (saveStatus === "ERROR") {
-      hasFailed.current = !hasFailed.current;
+      hasFailed.current = true;
+
+      update("saveStatus", "IDLE");
+    }
+  }, [saveStatus]);
+
+  // If the user reverted the changes during the 3 second debounce, cancel the function
+  useEffect(() => {
+    if (saveStatus === "PENDING" && isEqual(prevStateRef.current, state)) {
+      debouncedSave.cancel();
 
       update("saveStatus", "IDLE");
     }
   }, [state, saveStatus]);
 
   useEffect(() => {
-    prevStateRef.current = state;
-
-    update("saveStatus", "IDLE");
-  }, [state.id]);
-
-  useEffect(() => {
     if (hasFailed.current) {
-      hasFailed.current = false;
-    }
-  }, [state]);
-
-  useEffect(() => {
-    if (saveStatus === "PENDING" && isEqual(prevStateRef.current, state)) {
-      debouncedSave.cancel();
-
-      update("saveStatus", "IDLE");
+      resetFailedSaveRef();
     }
 
     if (
@@ -105,14 +100,11 @@ export default function ChangeListener() {
       !isEqual(prevStateRef.current, state) &&
       !hasFailed.current
     ) {
-      cancellationTokenRef.current.isCancelled = true;
-      cancellationTokenRef.current = { isCancelled: false };
-
       update("saveStatus", "PENDING");
 
-      debouncedSave(state, cancellationTokenRef.current);
+      debouncedSave(state);
     }
-  }, [state, saveStatus]);
+  }, [state]);
 
   return null;
 }
