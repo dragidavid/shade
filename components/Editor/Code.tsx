@@ -1,7 +1,9 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { useHotkeys } from "react-hotkeys-hook";
 import { motion } from "framer-motion";
+import { Key } from "ts-key-enum";
 
 import { useCodeMirror } from "@uiw/react-codemirror";
 import { EditorView } from "@codemirror/view";
@@ -20,10 +22,10 @@ export default function Code({ editable = false }: { editable: boolean }) {
   const [selectedLanguage, setSelectedLanguage] = useState<Extension | null>(
     null
   );
-  const editorContainerRef = useRef<HTMLDivElement>(null);
+  const [localEditable, setLocalEditable] = useState(editable);
+
   const editorRef = useRef<HTMLDivElement>(null);
 
-  const title = useStore((state) => state.title);
   const code = useStore((state) => state.code);
   const language = useStore((state) => state.language);
   const theme = useStore((state) => state.theme);
@@ -71,7 +73,7 @@ export default function Code({ editable = false }: { editable: boolean }) {
     settings: {
       background: "transparent",
       foreground: "white",
-      caret: editable ? colors.at(0) : "transparent",
+      caret: localEditable ? colors.at(0) : "transparent",
       selection: adjustLightness(colors.at(0)!, 0.1),
       selectionMatch: adjustLightness(colors.at(0)!, 0.2),
       lineHighlight: "transparent",
@@ -163,12 +165,12 @@ export default function Code({ editable = false }: { editable: boolean }) {
     ],
   });
 
-  const { container, setContainer, view } = useCodeMirror({
+  const { setContainer, view } = useCodeMirror({
     container: editorRef.current,
     value: code,
     onChange: (value) => update("code", value),
     autoFocus: false,
-    editable,
+    editable: localEditable,
     basicSetup: {
       lineNumbers: lineNumbers,
       foldGutter: false,
@@ -203,18 +205,16 @@ export default function Code({ editable = false }: { editable: boolean }) {
   }, [language]);
 
   useEffect(() => {
-    if (editorRef.current && !container && selectedLanguage) {
+    if (editorRef.current && selectedLanguage) {
       setContainer(editorRef.current);
     }
-  }, [selectedLanguage, container, setContainer]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editorRef.current, selectedLanguage]);
 
   useEffect(() => {
     function handleClick(event: MouseEvent) {
-      if (
-        !editorContainerRef.current?.contains(event.target as Node) &&
-        view?.hasFocus
-      ) {
-        view.contentDOM.blur();
+      if (editorRef.current?.contains(event.target as Node) && !localEditable) {
+        setLocalEditable(true);
       }
     }
 
@@ -223,17 +223,48 @@ export default function Code({ editable = false }: { editable: boolean }) {
     return () => {
       document.removeEventListener("click", handleClick);
     };
-  }, [view]);
+  }, [localEditable]);
 
   useEffect(() => {
     if (editorRef.current) {
       const textboxElement = document.querySelector('[role="textbox"]');
 
       if (textboxElement) {
-        textboxElement.ariaLabel = "code-editor";
+        textboxElement.setAttribute("aria-label", "code-editor");
       }
     }
-  }, [editorRef]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editorRef.current]);
+
+  useHotkeys(
+    Key.Escape,
+    () => {
+      if (view?.hasFocus) {
+        view.contentDOM.blur();
+
+        setLocalEditable(false);
+      }
+    },
+    {
+      enableOnContentEditable: true,
+    },
+    [view]
+  );
+
+  useHotkeys(
+    "f",
+    () => {
+      if (!view?.hasFocus) {
+        view?.focus();
+
+        setLocalEditable(true);
+      }
+    },
+    {
+      preventDefault: true,
+    },
+    [view]
+  );
 
   if (!selectedLanguage) {
     return null;
@@ -241,7 +272,6 @@ export default function Code({ editable = false }: { editable: boolean }) {
 
   return (
     <motion.div
-      ref={editorContainerRef}
       layout
       animate={{
         opacity: 1,
@@ -281,9 +311,7 @@ export default function Code({ editable = false }: { editable: boolean }) {
         <div className={cn("relative z-[4] rounded-lg", "bg-black/70")}>
           <TitleBar />
 
-          <div className={cn("rounded-lg p-3")}>
-            <div ref={editorRef} />
-          </div>
+          <div ref={editorRef} className={cn("rounded-lg p-3")} />
         </div>
       </motion.div>
     </motion.div>

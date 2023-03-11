@@ -111,35 +111,37 @@ export default memo(function Select<
         </SelectPrimitive.Icon>
       </SelectPrimitive.Trigger>
 
-      <SelectPrimitive.Content
-        position="popper"
-        sideOffset={-100}
-        align="center"
-        className={cn(
-          "relative z-10 overflow-hidden rounded-lg shadow-md",
-          "border-[1px] border-white/20 bg-black",
-          "animate-in fade-in zoom-in-75 duration-100 ease-in-out"
-        )}
-      >
-        <SelectPrimitive.Viewport className="p-1">
-          {options.map((option) => (
-            <SelectPrimitive.Item
-              key={`${type}-${option.id}`}
-              value={option.id}
-              className={cn(
-                "items-center rounded-md p-2",
-                "select-none outline-none",
-                "transition-all duration-100 ease-in-out",
-                "radix-highlighted:bg-white/20 radix-highlighted:text-almost-white"
-              )}
-            >
-              <SelectPrimitive.ItemText>
-                {get[type].optionContent(option as T)}
-              </SelectPrimitive.ItemText>
-            </SelectPrimitive.Item>
-          ))}
-        </SelectPrimitive.Viewport>
-      </SelectPrimitive.Content>
+      <SelectPrimitive.Portal>
+        <SelectPrimitive.Content
+          position="popper"
+          sideOffset={-100}
+          align="center"
+          className={cn(
+            "relative z-10 overflow-hidden rounded-lg shadow-md",
+            "border-[1px] border-white/20 bg-black",
+            "animate-in fade-in zoom-in-75 duration-100 ease-in-out"
+          )}
+        >
+          <SelectPrimitive.Viewport className="p-1">
+            {options.map((option) => (
+              <SelectPrimitive.Item
+                key={`${type}-${option.id}`}
+                value={option.id}
+                className={cn(
+                  "items-center rounded-md p-2",
+                  "select-none outline-none",
+                  "transition-all duration-100 ease-in-out",
+                  "radix-highlighted:bg-white/20 radix-highlighted:text-almost-white"
+                )}
+              >
+                <SelectPrimitive.ItemText>
+                  {get[type].optionContent(option as T)}
+                </SelectPrimitive.ItemText>
+              </SelectPrimitive.Item>
+            ))}
+          </SelectPrimitive.Viewport>
+        </SelectPrimitive.Content>
+      </SelectPrimitive.Portal>
     </SelectPrimitive.Root>
   );
 });

@@ -9,7 +9,7 @@ import {
 
 import Header from "components/Header";
 
-import Auth from "contexts/Auth";
+import Providers from "contexts/Providers";
 
 import { cn } from "lib/cn";
 
@@ -65,11 +65,11 @@ export default function RootLayout({
           "bg-almost-black text-greyish"
         )}
       >
-        <Auth>
+        <Providers>
           <Header />
 
           <main className={cn("grid place-items-center")}>{children}</main>
-        </Auth>
+        </Providers>
       </body>
     </html>
   );
