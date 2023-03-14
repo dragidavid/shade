@@ -1,3 +1,6 @@
+import { useRef } from "react";
+import { useHotkeys } from "react-hotkeys-hook";
+
 import { Info } from "lucide-react";
 
 import Tooltip from "components/ui/Tooltip";
@@ -5,9 +8,25 @@ import Tooltip from "components/ui/Tooltip";
 import { cn } from "lib/cn";
 import { useStore } from "lib/store";
 
-export default function TitleBar() {
+export default function TitleBar({ editable = false }: { editable: boolean }) {
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const title = useStore((state) => state.title);
   const update = useStore((state) => state.update);
+
+  useHotkeys(
+    "t",
+    () => {
+      if (inputRef.current) {
+        inputRef.current.focus();
+        inputRef.current.select();
+      }
+    },
+    {
+      enabled: editable,
+      preventDefault: true,
+    }
+  );
 
   return (
     <div
@@ -18,18 +37,21 @@ export default function TitleBar() {
     >
       <Tooltip
         content={
-          <div className={cn("flex items-center gap-2")}>
-            <Info size={14} aria-hidden="true" />
-            <span>Max 50 characters</span>
+          <div className={cn("flex items-center gap-2 pl-1 text-xs")}>
+            <Info size={16} aria-hidden="true" />
+            Max 24 characters
           </div>
         }
-        kbd={["⌘", "T"]}
+        kbd={["T"]}
+        disabled={!editable}
       >
         <input
+          ref={inputRef}
           value={title ?? ""}
           placeholder="Untitled"
           maxLength={50}
           onChange={(e) => update("title", e.target.value)}
+          disabled={!editable}
           tabIndex={-1}
           className={cn(
             "w-32 truncate rounded-md text-center font-medium leading-loose",

@@ -45,9 +45,8 @@ export default async function Page() {
                 "select-none outline-none",
                 "border-[1px] border-white/20 bg-black",
                 "transition-all duration-100 ease-in-out",
-                "hover:border-almost-white hover:bg-white/10 hover:text-almost-white",
-                "focus:ring-1 focus:ring-almost-white focus:ring-offset-2 focus:ring-offset-black",
-                "active:bg-white/20"
+                "hover:bg-white/10 hover:text-almost-white",
+                "focus:border-almost-white focus:text-almost-white"
               )}
             >
               <div className={cn("flex items-center gap-2")}>

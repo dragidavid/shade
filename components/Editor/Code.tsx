@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import { motion } from "framer-motion";
-import { Key } from "ts-key-enum";
 
 import { useCodeMirror } from "@uiw/react-codemirror";
 import { EditorView } from "@codemirror/view";
@@ -74,8 +73,8 @@ export default function Code({ editable = false }: { editable: boolean }) {
       background: "transparent",
       foreground: "white",
       caret: localEditable ? colors.at(0) : "transparent",
-      selection: adjustLightness(colors.at(0)!, 0.1),
-      selectionMatch: adjustLightness(colors.at(0)!, 0.2),
+      selection: adjustLightness(colors.at(0)!, 0.4),
+      selectionMatch: adjustLightness(colors.at(0)!, 0.4),
       lineHighlight: "transparent",
       gutterBackground: "transparent",
       gutterForeground: adjustLightness(colors.at(0)!, 0.4),
@@ -213,7 +212,11 @@ export default function Code({ editable = false }: { editable: boolean }) {
 
   useEffect(() => {
     function handleClick(event: MouseEvent) {
-      if (editorRef.current?.contains(event.target as Node) && !localEditable) {
+      if (
+        editable &&
+        editorRef.current?.contains(event.target as Node) &&
+        !localEditable
+      ) {
         setLocalEditable(true);
       }
     }
@@ -223,7 +226,7 @@ export default function Code({ editable = false }: { editable: boolean }) {
     return () => {
       document.removeEventListener("click", handleClick);
     };
-  }, [localEditable]);
+  }, [editable, localEditable]);
 
   useEffect(() => {
     if (editorRef.current) {
@@ -237,7 +240,30 @@ export default function Code({ editable = false }: { editable: boolean }) {
   }, [editorRef.current]);
 
   useHotkeys(
-    Key.Escape,
+    "f",
+    () => {
+      if (!view?.hasFocus) {
+        view?.focus();
+
+        setLocalEditable(true);
+
+        view?.dispatch({
+          selection: {
+            anchor: 0,
+            head: view.state.doc.length,
+          },
+        });
+      }
+    },
+    {
+      enabled: editable,
+      preventDefault: true,
+    },
+    [view]
+  );
+
+  useHotkeys(
+    "escape",
     () => {
       if (view?.hasFocus) {
         view.contentDOM.blur();
@@ -246,24 +272,10 @@ export default function Code({ editable = false }: { editable: boolean }) {
       }
     },
     {
+      enabled: editable && localEditable,
       enableOnContentEditable: true,
     },
-    [view]
-  );
-
-  useHotkeys(
-    "f",
-    () => {
-      if (!view?.hasFocus) {
-        view?.focus();
-
-        setLocalEditable(true);
-      }
-    },
-    {
-      preventDefault: true,
-    },
-    [view]
+    [view, localEditable]
   );
 
   if (!selectedLanguage) {
@@ -309,7 +321,7 @@ export default function Code({ editable = false }: { editable: boolean }) {
           />
         </div>
         <div className={cn("relative z-[4] rounded-lg", "bg-black/70")}>
-          <TitleBar />
+          <TitleBar editable={editable} />
 
           <div ref={editorRef} className={cn("rounded-lg p-3")} />
         </div>
