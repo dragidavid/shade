@@ -13,9 +13,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       },
     });
 
-    res.status(200).json(createdSnippet);
+    return res.status(200).json(createdSnippet);
   } catch (e) {
-    res.status(500).send({ message: "Unable to create a new snippet." });
+    return res.status(500).send({ message: "Unable to create a new snippet" });
   }
 }
 
