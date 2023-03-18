@@ -93,13 +93,13 @@ export default function Button() {
       className={cn(
         "flex w-auto items-center gap-4 rounded-lg p-1 font-medium",
         "select-none outline-none",
-        "border-[1px]",
+        "border",
         "transition-all duration-100 ease-in-out",
         buttonState.additionalClasses,
         "focus:border-almost-white focus:text-almost-white"
       )}
     >
-      <div className={cn("flex items-center gap-2 pl-[2px]")}>
+      <div className={cn("flex items-center gap-2 pl-0.5")}>
         {loading ? (
           <Loader2 size={16} className="animate-spin" aria-hidden="true" />
         ) : (

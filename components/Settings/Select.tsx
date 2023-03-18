@@ -48,7 +48,7 @@ export default memo(function Select<
       initialValue: (
         <ThemeBubble
           colors={(value as ThemeDefinition).class}
-          additionalClasses="p-[2px]"
+          additionalClasses="p-0.5"
         />
       ),
       optionContent: (option: T) => (
@@ -97,7 +97,7 @@ export default memo(function Select<
         className={cn(
           "flex w-auto items-center justify-between gap-2 rounded-md p-2",
           "select-none outline-none",
-          "border-[1px] border-white/20 bg-black",
+          "border border-white/20 bg-black",
           "transition-all duration-100 ease-in-out",
           "hover:border-almost-white hover:bg-white/10 hover:text-almost-white",
           "focus:border-almost-white focus:bg-white/10 focus:text-almost-white",
@@ -118,7 +118,7 @@ export default memo(function Select<
           align="center"
           className={cn(
             "relative z-10 overflow-hidden rounded-lg shadow-md",
-            "border-[1px] border-white/20 bg-black",
+            "border border-white/20 bg-black",
             "animate-in fade-in zoom-in-75 duration-100 ease-in-out"
           )}
         >

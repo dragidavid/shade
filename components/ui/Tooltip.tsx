@@ -32,7 +32,7 @@ export default function Tooltip({
           "select-none outline-none",
           "bg-black",
           "animate-in fade-in zoom-in-90 duration-100 ease-in-out",
-          content && "rounded-lg border-[1px] border-white/20 p-1"
+          content && "rounded-lg border border-white/20 p-1"
         )}
       >
         {content}

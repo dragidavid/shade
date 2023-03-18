@@ -47,7 +47,7 @@ export default function Home() {
         className={cn(
           "flex items-center gap-6 rounded-lg p-1 font-medium",
           "select-none outline-none",
-          "border-[1px] border-white/20 bg-black",
+          "border border-white/20 bg-black",
           "transition-all duration-100 ease-in-out",
           "hover:bg-white/20 hover:text-almost-white",
           "focus:border-almost-white focus:text-almost-white",

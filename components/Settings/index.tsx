@@ -111,7 +111,7 @@ export default function Settings() {
       animate={animationControls}
       className={cn(
         "fixed bottom-32 z-10 rounded-xl p-4 font-medium shadow-xl",
-        "border-[1px] border-white/20 bg-black opacity-30",
+        "border border-white/20 bg-black opacity-30",
         "transition-opacity duration-100 ease-in-out",
         "hover:opacity-100",
         "focus-within:opacity-100"
@@ -126,7 +126,7 @@ export default function Settings() {
         className={cn(
           "absolute -top-[12px] left-1/2 rounded-md py-1 px-2",
           "select-none outline-none",
-          "border-[1px] border-white/20 bg-black",
+          "border border-white/20 bg-black",
           "transition-all duration-100 ease-in-out",
           "hover:scale-125 hover:cursor-grab hover:border-almost-white",
           "active:scale-125 active:border-almost-white"

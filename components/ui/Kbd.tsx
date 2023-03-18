@@ -7,7 +7,7 @@ export default function Kbd({ keys }: { keys: string[] }) {
         <kbd
           key={key}
           className={cn(
-            "rounded-[4px] py-[2px] px-[6px] font-sans font-medium",
+            "rounded-[4px] py-0.5 px-1.5 font-sans font-medium",
             "bg-white/20"
           )}
         >

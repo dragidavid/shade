@@ -11,7 +11,7 @@ export default function Header() {
     <header
       className={cn(
         "sticky top-0 z-50 flex h-16 items-center justify-between px-[18px] font-medium shadow-xl",
-        "border-b-[1px] border-white/20 bg-black"
+        "border-b border-white/20 bg-black"
       )}
     >
       <Home />
