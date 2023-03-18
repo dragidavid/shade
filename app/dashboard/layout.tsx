@@ -22,7 +22,7 @@ export default async function Dashboard({
     <div
       className={cn(
         "flex w-[576px] flex-col gap-6 rounded-xl p-5 shadow-xl",
-        "border-[1px] border-white/20 bg-black"
+        "border border-white/20 bg-black"
       )}
     >
       <div className={cn("flex w-full items-center justify-between")}>

@@ -21,7 +21,7 @@ export default function ChangeListener() {
 
   const { trigger } = useSWRMutation(
     "/api/snippets/update",
-    (url, { arg }) =>
+    (url, { arg }: { arg: State }) =>
       fetcher(url, {
         method: "PATCH",
         body: JSON.stringify(arg),
@@ -40,7 +40,7 @@ export default function ChangeListener() {
   );
 
   const debouncedSave = useCallback(
-    debounce(async (changes) => {
+    debounce(async (changes: State) => {
       if (!isEqual(state, changes) && !hasFailed.current) {
         if (saveStatus !== "PENDING") update("saveStatus", "PENDING");
 

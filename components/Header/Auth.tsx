@@ -101,34 +101,33 @@ export default function Auth() {
             </Tooltip>
           </button>
         </DropdownMenuPrimitive.Trigger>
-
-        <DropdownMenuPrimitive.Content
-          sideOffset={5}
-          className={cn(
-            "z-50 min-w-[8rem] overflow-hidden rounded-lg p-1 shadow-lg",
-            "border-[1px] border-white/20 bg-black",
-            "animate-in fade-in zoom-in-75 duration-100 ease-in-out"
-          )}
-        >
-          <DropdownMenuPrimitive.Item
-            onSelect={() => signOut()}
+        <DropdownMenuPrimitive.Portal>
+          <DropdownMenuPrimitive.Content
+            sideOffset={5}
             className={cn(
-              "relative flex items-center gap-6 rounded-[5px] p-1",
-              "select-none outline-none",
-              "transition-all duration-100 ease-in-out",
-              "focus:cursor-pointer focus:bg-white/20 focus:text-almost-white"
+              "z-50 w-40 rounded-lg p-1 text-xs shadow-lg",
+              "border border-white/20 bg-black/20 backdrop-blur-md",
+              "animate-in fade-in zoom-in-75 duration-100 ease-in-out"
             )}
           >
-            <div className="flex items-center gap-2 pl-[2px]">
-              <LogOut size={16} aria-hidden="true" />
-              Sign out
-            </div>
+            <DropdownMenuPrimitive.Item
+              onSelect={() => signOut()}
+              className={cn(
+                "relative flex items-center justify-between rounded-[5px] p-1",
+                "select-none outline-none",
+                "transition-all duration-100 ease-in-out",
+                "focus:cursor-pointer focus:bg-white/20 focus:text-almost-white"
+              )}
+            >
+              <div className="flex items-center gap-2 pl-0.5">
+                <LogOut size={16} aria-hidden="true" />
+                Sign out
+              </div>
 
-            <Kbd keys={["Q"]} />
-          </DropdownMenuPrimitive.Item>
-
-          <DropdownMenuPrimitive.Arrow className="fill-white/20" />
-        </DropdownMenuPrimitive.Content>
+              <Kbd keys={["Q"]} />
+            </DropdownMenuPrimitive.Item>
+          </DropdownMenuPrimitive.Content>
+        </DropdownMenuPrimitive.Portal>
       </DropdownMenuPrimitive.Root>
     );
   }
@@ -141,7 +140,7 @@ export default function Auth() {
         className={cn(
           "flex items-center gap-6 rounded-lg p-1 font-medium",
           "select-none outline-none",
-          "border-[1px] border-white/20 bg-black",
+          "border border-white/20 bg-black",
           "transition-all duration-100 ease-in-out",
           "hover:bg-white/20 hover:text-almost-white",
           "focus:border-almost-white focus:text-almost-white"

@@ -46,10 +46,13 @@ export default function TitleBar({ editable = false }: { editable: boolean }) {
         disabled={!editable}
       >
         <input
+          type="text"
           ref={inputRef}
           value={title ?? ""}
           placeholder="Untitled"
-          maxLength={50}
+          spellCheck={false}
+          autoComplete="off"
+          maxLength={69}
           onChange={(e) => update("title", e.target.value)}
           disabled={!editable}
           tabIndex={-1}
