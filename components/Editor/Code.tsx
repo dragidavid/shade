@@ -284,6 +284,7 @@ export default function Code({ editable = false }: { editable: boolean }) {
 
   return (
     <motion.div
+      id="screenshot"
       layout
       animate={{
         opacity: 1,
@@ -293,7 +294,7 @@ export default function Code({ editable = false }: { editable: boolean }) {
         opacity: 0,
       }}
       className={cn(
-        "relative z-0 w-auto min-w-[512px] max-w-5xl rounded-xl shadow-xl",
+        "relative z-0 w-auto min-w-[512px] max-w-5xl shadow-xl",
         padding.class,
         "bg-gradient-to-br",
         theme.class,
