@@ -46,6 +46,8 @@
     "@uiw/codemirror-themes-all": "^4.19.9",
     "@uiw/react-codemirror": "^4.19.9",
     "clsx": "^1.2.1",
+    "dom-to-image": "^2.6.0",
+    "file-saver": "^2.0.5",
     "framer-motion": "^9.1.7",
     "immer": "^9.0.19",
     "lucide-react": "^0.113.0",
@@ -60,6 +62,8 @@
     "zustand": "^4.3.6"
   },
   "devDependencies": {
+    "@types/dom-to-image": "^2.6.4",
+    "@types/file-saver": "^2.0.5",
     "@types/lodash.debounce": "^4.0.7",
     "@types/lodash.isequal": "^4.5.6",
     "autoprefixer": "^10.4.14",

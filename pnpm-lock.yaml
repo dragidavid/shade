@@ -29,6 +29,8 @@ specifiers:
   '@radix-ui/react-select': ^1.2.1
   '@radix-ui/react-switch': ^1.0.2
   '@radix-ui/react-tooltip': ^1.0.5
+  '@types/dom-to-image': ^2.6.4
+  '@types/file-saver': ^2.0.5
   '@types/lodash.debounce': ^4.0.7
   '@types/lodash.isequal': ^4.5.6
   '@types/node': 18.14.2
@@ -41,9 +43,11 @@ specifiers:
   '@uiw/react-codemirror': ^4.19.9
   autoprefixer: ^10.4.14
   clsx: ^1.2.1
+  dom-to-image: ^2.6.0
   eslint: 8.35.0
   eslint-config-next: 13.2.3
   eslint-config-prettier: ^8.7.0
+  file-saver: ^2.0.5
   framer-motion: ^9.1.7
   immer: ^9.0.19
   lodash.debounce: ^4.0.8
@@ -105,6 +109,8 @@ dependencies:
   '@uiw/codemirror-themes-all': 4.19.9_m2g2fjrvetqbsl7zxwctz5ljh4
   '@uiw/react-codemirror': 4.19.9_iuvt3ze4xzyrsk2ytmsjjsnjpi
   clsx: 1.2.1
+  dom-to-image: 2.6.0
+  file-saver: 2.0.5
   framer-motion: 9.1.7_biqbaboplfbrettd7655fr4n2y
   immer: 9.0.19
   lucide-react: 0.113.0_react@18.2.0
@@ -119,6 +125,8 @@ dependencies:
   zustand: 4.3.6_immer@9.0.19+react@18.2.0
 
 devDependencies:
+  '@types/dom-to-image': 2.6.4
+  '@types/file-saver': 2.0.5
   '@types/lodash.debounce': 4.0.7
   '@types/lodash.isequal': 4.5.6
   autoprefixer: 10.4.14_postcss@8.4.21
@@ -1278,6 +1286,14 @@ packages:
       tslib: 2.5.0
     dev: false
 
+  /@types/dom-to-image/2.6.4:
+    resolution: {integrity: sha512-UddUdGF1qulrSDulkz3K2Ypq527MR6ixlgAzqLbxSiQ0icx0XDlIV+h4+edmjq/1dqn0KgN0xGSe1kI9t+vGuw==}
+    dev: true
+
+  /@types/file-saver/2.0.5:
+    resolution: {integrity: sha512-zv9kNf3keYegP5oThGLaPk8E081DFDuwfqjtiTzm6PoxChdJ1raSuADf2YGCVIyrSynLrgc8JWv296s7Q7pQSQ==}
+    dev: true
+
   /@types/json5/0.0.29:
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
     dev: true
@@ -2143,6 +2159,10 @@ packages:
       esutils: 2.0.3
     dev: true
 
+  /dom-to-image/2.6.0:
+    resolution: {integrity: sha512-Dt0QdaHmLpjURjU7Tnu3AgYSF2LuOmksSGsUcE6ItvJoCWTBEmiMXcqBdNSAm9+QbbwD7JMoVsuuKX6ZVQv1qA==}
+    dev: false
+
   /electron-to-chromium/1.4.328:
     resolution: {integrity: sha512-DE9tTy2PNmy1v55AZAO542ui+MLC2cvINMK4P2LXGsJdput/ThVG9t+QGecPuAZZSgC8XoI+Jh9M1OG9IoNSCw==}
     dev: true
@@ -2576,6 +2596,10 @@ packages:
     dependencies:
       flat-cache: 3.0.4
     dev: true
+
+  /file-saver/2.0.5:
+    resolution: {integrity: sha512-P9bmyZ3h/PRG+Nzga+rbdI4OEpNDzAVyy74uVO9ATgzLK6VtAsYybF/+TOCvrc0MO793d6+42lLyZTw7/ArVzA==}
+    dev: false
 
   /fill-range/7.0.1:
     resolution: {integrity: sha512-qOo9F+dMUmC2Lcb4BbVvnKJxTPjCm+RRpe4gDuGrzkL7mEVl/djYSu2OdQ2Pa302N4oqkSg9ir6jaLWJ2USVpQ==}
