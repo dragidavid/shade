@@ -102,7 +102,7 @@ export default memo(function Select<
           "hover:border-almost-white hover:bg-white/10 hover:text-almost-white",
           "focus:border-almost-white focus:bg-white/10 focus:text-almost-white",
           type === "language" && "w-32",
-          type === "fontStyle" && "w-48"
+          type === "fontStyle" && "w-44"
         )}
       >
         <SelectPrimitive.Value>{get[type].initialValue}</SelectPrimitive.Value>
