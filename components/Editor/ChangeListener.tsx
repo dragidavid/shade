@@ -53,7 +53,7 @@ export default function ChangeListener() {
       } else {
         update("saveStatus", "IDLE");
       }
-    }, 3000),
+    }, 2500),
     [state.id, shouldUpdate.current]
   );
 

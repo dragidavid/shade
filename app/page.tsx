@@ -7,11 +7,11 @@ import { getSession } from "lib/auth";
 export default async function Page() {
   const session = await getSession();
 
-  const signedIn = !!session;
+  const isAuthenticated = !!session;
 
   if (session) {
     redirect("/dashboard");
   }
 
-  return <Editor editable={true} signedIn={signedIn} />;
+  return <Editor editable={true} isAuthenticated={isAuthenticated} />;
 }

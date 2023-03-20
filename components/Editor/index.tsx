@@ -12,11 +12,11 @@ import type { Snippet } from "@prisma/client";
 export default function Editor({
   partialSnippet,
   editable,
-  signedIn,
+  isAuthenticated,
 }: {
   partialSnippet?: Partial<Snippet>;
   editable: boolean;
-  signedIn: boolean;
+  isAuthenticated: boolean;
 }) {
   const setEditorState = useStore((state) => state.setEditorState);
 
@@ -35,7 +35,7 @@ export default function Editor({
 
       {editable && <Settings />}
 
-      {editable && signedIn && <ChangeListener />}
+      {editable && isAuthenticated && <ChangeListener />}
     </div>
   );
 }

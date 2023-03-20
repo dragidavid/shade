@@ -26,7 +26,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   const partialSnippet = await getSnippet(params.id);
 
   const editable = session?.user?.id === partialSnippet?.userId;
-  const signedIn = !!session;
+  const isAuthenticated = !!session;
 
   if (!partialSnippet) {
     notFound();
@@ -36,7 +36,7 @@ export default async function Page({ params }: { params: { id: string } }) {
     <Editor
       partialSnippet={partialSnippet}
       editable={editable}
-      signedIn={signedIn}
+      isAuthenticated={isAuthenticated}
     />
   );
 }
