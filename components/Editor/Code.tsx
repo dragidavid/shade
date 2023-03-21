@@ -284,7 +284,6 @@ export default function Code({ editable = false }: { editable: boolean }) {
 
   return (
     <motion.div
-      id="screenshot"
       layout
       animate={{
         opacity: 1,
@@ -293,40 +292,45 @@ export default function Code({ editable = false }: { editable: boolean }) {
       initial={{
         opacity: 0,
       }}
-      className={cn(
-        "relative z-0 w-auto min-w-[512px] max-w-5xl shadow-xl",
-        padding.class,
-        "bg-gradient-to-br",
-        theme.class,
-        "transition-all duration-100 ease-in-out"
-      )}
+      className={cn("overflow-hidden rounded-xl", "shadow-xl shadow-black/40")}
     >
-      <motion.div
-        layout
+      <div
+        id="screenshot"
         className={cn(
-          "relative z-[1] h-full w-full min-w-[480px] max-w-2xl rounded-lg"
+          "relative z-0 w-auto min-w-[512px] max-w-5xl",
+          padding.class,
+          "bg-gradient-to-br",
+          theme.class,
+          "transition-all duration-100 ease-in-out"
         )}
       >
-        <div
+        <motion.div
+          layout
           className={cn(
-            "absolute inset-0 rounded-lg",
-            "after:absolute after:inset-0 after:z-[2] after:translate-y-6 after:rounded-xl after:bg-black/60 after:blur-xl"
+            "relative z-[1] h-full w-full min-w-[480px] max-w-2xl rounded-lg"
           )}
         >
           <div
             className={cn(
-              "absolute inset-0 z-[3] rounded-lg",
-              "bg-gradient-to-br",
-              theme.class
+              "absolute inset-0 rounded-lg",
+              "after:absolute after:inset-0 after:z-[2] after:translate-y-6 after:rounded-xl after:bg-black/60 after:blur-xl"
             )}
-          />
-        </div>
-        <div className={cn("relative z-[4] rounded-lg", "bg-black/70")}>
-          <TitleBar editable={editable} />
+          >
+            <div
+              className={cn(
+                "absolute inset-0 z-[3] rounded-lg",
+                "bg-gradient-to-br",
+                theme.class
+              )}
+            />
+          </div>
+          <div className={cn("relative z-[4] rounded-lg", "bg-black/70")}>
+            <TitleBar editable={editable} />
 
-          <div ref={editorRef} className={cn("rounded-lg p-3")} />
-        </div>
-      </motion.div>
+            <div ref={editorRef} className={cn("rounded-lg p-3")} />
+          </div>
+        </motion.div>
+      </div>
     </motion.div>
   );
 }

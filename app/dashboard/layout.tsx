@@ -21,8 +21,8 @@ export default async function Dashboard({
   return (
     <div
       className={cn(
-        "flex w-[576px] flex-col gap-6 rounded-xl p-5 shadow-xl",
-        "border border-white/20 bg-black"
+        "flex w-[576px] flex-col gap-6 rounded-xl p-5",
+        "border border-white/20 bg-black shadow-xl shadow-black/40"
       )}
     >
       <div className={cn("flex w-full items-center justify-between")}>

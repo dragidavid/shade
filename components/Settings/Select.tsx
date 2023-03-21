@@ -95,12 +95,12 @@ export default memo(function Select<
       <SelectPrimitive.Trigger
         aria-label={`${type}-select`}
         className={cn(
-          "flex w-auto items-center justify-between gap-2 rounded-md p-2",
+          "flex w-auto items-center justify-between gap-2 rounded-lg p-2",
           "select-none outline-none",
           "border border-white/20 bg-black",
           "transition-all duration-100 ease-in-out",
-          "hover:border-almost-white hover:bg-white/10 hover:text-almost-white",
-          "focus:border-almost-white focus:bg-white/10 focus:text-almost-white",
+          "hover:bg-white/10 hover:text-almost-white",
+          "focus:border-almost-white focus:text-almost-white",
           type === "language" && "w-32",
           type === "fontStyle" && "w-44"
         )}
@@ -117,18 +117,18 @@ export default memo(function Select<
           sideOffset={-100}
           align="center"
           className={cn(
-            "relative z-10 overflow-hidden rounded-lg shadow-md",
-            "border border-white/20 bg-black",
+            "z-50 overflow-hidden rounded-lg p-1",
+            "border border-white/20 bg-black/30 shadow-lg backdrop-blur-md",
             "animate-in fade-in zoom-in-75 duration-100 ease-in-out"
           )}
         >
-          <SelectPrimitive.Viewport className="p-1">
+          <SelectPrimitive.Viewport>
             {options.map((option) => (
               <SelectPrimitive.Item
                 key={`${type}-${option.id}`}
                 value={option.id}
                 className={cn(
-                  "items-center rounded-md p-2",
+                  "items-center rounded-[5px] p-2",
                   "select-none outline-none",
                   "transition-all duration-100 ease-in-out",
                   "radix-highlighted:bg-white/20 radix-highlighted:text-almost-white"

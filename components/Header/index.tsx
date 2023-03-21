@@ -10,8 +10,8 @@ export default function Header() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-40 flex h-16 items-center justify-between px-[18px] font-medium shadow-xl",
-        "border-b border-white/20 bg-black"
+        "sticky top-0 z-40 flex h-16 items-center justify-between px-[18px] font-medium",
+        "border-b border-white/20 bg-black shadow-xl shadow-black/40"
       )}
     >
       <Home />

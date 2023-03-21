@@ -238,8 +238,8 @@ export default function Snippets({ snippets }: { snippets: Snippet[] }) {
               <ContextMenuPrimitive.Portal>
                 <ContextMenuPrimitive.Content
                   className={cn(
-                    "z-50 w-40 rounded-lg p-1 text-xs shadow-lg",
-                    "border border-white/20 bg-black/20 backdrop-blur-md",
+                    "z-50 w-40 rounded-lg p-1",
+                    "border border-white/20 bg-black/30 shadow-lg backdrop-blur-md",
                     "animate-in fade-in zoom-in-75 duration-100 ease-in-out"
                   )}
                 >
@@ -311,8 +311,8 @@ export default function Snippets({ snippets }: { snippets: Snippet[] }) {
 
               <DialogPrimitive.Content
                 className={cn(
-                  "z-50 w-[640px] min-w-min rounded-xl p-6 shadow-xl",
-                  "border border-white/20 bg-black backdrop-blur-sm",
+                  "z-50 w-[640px] min-w-min rounded-xl p-6",
+                  "border border-white/20 bg-black shadow-xl",
                   "transition-all duration-100 ease-in-out",
                   "radix-state-open:animate-in radix-state-open:fade-in radix-state-open:zoom-in-75"
                 )}

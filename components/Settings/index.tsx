@@ -112,8 +112,8 @@ export default function Settings() {
       dragConstraints={dragConstraints}
       animate={animationControls}
       className={cn(
-        "fixed bottom-32 z-10 rounded-xl p-4 font-medium shadow-xl",
-        "border border-white/20 bg-black opacity-40",
+        "fixed bottom-12 z-40 rounded-xl p-5 font-medium",
+        "border border-white/20 bg-black opacity-40 shadow-xl shadow-black/40",
         "transition-opacity duration-100 ease-in-out",
         "hover:opacity-100",
         "focus-within:opacity-100"
@@ -203,6 +203,7 @@ function Control({
       <label htmlFor={htmlFor} className={cn("text-xs font-bold")}>
         {label}
       </label>
+
       {children}
     </div>
   );

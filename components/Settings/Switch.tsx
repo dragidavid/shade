@@ -21,14 +21,14 @@ export default memo(function Switch({ type }: { type: "lineNumbers" }) {
           "border border-white/20",
           "transition-all duration-100 ease-in-out",
           "focus:ring-1 focus:ring-almost-white focus:ring-offset-2 focus:ring-offset-black",
-          "radix-state-checked:border-transparent radix-state-checked:bg-white/20 radix-state-unchecked:bg-black"
+          "radix-state-checked:bg-white/20 radix-state-unchecked:bg-black"
         )}
       >
         <SwitchPrimitive.Thumb
           className={cn(
-            "block h-5 w-5 rounded-full shadow-lg",
+            "block h-5 w-5 rounded-full",
             "pointer-events-none outline-none",
-            "bg-almost-white",
+            "bg-almost-white shadow-lg",
             "transition-transform duration-100 ease-in-out",
             "radix-state-checked:translate-x-[21px] radix-state-unchecked:translate-x-px"
           )}
