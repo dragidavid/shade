@@ -23,8 +23,9 @@ export type FontDefinition = {
 
 export type ChoiceDefinition = {
   id: string;
-  label: string;
-  class: string;
+  value?: number;
+  label?: string;
+  class?: string;
 };
 
 export type State = {
@@ -34,6 +35,7 @@ export type State = {
   language: LanguageDefinition;
   theme: ThemeDefinition;
   fontStyle: FontDefinition;
+  fontSize: ChoiceDefinition;
   lineNumbers: boolean;
   padding: ChoiceDefinition;
 };
@@ -42,6 +44,7 @@ export interface SnippetSettings extends Prisma.JsonObject {
   language: string;
   theme: string;
   fontStyle: string;
+  fontSize: string;
   lineNumbers: boolean;
   padding: string;
 }

@@ -73,11 +73,11 @@ export default function TitleBar({ editable = false }: { editable: boolean }) {
           "absolute left-0 -bottom-2 flex w-full justify-between fill-black/30"
         )}
       >
-        <svg width={8} height={8} className="rotate-180">
+        <svg width={8} height={8} className={cn("rotate-180", "fill-black/50")}>
           <path d="M0 8a8 8 0 0 0 8-8v8H0Z" />
         </svg>
 
-        <svg width={8} height={8} className="-rotate-90">
+        <svg width={8} height={8} className={cn("-rotate-90", "fill-black/50")}>
           <path d="M0 8a8 8 0 0 0 8-8v8H0Z" />
         </svg>
       </div>

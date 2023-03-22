@@ -2,7 +2,7 @@ import { memo } from "react";
 
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
 
-import { SUPPORTED_PADDING_CHOICES } from "lib/values";
+import { SUPPORTED_FONT_SIZES, SUPPORTED_PADDING_CHOICES } from "lib/values";
 
 import { cn } from "lib/cn";
 import { find } from "lib/find";
@@ -14,18 +14,27 @@ export default memo(function Choices({
   type,
   choices,
 }: {
-  type: "padding";
+  type: "fontSize" | "padding";
   choices: ChoiceDefinition[];
 }) {
   const value = useStore((state) => state[type]);
   const update = useStore((state) => state.update);
+
+  const get = {
+    fontSize: {
+      valueForKey: (key: string) => find(SUPPORTED_FONT_SIZES, key),
+    },
+    padding: {
+      valueForKey: (key: string) => find(SUPPORTED_PADDING_CHOICES, key),
+    },
+  };
 
   return (
     <RadioGroupPrimitive.Root
       defaultValue={value.id}
       value={value.id}
       onValueChange={(value: string) =>
-        update(type, find(SUPPORTED_PADDING_CHOICES, value))
+        update(type, get[type].valueForKey(value))
       }
       className={cn("flex h-full items-center justify-center")}
     >

@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { useHotkeys } from "react-hotkeys-hook";
 import { motion } from "framer-motion";
+import { useHotkeys } from "react-hotkeys-hook";
 
 import { useCodeMirror } from "@uiw/react-codemirror";
 import { EditorView } from "@codemirror/view";
@@ -29,14 +29,14 @@ export default function Code({ editable = false }: { editable: boolean }) {
   const language = useStore((state) => state.language);
   const theme = useStore((state) => state.theme);
   const fontStyle = useStore((state) => state.fontStyle);
+  const fontSize = useStore((state) => state.fontSize);
   const lineNumbers = useStore((state) => state.lineNumbers);
   const padding = useStore((state) => state.padding);
   const update = useStore((state) => state.update);
 
   const customStyles = EditorView.baseTheme({
     "&.cm-editor": {
-      fontSize: "0.9375rem",
-      fontWeight: 600,
+      fontWeight: 400,
     },
     "&.cm-editor.cm-focused": {
       outline: "none",
@@ -45,11 +45,7 @@ export default function Code({ editable = false }: { editable: boolean }) {
       display: "flex",
       justifyContent: "flex-end",
       paddingRight: "1rem !important",
-      lineHeight: "1.5rem",
       letterSpacing: ".1px",
-    },
-    ".cm-content": {
-      lineHeight: "1.5rem",
     },
   });
   const customFontStyle = EditorView.theme({
@@ -60,6 +56,18 @@ export default function Code({ editable = false }: { editable: boolean }) {
     ".cm-gutters": {
       fontFamily: fontStyle.variable,
       fontVariantLigatures: "normal",
+    },
+  });
+  const customFontSize = EditorView.theme({
+    ".cm-content *": {
+      fontSize: `${fontSize.value}px`,
+      lineHeight: `${fontSize.value! * 1.5}px`,
+      transition: "all 0.1s ease-in-out",
+    },
+    ".cm-gutters": {
+      fontSize: `${fontSize.value}px`,
+      lineHeight: `${fontSize.value! * 1.5}px`,
+      transition: "all 0.1s ease-in-out",
     },
   });
   const lineWrapping = EditorView.lineWrapping;
@@ -187,6 +195,7 @@ export default function Code({ editable = false }: { editable: boolean }) {
       selectedLanguage!,
       customStyles,
       customFontStyle,
+      customFontSize,
       lineWrapping,
       setTabIndex,
     ],

@@ -195,6 +195,12 @@ export const SUPPORTED_FONT_STYLES: FontDefinition[] = [
   },
 ];
 
+export const SUPPORTED_FONT_SIZES: ChoiceDefinition[] = [
+  { id: "xs", label: "xs", value: 12 },
+  { id: "sm", label: "sm", value: 14 },
+  { id: "md", label: "md", value: 16 },
+];
+
 export const SUPPORTED_PADDING_CHOICES: ChoiceDefinition[] = [
   { id: "sm", label: "16", class: "p-4" },
   { id: "md", label: "32", class: "p-8" },

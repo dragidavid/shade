@@ -7,6 +7,7 @@ import {
   SUPPORTED_LANGUAGES,
   SUPPORTED_THEMES,
   SUPPORTED_FONT_STYLES,
+  SUPPORTED_FONT_SIZES,
   SUPPORTED_PADDING_CHOICES,
 } from "lib/values";
 
@@ -23,6 +24,7 @@ export const useStore = create<Store>()(
     language: SUPPORTED_LANGUAGES.at(0)!,
     theme: SUPPORTED_THEMES.at(0)!,
     fontStyle: SUPPORTED_FONT_STYLES.at(0)!,
+    fontSize: SUPPORTED_FONT_SIZES.at(0)!,
     lineNumbers: true,
     padding: SUPPORTED_PADDING_CHOICES.at(1)!,
     update: (type, value) =>
@@ -42,6 +44,7 @@ export const useStore = create<Store>()(
           state.language = find(SUPPORTED_LANGUAGES, settings.language);
           state.theme = find(SUPPORTED_THEMES, settings.theme);
           state.fontStyle = find(SUPPORTED_FONT_STYLES, settings.fontStyle);
+          state.fontSize = find(SUPPORTED_FONT_SIZES, settings.fontSize);
           state.lineNumbers = settings.lineNumbers;
           state.padding = find(SUPPORTED_PADDING_CHOICES, settings.padding);
         })
@@ -54,6 +57,7 @@ export const useStore = create<Store>()(
         language,
         theme,
         fontStyle,
+        fontSize,
         lineNumbers,
         padding,
       } = get();
@@ -65,6 +69,7 @@ export const useStore = create<Store>()(
         language,
         theme,
         fontStyle,
+        fontSize,
         lineNumbers,
         padding,
       };

@@ -19,6 +19,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           language: req.body.language.id,
           theme: req.body.theme.id,
           fontStyle: req.body.fontStyle.id,
+          fontSize: req.body.fontSize.id,
           lineNumbers: req.body.lineNumbers,
           padding: req.body.padding.id,
         },

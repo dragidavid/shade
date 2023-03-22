@@ -12,6 +12,7 @@ import {
   SUPPORTED_LANGUAGES,
   SUPPORTED_THEMES,
   SUPPORTED_FONT_STYLES,
+  SUPPORTED_FONT_SIZES,
   SUPPORTED_PADDING_CHOICES,
 } from "lib/values";
 
@@ -169,6 +170,9 @@ function SettingsControls() {
       </Control>
       <Control htmlFor="fontStyle" label="Font style">
         <Select type="fontStyle" options={SUPPORTED_FONT_STYLES} />
+      </Control>
+      <Control htmlFor="fontSize" label="Font size">
+        <Choices type="fontSize" choices={SUPPORTED_FONT_SIZES} />
       </Control>
       <Control htmlFor="lineNumbers" label="Line numbers">
         <Switch type="lineNumbers" />
