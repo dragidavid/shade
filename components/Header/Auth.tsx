@@ -106,7 +106,7 @@ export default function Auth() {
             sideOffset={5}
             className={cn(
               "z-50 w-40 rounded-lg p-1",
-              "border border-white/20 bg-black/30 shadow-lg backdrop-blur-md",
+              "border border-white/20 bg-black/50 shadow-lg backdrop-blur-md",
               "animate-in fade-in zoom-in-75 duration-100 ease-in-out"
             )}
           >

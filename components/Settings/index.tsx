@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { motion, useDragControls, useAnimationControls } from "framer-motion";
+import { useHotkeys } from "react-hotkeys-hook";
 
-import { GripHorizontal } from "lucide-react";
+import { GripHorizontal, Link, Copy, Image } from "lucide-react";
 
 import Select from "components/Settings/Select";
 import Switch from "components/Settings/Switch";
@@ -112,8 +113,8 @@ export default function Settings() {
       dragConstraints={dragConstraints}
       animate={animationControls}
       className={cn(
-        "fixed bottom-12 z-40 rounded-xl p-5 font-medium",
-        "border border-white/20 bg-black opacity-40 shadow-xl shadow-black/40",
+        "fixed bottom-12 z-40 rounded-xl font-medium",
+        "border border-white/20 bg-black/50 opacity-20 shadow-xl shadow-black/40 backdrop-blur-md",
         "transition-opacity duration-100 ease-in-out",
         "hover:opacity-100",
         "focus-within:opacity-100"
@@ -122,6 +123,8 @@ export default function Settings() {
       <DraggableHandle dragControls={dragControls} />
 
       <SettingsControls />
+
+      <BottomBar />
     </motion.div>
   );
 }
@@ -152,7 +155,12 @@ function DraggableHandle({
 
 function SettingsControls() {
   return (
-    <div className="flex gap-8">
+    <div
+      className={cn(
+        "flex gap-8 rounded-xl p-5",
+        "border-b border-white/20 bg-black shadow-xl shadow-black/40"
+      )}
+    >
       <Control htmlFor="language" label="Language">
         <Select type="language" options={SUPPORTED_LANGUAGES} />
       </Control>
@@ -168,23 +176,6 @@ function SettingsControls() {
       <Control htmlFor="padding" label="Padding">
         <Choices type="padding" choices={SUPPORTED_PADDING_CHOICES} />
       </Control>
-
-      <div className={cn("relative flex")}>
-        <button
-          type="button"
-          onClick={snap}
-          className={cn(
-            "flex grow items-center justify-center rounded-md p-2",
-            "select-none outline-none",
-            "border border-white/20 bg-black",
-            "transition-all duration-100 ease-in-out",
-            "hover:border-almost-white hover:bg-white/10 hover:text-almost-white",
-            "focus:border-almost-white focus:bg-white/10 focus:text-almost-white"
-          )}
-        >
-          Export
-        </button>
-      </div>
     </div>
   );
 }
@@ -206,5 +197,65 @@ function Control({
 
       {children}
     </div>
+  );
+}
+
+function BottomBar() {
+  useHotkeys("meta+shift+c", () =>
+    navigator.clipboard.writeText(window.location.href)
+  );
+  useHotkeys("meta+c", () => snap("COPY"));
+  useHotkeys("meta+s", () => snap("DOWNLOAD"), {
+    preventDefault: true,
+  });
+
+  return (
+    <div className={cn("grid grid-cols-3 place-items-center p-2")}>
+      <BottomBarButton
+        icon={<Link size={16} aria-hidden={true} />}
+        label="Copy URL"
+        action={() => navigator.clipboard.writeText(window.location.href)}
+      />
+      <BottomBarButton
+        icon={<Copy size={16} aria-hidden={true} />}
+        label="Copy image"
+        action={() => snap("COPY")}
+      />
+      <BottomBarButton
+        icon={<Image size={16} aria-hidden={true} />}
+        label="Download as PNG"
+        action={() => snap("DOWNLOAD")}
+      />
+    </div>
+  );
+}
+
+function BottomBarButton({
+  icon,
+  label,
+  action,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  action: any;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={action}
+      className={cn(
+        "flex items-center justify-center rounded-lg py-1 px-1.5",
+        "select-none outline-none",
+        "border border-transparent bg-transparent",
+        "transition-all duration-100 ease-in-out",
+        "hover:bg-white/10 hover:text-almost-white",
+        "focus:border-almost-white focus:text-almost-white"
+      )}
+    >
+      <div className={cn("flex items-center gap-2")}>
+        {icon}
+        {label}
+      </div>
+    </button>
   );
 }

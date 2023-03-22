@@ -32,7 +32,7 @@ export default function TitleBar({ editable = false }: { editable: boolean }) {
     <div
       className={cn(
         "relative flex items-center justify-center gap-2 rounded-t-lg py-2",
-        "bg-black/30"
+        "bg-black/50"
       )}
     >
       <Tooltip
