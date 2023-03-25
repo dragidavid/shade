@@ -113,7 +113,7 @@ export default function Auth() {
             <DropdownMenuPrimitive.Item
               onSelect={() => signOut()}
               className={cn(
-                "relative flex items-center justify-between rounded-[5px] p-1",
+                "flex items-center justify-between rounded-[5px] p-1",
                 "select-none outline-none",
                 "transition-all duration-100 ease-in-out",
                 "focus:cursor-pointer focus:bg-white/20 focus:text-almost-white"

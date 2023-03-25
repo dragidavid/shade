@@ -95,7 +95,7 @@ export default memo(function Select<
       <SelectPrimitive.Trigger
         aria-label={`${type}-select`}
         className={cn(
-          "flex w-auto items-center justify-between gap-2 rounded-lg p-2",
+          "flex w-auto items-center justify-between gap-2 rounded-lg py-1 px-2",
           "select-none outline-none",
           "border border-white/20 bg-black",
           "transition-all duration-100 ease-in-out",
@@ -128,7 +128,7 @@ export default memo(function Select<
                 key={`${type}-${option.id}`}
                 value={option.id}
                 className={cn(
-                  "items-center rounded-[5px] p-2",
+                  "rounded-[5px] p-1.5",
                   "select-none outline-none",
                   "transition-all duration-100 ease-in-out",
                   "radix-highlighted:bg-white/20 radix-highlighted:text-almost-white"

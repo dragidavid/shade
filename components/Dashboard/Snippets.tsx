@@ -7,7 +7,7 @@ import useSWRMutation from "swr/mutation";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import * as ContextMenuPrimitive from "@radix-ui/react-context-menu";
 
-import { Edit3, Trash } from "lucide-react";
+import { Edit3, Link as LinkIcon, Trash } from "lucide-react";
 
 import RenameDialog from "components/Dashboard/RenameDialog";
 import DeleteDialog from "components/Dashboard/DeleteDialog";
@@ -49,15 +49,25 @@ export default function Snippets({ snippets }: { snippets: Snippet[] }) {
           activeElement.querySelector('[data-id="title"]') as HTMLSpanElement
         ).innerText;
 
-        if ((e.key === "r" || e.key === "d") && id && title) {
+        if (id && title) {
           e.preventDefault();
 
-          if (e.key === "r") {
-            setDialogProps({ type: "RENAME", id, title });
-          } else if (e.key === "d") {
-            setDialogProps({ type: "DELETE", id, title });
+          switch (e.key) {
+            case "r":
+              setDialogProps({ type: "RENAME", id, title });
+              setLocalDialogOpen(true);
+
+              break;
+            case "d":
+              setDialogProps({ type: "DELETE", id, title });
+              setLocalDialogOpen(true);
+
+              break;
+            case "c":
+              navigator.clipboard.writeText(`${window.location.origin}/${id}`);
+
+              break;
           }
-          setLocalDialogOpen(true);
         }
       }
     },
@@ -265,6 +275,27 @@ export default function Snippets({ snippets }: { snippets: Snippet[] }) {
                       <Kbd keys={["R"]} />
                     </ContextMenuPrimitive.Item>
                   </DialogPrimitive.Trigger>
+
+                  <ContextMenuPrimitive.Item
+                    onClick={() =>
+                      navigator.clipboard.writeText(
+                        `${window.location.origin}/${id}`
+                      )
+                    }
+                    className={cn(
+                      "flex items-center justify-between rounded-[5px] p-1",
+                      "select-none outline-none",
+                      "transition-all duration-100 ease-in-out",
+                      "focus:cursor-pointer focus:bg-white/20 focus:text-almost-white"
+                    )}
+                  >
+                    <div className={cn("flex items-center gap-2 pl-0.5")}>
+                      <LinkIcon size={16} aria-hidden="true" />
+                      Copy link
+                    </div>
+
+                    <Kbd keys={["C"]} />
+                  </ContextMenuPrimitive.Item>
 
                   <DialogPrimitive.Trigger asChild>
                     <ContextMenuPrimitive.Item

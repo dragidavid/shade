@@ -62,12 +62,10 @@ export default function Code({ editable = false }: { editable: boolean }) {
     ".cm-content *": {
       fontSize: `${fontSize.value}px`,
       lineHeight: `${fontSize.value! * 1.5}px`,
-      transition: "all 0.1s ease-in-out",
     },
     ".cm-gutters": {
       fontSize: `${fontSize.value}px`,
       lineHeight: `${fontSize.value! * 1.5}px`,
-      transition: "all 0.1s ease-in-out",
     },
   });
   const lineWrapping = EditorView.lineWrapping;

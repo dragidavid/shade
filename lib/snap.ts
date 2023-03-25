@@ -1,7 +1,7 @@
 import domtoimage from "dom-to-image";
 import { saveAs } from "file-saver";
 
-export async function snap(): Promise<void> {
+export async function snap(mode: "DOWNLOAD" | "COPY"): Promise<void> {
   const editorDiv = document.getElementById("screenshot");
 
   if (!editorDiv) {
@@ -22,23 +22,19 @@ export async function snap(): Promise<void> {
 
     const dataUrl = await domtoimage.toPng(editorDiv, options);
 
-    // to save as PNG
-    // fetch(dataUrl)
-    //   .then((response) => response.blob())
-    //   .then((blob) => {
-    //     saveAs(blob, "code-snippet.png");
-    //   });
-
-    // to copy to clipboard
     fetch(dataUrl)
       .then((response) => response.blob())
       .then(async (blob) => {
-        if (navigator.clipboard && navigator.clipboard.write) {
-          const item = new ClipboardItem({ "image/png": blob });
-
-          await navigator.clipboard.write([item]);
+        if (mode === "DOWNLOAD") {
+          saveAs(blob, "code-snippet.png");
         } else {
-          console.error("clipboard not supported");
+          if (navigator.clipboard && navigator.clipboard.write) {
+            const item = new ClipboardItem({ "image/png": blob });
+
+            await navigator.clipboard.write([item]);
+          } else {
+            console.error("clipboard not supported");
+          }
         }
       });
   } catch (err) {

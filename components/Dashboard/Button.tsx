@@ -74,7 +74,7 @@ export default function Button() {
   };
 
   useHotkeys(
-    "c",
+    "n",
     () => {
       if (!loading && buttonState.id === "default") {
         handleButtonClick();
@@ -108,7 +108,7 @@ export default function Button() {
         {buttonState.text}
       </div>
 
-      <Kbd keys={["C"]} />
+      <Kbd keys={["N"]} />
     </button>
   );
 }

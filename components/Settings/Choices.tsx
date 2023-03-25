@@ -38,15 +38,16 @@ export default memo(function Choices({
       }
       className={cn("flex h-full items-center justify-center")}
     >
-      <div className={cn("flex gap-3")}>
+      <div className={cn("flex h-full gap-3")}>
         {choices.map((choice) => (
           <RadioGroupPrimitive.Item
-            key={choice.id}
-            id={choice.id}
+            key={`${type}-${choice.id}`}
+            id={`${type}-${choice.id}`}
             value={choice.id}
             className={cn(
-              "flex items-center justify-center rounded-md py-1 px-2",
+              "flex items-center justify-center rounded-lg py-1 px-2",
               "select-none outline-none",
+              "border border-white/20 bg-black",
               "transition-all duration-100 ease-in-out",
               "hover:text-almost-white",
               "focus:text-almost-white focus:ring-1 focus:ring-almost-white focus:ring-offset-2 focus:ring-offset-black",

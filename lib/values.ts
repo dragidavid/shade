@@ -18,7 +18,7 @@ const importLegacy = () =>
 
 export const INITIAL_TITLE = "Untitled";
 
-export const INITIAL_CODE = "// Write some code here";
+export const INITIAL_CODE = "// Add some code here...";
 
 export const SUPPORTED_LANGUAGES: LanguageDefinition[] = [
   {
@@ -196,9 +196,9 @@ export const SUPPORTED_FONT_STYLES: FontDefinition[] = [
 ];
 
 export const SUPPORTED_FONT_SIZES: ChoiceDefinition[] = [
-  { id: "xs", label: "xs", value: 12 },
-  { id: "sm", label: "sm", value: 14 },
-  { id: "md", label: "md", value: 16 },
+  { id: "xs", label: "12", value: 12 },
+  { id: "sm", label: "14", value: 14 },
+  { id: "md", label: "16", value: 16 },
 ];
 
 export const SUPPORTED_PADDING_CHOICES: ChoiceDefinition[] = [

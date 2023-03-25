@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { motion, useDragControls, useAnimationControls } from "framer-motion";
 import { useHotkeys } from "react-hotkeys-hook";
 
-import { GripHorizontal, Link, Copy, Image } from "lucide-react";
+import { GripHorizontal, Link, Copy, Image as ImageIcon } from "lucide-react";
 
 import Select from "components/Settings/Select";
 import Switch from "components/Settings/Switch";
@@ -115,10 +115,7 @@ export default function Settings() {
       animate={animationControls}
       className={cn(
         "fixed bottom-12 z-40 rounded-xl font-medium",
-        "border border-white/20 bg-black/50 opacity-20 shadow-xl shadow-black/40 backdrop-blur-md",
-        "transition-opacity duration-100 ease-in-out",
-        "hover:opacity-100",
-        "focus-within:opacity-100"
+        "border border-white/20 bg-black/50 shadow-xl shadow-black/40 backdrop-blur-md"
       )}
     >
       <DraggableHandle dragControls={dragControls} />
@@ -141,7 +138,7 @@ function DraggableHandle({
       whileTap={{ cursor: "grabbing" }}
       tabIndex={-1}
       className={cn(
-        "absolute -top-[12px] left-1/2 rounded-md py-1 px-2",
+        "absolute -top-[14px] left-1/2 rounded-md py-1 px-2",
         "select-none outline-none",
         "border border-white/20 bg-black",
         "transition-all duration-100 ease-in-out",
@@ -158,7 +155,7 @@ function SettingsControls() {
   return (
     <div
       className={cn(
-        "flex gap-8 rounded-xl p-5",
+        "flex gap-8 rounded-xl px-3 pb-3 pt-5",
         "border-b border-white/20 bg-black shadow-xl shadow-black/40"
       )}
     >
@@ -217,7 +214,7 @@ function BottomBar() {
     <div className={cn("grid grid-cols-3 place-items-center p-2")}>
       <BottomBarButton
         icon={<Link size={16} aria-hidden={true} />}
-        label="Copy URL"
+        label="Copy link"
         action={() => navigator.clipboard.writeText(window.location.href)}
       />
       <BottomBarButton
@@ -226,7 +223,7 @@ function BottomBar() {
         action={() => snap("COPY")}
       />
       <BottomBarButton
-        icon={<Image size={16} aria-hidden={true} />}
+        icon={<ImageIcon size={16} aria-hidden={true} />}
         label="Download as PNG"
         action={() => snap("DOWNLOAD")}
       />
