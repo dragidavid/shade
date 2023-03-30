@@ -62,6 +62,7 @@ export default function TitleBar({ editable = false }: { editable: boolean }) {
             "transition-all duration-100 ease-in-out",
             "focus:text-almost-white"
           )}
+          aria-label="title-input"
         />
       </Tooltip>
 

@@ -93,7 +93,6 @@ export default memo(function Select<
       }
     >
       <SelectPrimitive.Trigger
-        aria-label={`${type}-select`}
         className={cn(
           "flex w-auto items-center justify-between gap-2 rounded-lg py-1 px-2",
           "select-none outline-none",
@@ -104,6 +103,7 @@ export default memo(function Select<
           type === "language" && "w-32",
           type === "fontStyle" && "w-44"
         )}
+        aria-label={`${type}-select`}
       >
         <SelectPrimitive.Value>{get[type].initialValue}</SelectPrimitive.Value>
         <SelectPrimitive.Icon>

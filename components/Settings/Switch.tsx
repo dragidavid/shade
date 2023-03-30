@@ -14,7 +14,6 @@ export default memo(function Switch({ type }: { type: "lineNumbers" }) {
       <SwitchPrimitive.Root
         checked={value}
         onCheckedChange={(value: boolean) => update(type, value)}
-        aria-label={`${type}-switch`}
         className={cn(
           "inline-flex h-6 w-[44px] shrink-0 items-center rounded-full",
           "outline-none",
@@ -23,6 +22,7 @@ export default memo(function Switch({ type }: { type: "lineNumbers" }) {
           "focus:ring-1 focus:ring-almost-white focus:ring-offset-2 focus:ring-offset-black",
           "radix-state-checked:bg-white/20 radix-state-unchecked:bg-black"
         )}
+        aria-label={`${type}-switch`}
       >
         <SwitchPrimitive.Thumb
           className={cn(
