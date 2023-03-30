@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { motion, useDragControls, useAnimationControls } from "framer-motion";
-import { useHotkeys } from "react-hotkeys-hook";
 
-import { GripHorizontal, Link, Copy, Image as ImageIcon } from "lucide-react";
+import { GripHorizontal } from "lucide-react";
 
 import Select from "components/Settings/Select";
 import Switch from "components/Settings/Switch";
 import Choices from "components/Settings/Choices";
+import Actions from "components/Settings/Actions";
 
 import {
   SUPPORTED_LANGUAGES,
@@ -17,7 +17,6 @@ import {
 } from "lib/values";
 
 import { cn } from "lib/cn";
-import { snap } from "lib/snap";
 
 interface Dimensions {
   height: number;
@@ -79,7 +78,7 @@ export default function Settings() {
 
       window.removeEventListener("resize", handleResize);
     };
-  }, []);
+  }, [animationControls]);
 
   useEffect(() => {
     const settings = document.getElementById("settings");
@@ -122,7 +121,7 @@ export default function Settings() {
 
       <SettingsControls />
 
-      <BottomBar />
+      <Actions />
     </motion.div>
   );
 }
@@ -155,7 +154,7 @@ function SettingsControls() {
   return (
     <div
       className={cn(
-        "flex gap-8 rounded-xl px-3 pb-3 pt-5",
+        "flex gap-8 rounded-xl px-4 pb-4 pt-5",
         "border-b border-white/20 bg-black shadow-xl shadow-black/40"
       )}
     >
@@ -198,65 +197,5 @@ function Control({
 
       {children}
     </div>
-  );
-}
-
-function BottomBar() {
-  useHotkeys("meta+shift+c", () =>
-    navigator.clipboard.writeText(window.location.href)
-  );
-  useHotkeys("meta+c", () => snap("COPY"));
-  useHotkeys("meta+s", () => snap("DOWNLOAD"), {
-    preventDefault: true,
-  });
-
-  return (
-    <div className={cn("grid grid-cols-3 place-items-center p-2")}>
-      <BottomBarButton
-        icon={<Link size={16} aria-hidden={true} />}
-        label="Copy link"
-        action={() => navigator.clipboard.writeText(window.location.href)}
-      />
-      <BottomBarButton
-        icon={<Copy size={16} aria-hidden={true} />}
-        label="Copy image"
-        action={() => snap("COPY")}
-      />
-      <BottomBarButton
-        icon={<ImageIcon size={16} aria-hidden={true} />}
-        label="Download as PNG"
-        action={() => snap("DOWNLOAD")}
-      />
-    </div>
-  );
-}
-
-function BottomBarButton({
-  icon,
-  label,
-  action,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  action: any;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={action}
-      className={cn(
-        "flex items-center justify-center rounded-lg py-1 px-1.5",
-        "select-none outline-none",
-        "border border-transparent bg-transparent",
-        "transition-all duration-100 ease-in-out",
-        "hover:bg-white/10 hover:text-almost-white",
-        "focus:border-almost-white focus:text-almost-white"
-      )}
-    >
-      <div className={cn("flex items-center gap-2")}>
-        {icon}
-        {label}
-      </div>
-    </button>
   );
 }
