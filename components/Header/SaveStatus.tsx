@@ -1,11 +1,11 @@
-"use client";
-
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { AnimatePresence, motion } from "framer-motion";
 
-import { Loader2, Check, X } from "lucide-react";
+import { Check, X } from "lucide-react";
+
+import Loader from "components/ui/Loader";
 
 import { cn } from "lib/cn";
 import { useStore } from "lib/store";
@@ -13,7 +13,7 @@ import { useStore } from "lib/store";
 interface ContentState {
   id: string;
   text: string;
-  icon: JSX.Element;
+  icon?: JSX.Element;
   additionalClasses?: string;
 }
 
@@ -33,7 +33,15 @@ const CONTENT_STATES: Record<string, ContentState> = {
   PENDING: {
     id: "pending",
     text: "Saving...",
-    icon: <Loader2 size={16} className="animate-spin" aria-hidden="true" />,
+    icon: <Loader />,
+  },
+  IMAGE_COPY: {
+    id: "image_copy",
+    text: "Image copied to clipboard",
+  },
+  LINK_COPY: {
+    id: "link_copy",
+    text: "Link copied",
   },
 };
 
@@ -46,37 +54,38 @@ export default function SaveStatus() {
   const { data: session } = useSession();
 
   const saveStatus = useStore((state) => state.saveStatus);
+  const update = useStore((state) => state.update);
 
   useEffect(() => {
-    if (saveStatus === "SUCCESS" || saveStatus === "ERROR") {
-      setShowMessage(true);
+    let timeoutId: ReturnType<typeof setTimeout>;
 
+    if (saveStatus === "IDLE") {
+      setShowMessage(false);
+    } else {
+      setShowMessage(true);
       setContent(CONTENT_STATES[saveStatus]);
 
-      setTimeout(() => {
-        setShowMessage(false);
-      }, 3000);
+      if (saveStatus !== "PENDING") {
+        timeoutId = setTimeout(() => {
+          update("saveStatus", "IDLE");
+        }, 2500);
+      }
     }
-  }, [saveStatus]);
 
-  useEffect(() => {
-    if (saveStatus === "PENDING" && showMessage) {
-      setShowMessage(false);
-    }
-  }, [saveStatus, showMessage]);
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
+  }, [saveStatus, update]);
 
   if (pathname === "/dashboard" || !session) return null;
 
   return (
     <div className={cn("absolute left-1/2 -translate-x-1/2")}>
       <AnimatePresence mode="wait">
-        {showMessage && <Wrapper content={content!} key="idle" />}
-
-        {saveStatus === "PENDING" && !showMessage && (
-          <Wrapper
-            content={CONTENT_STATES["PENDING"]}
-            key={CONTENT_STATES["PENDING"].id}
-          />
+        {showMessage && content && (
+          <Wrapper content={content} key={content.id} />
         )}
       </AnimatePresence>
     </div>

@@ -1,25 +1,21 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useCallback, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import useSWRMutation from "swr/mutation";
 
-import debounce from "lodash.debounce";
 import isEqual from "lodash.isequal";
 
 import { fetcher } from "lib/fetcher";
 import { useStore } from "lib/store";
 
-import type { State } from "lib/types";
+import { State } from "lib/types";
 
 export default function ChangeListener() {
-  const prevStateRef = useRef<State | null>(null);
-  const shouldUpdate = useRef(false);
-  const hasFailed = useRef(false);
+  const prevState = useRef<State | null>(null);
+  const pendingSave = useRef<boolean>(false);
 
-  const saveStatus = useStore((state) => state.saveStatus);
   const state = useStore((state) => state.getEditorState());
   const update = useStore((state) => state.update);
 
-  const { trigger } = useSWRMutation(
+  const { trigger, error, data } = useSWRMutation(
     "/api/snippets/update",
     (url, { arg }: { arg: State }) =>
       fetcher(url, {
@@ -32,79 +28,61 @@ export default function ChangeListener() {
     }
   );
 
-  const resetFailedSaveRef = useCallback(
-    debounce(() => {
-      hasFailed.current = false;
-    }, 0),
-    []
-  );
+  const handleStateChange = () => {
+    if (!isEqual(prevState.current, state)) {
+      if (!pendingSave.current) {
+        update("saveStatus", "PENDING");
 
-  const debouncedSave = useCallback(
-    debounce(async (changes: State) => {
-      if (!isEqual(state, changes) && !hasFailed.current) {
-        if (saveStatus !== "PENDING") update("saveStatus", "PENDING");
-
-        try {
-          await trigger(changes);
-
-          update("saveStatus", "SUCCESS");
-        } catch (e) {
-          update("saveStatus", "ERROR");
-        }
-      } else {
-        update("saveStatus", "IDLE");
+        pendingSave.current = true;
       }
-    }, 2500),
-    [state.id, shouldUpdate.current]
-  );
 
-  // When a new snippet is viewed, set the previous state to the current state
-  useEffect(() => {
-    prevStateRef.current = state;
+      const timeout = setTimeout(() => {
+        if (!isEqual(prevState.current, state)) {
+          prevState.current = state;
 
-    update("saveStatus", "IDLE");
-  }, [state.id]);
+          trigger(state);
+        }
+        pendingSave.current = false;
+      }, 2500);
 
-  // Handle success and error states
-  useEffect(() => {
-    if (saveStatus === "SUCCESS") {
-      prevStateRef.current = state;
-      shouldUpdate.current = !shouldUpdate.current;
-
+      return () => {
+        clearTimeout(timeout);
+      };
+    } else if (pendingSave.current) {
       update("saveStatus", "IDLE");
+
+      pendingSave.current = false;
     }
-
-    if (saveStatus === "ERROR") {
-      hasFailed.current = true;
-
-      update("saveStatus", "IDLE");
-    }
-  }, [saveStatus]);
-
-  // If the user reverted the changes during the 3 second debounce, cancel the function
-  useEffect(() => {
-    if (saveStatus === "PENDING" && isEqual(prevStateRef.current, state)) {
-      debouncedSave.cancel();
-
-      update("saveStatus", "IDLE");
-    }
-  }, [state, saveStatus]);
+  };
 
   useEffect(() => {
-    if (hasFailed.current) {
-      resetFailedSaveRef();
-    }
+    if (prevState.current === null) {
+      prevState.current = state;
+    } else {
+      const cleanup = handleStateChange();
 
-    if (
-      state.id &&
-      !isEqual(prevStateRef.current, state) &&
-      !hasFailed.current
-    ) {
-      update("saveStatus", "PENDING");
-
-      debouncedSave(state);
+      if (cleanup) {
+        return cleanup;
+      }
     }
-  }, [state]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state, trigger, update]);
+
+  useEffect(() => {
+    if (error) {
+      update("saveStatus", "ERROR");
+
+      pendingSave.current = false;
+    }
+  }, [error, update]);
+
+  useEffect(() => {
+    if (data) {
+      update("saveStatus", "SUCCESS");
+
+      pendingSave.current = false;
+    }
+  }, [data, update]);
 
   return null;
 }
