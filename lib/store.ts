@@ -17,7 +17,7 @@ import type { Store, SnippetSettings } from "lib/types";
 
 export const useStore = create<Store>()(
   devtools((set, get) => ({
-    saveStatus: "IDLE",
+    message: "IDLE",
     id: null,
     title: null,
     code: INITIAL_CODE,

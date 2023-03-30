@@ -10,6 +10,8 @@ import Loader from "components/ui/Loader";
 import { cn } from "lib/cn";
 import { useStore } from "lib/store";
 
+import type { Message } from "lib/types";
+
 interface ContentState {
   id: string;
   text: string;
@@ -17,7 +19,7 @@ interface ContentState {
   additionalClasses?: string;
 }
 
-const CONTENT_STATES: Record<string, ContentState> = {
+const CONTENT_STATES: Partial<Record<Message, ContentState>> = {
   SUCCESS: {
     id: "success",
     text: "Changes saved",
@@ -30,22 +32,24 @@ const CONTENT_STATES: Record<string, ContentState> = {
     icon: <X size={16} aria-hidden="true" />,
     additionalClasses: "text-red-400",
   },
+  TOO_MANY_REQUESTS: {
+    id: "too-many-requests",
+    text: "Too many requests",
+    additionalClasses: "text-red-400",
+  },
+  LIMIT_REACHED: {
+    id: "limit-reached",
+    text: "Limit reached",
+    additionalClasses: "text-red-400",
+  },
   PENDING: {
     id: "pending",
     text: "Saving...",
     icon: <Loader />,
   },
-  IMAGE_COPY: {
-    id: "image_copy",
-    text: "Image copied to clipboard",
-  },
-  LINK_COPY: {
-    id: "link_copy",
-    text: "Link copied",
-  },
 };
 
-export default function SaveStatus() {
+export default function Message() {
   const [showMessage, setShowMessage] = useState(false);
   const [content, setContent] = useState<ContentState | null>(null);
 
@@ -53,21 +57,21 @@ export default function SaveStatus() {
 
   const { data: session } = useSession();
 
-  const saveStatus = useStore((state) => state.saveStatus);
+  const message = useStore((state) => state.message);
   const update = useStore((state) => state.update);
 
   useEffect(() => {
     let timeoutId: ReturnType<typeof setTimeout>;
 
-    if (saveStatus === "IDLE") {
+    if (message === "IDLE") {
       setShowMessage(false);
     } else {
       setShowMessage(true);
-      setContent(CONTENT_STATES[saveStatus]);
+      setContent(CONTENT_STATES[message]!);
 
-      if (saveStatus !== "PENDING") {
+      if (message !== "PENDING") {
         timeoutId = setTimeout(() => {
-          update("saveStatus", "IDLE");
+          update("message", "IDLE");
         }, 2500);
       }
     }
@@ -77,9 +81,15 @@ export default function SaveStatus() {
         clearTimeout(timeoutId);
       }
     };
-  }, [saveStatus, update]);
+  }, [message, update]);
 
-  if (pathname === "/dashboard" || !session) return null;
+  useEffect(() => {
+    if (pathname === "/dashboard") {
+      update("message", "IDLE");
+    }
+  }, [pathname, update]);
+
+  if (!session) return null;
 
   return (
     <div className={cn("absolute left-1/2 -translate-x-1/2")}>

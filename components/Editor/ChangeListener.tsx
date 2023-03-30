@@ -31,7 +31,7 @@ export default function ChangeListener() {
   const handleStateChange = () => {
     if (!isEqual(prevState.current, state)) {
       if (!pendingSave.current) {
-        update("saveStatus", "PENDING");
+        update("message", "PENDING");
 
         pendingSave.current = true;
       }
@@ -49,7 +49,7 @@ export default function ChangeListener() {
         clearTimeout(timeout);
       };
     } else if (pendingSave.current) {
-      update("saveStatus", "IDLE");
+      update("message", "IDLE");
 
       pendingSave.current = false;
     }
@@ -70,7 +70,7 @@ export default function ChangeListener() {
 
   useEffect(() => {
     if (error) {
-      update("saveStatus", "ERROR");
+      update("message", "ERROR");
 
       pendingSave.current = false;
     }
@@ -78,7 +78,7 @@ export default function ChangeListener() {
 
   useEffect(() => {
     if (data) {
-      update("saveStatus", "SUCCESS");
+      update("message", "SUCCESS");
 
       pendingSave.current = false;
     }

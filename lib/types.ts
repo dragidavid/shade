@@ -49,10 +49,16 @@ export interface SnippetSettings extends Prisma.JsonObject {
   padding: string;
 }
 
-export type SaveStatus = "SUCCESS" | "ERROR" | "PENDING" | "IDLE";
+export type Message =
+  | "SUCCESS"
+  | "ERROR"
+  | "TOO_MANY_REQUESTS"
+  | "LIMIT_REACHED"
+  | "PENDING"
+  | "IDLE";
 
 export interface Store extends State {
-  saveStatus: SaveStatus;
+  message: Message;
   update: <
     T extends string,
     V extends

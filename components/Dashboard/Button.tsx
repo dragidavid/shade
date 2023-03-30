@@ -12,6 +12,7 @@ import Loader from "components/ui/Loader";
 
 import { cn } from "lib/cn";
 import { fetcher } from "lib/fetcher";
+import { useStore } from "lib/store";
 
 interface ButtonState {
   id: string;
@@ -26,7 +27,7 @@ const BUTTON_STATES: Record<string, ButtonState> = {
     text: "New",
     icon: <Plus size={16} aria-hidden="true" />,
     additionalClasses:
-      "border-white/20 bg-black hover:bg-white/20 hover:text-almost-white",
+      "border-white/20 bg-black hover:bg-white/20 hover:text-almost-white disabled:brightness-50",
   },
   SUCCESS: {
     id: "success",
@@ -42,12 +43,14 @@ const BUTTON_STATES: Record<string, ButtonState> = {
   },
 };
 
-export default function Button() {
+export default function Button({ isDisabled }: { isDisabled: boolean }) {
   const [buttonState, setButtonState] = useState<ButtonState>(
     BUTTON_STATES.DEFAULT
   );
 
   const router = useRouter();
+
+  const update = useStore((state) => state.update);
 
   const { trigger, isMutating: loading } = useSWRMutation(
     "/api/snippets/create",
@@ -57,7 +60,7 @@ export default function Button() {
   const reset = () => {
     setTimeout(() => {
       setButtonState(BUTTON_STATES.DEFAULT);
-    }, 3000);
+    }, 2500);
   };
 
   const handleButtonClick = async () => {
@@ -69,6 +72,19 @@ export default function Button() {
       router.push(`/${id}`);
     } catch (e) {
       setButtonState(BUTTON_STATES.ERROR);
+
+      if (e instanceof Error) {
+        switch (e.message) {
+          case "Too many requests":
+            update("message", "TOO_MANY_REQUESTS");
+            break;
+          case "You have reached the limit":
+            update("message", "LIMIT_REACHED");
+            break;
+          default:
+            break;
+        }
+      }
     } finally {
       reset();
     }
@@ -90,14 +106,15 @@ export default function Button() {
     <button
       type="button"
       onClick={handleButtonClick}
-      disabled={loading || buttonState.id !== "default"}
+      disabled={isDisabled || loading || buttonState.id !== "default"}
       className={cn(
         "flex w-auto items-center gap-4 rounded-lg p-1 font-medium",
         "select-none outline-none",
         "border",
         "transition-all duration-100 ease-in-out",
         buttonState.additionalClasses,
-        "focus:border-almost-white focus:text-almost-white"
+        "focus:border-almost-white focus:text-almost-white",
+        "disabled:cursor-not-allowed"
       )}
     >
       <div className={cn("flex items-center gap-2 pl-0.5")}>
