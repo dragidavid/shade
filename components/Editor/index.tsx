@@ -17,7 +17,7 @@ export default function Editor({
   isAuthenticated,
 }: {
   partialSnippet?: Partial<Snippet>;
-  views: number;
+  views?: number;
   editable: boolean;
   isAuthenticated: boolean;
 }) {
@@ -34,7 +34,7 @@ export default function Editor({
         "relative flex h-full w-full flex-col items-center justify-center p-6"
       )}
     >
-      <Views views={views} />
+      {views && <Views views={views} />}
 
       <Code editable={editable} />
 
