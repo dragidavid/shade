@@ -8,13 +8,16 @@ import { cn } from "lib/cn";
 import { useStore } from "lib/store";
 
 import type { Snippet } from "@prisma/client";
+import Views from "./Views";
 
 export default function Editor({
   partialSnippet,
+  views,
   editable,
   isAuthenticated,
 }: {
   partialSnippet?: Partial<Snippet>;
+  views: number;
   editable: boolean;
   isAuthenticated: boolean;
 }) {
@@ -28,9 +31,11 @@ export default function Editor({
     <div
       id="editor"
       className={cn(
-        "flex h-full w-full flex-col items-center justify-center p-6"
+        "relative flex h-full w-full flex-col items-center justify-center p-6"
       )}
     >
+      <Views views={views} />
+
       <Code editable={editable} />
 
       {editable && <Settings />}

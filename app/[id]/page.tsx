@@ -20,10 +20,27 @@ async function getSnippet(id: string) {
   });
 }
 
+async function increaseViewCount(id: string) {
+  return await prisma.view.update({
+    where: {
+      snippetId: id,
+    },
+    data: {
+      count: {
+        increment: 1,
+      },
+    },
+    select: {
+      count: true,
+    },
+  });
+}
+
 export default async function Page({ params }: { params: { id: string } }) {
   const session = await getSession();
 
   const partialSnippet = await getSnippet(params.id);
+  const views = await increaseViewCount(params.id);
 
   const editable = session?.user?.id === partialSnippet?.userId;
   const isAuthenticated = !!session;
@@ -35,6 +52,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   return (
     <Editor
       partialSnippet={partialSnippet}
+      views={views.count}
       editable={editable}
       isAuthenticated={isAuthenticated}
     />

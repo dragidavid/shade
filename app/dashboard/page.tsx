@@ -13,6 +13,9 @@ async function getSnippets(userId: string) {
     where: {
       userId,
     },
+    include: {
+      views: true,
+    },
   });
 }
 

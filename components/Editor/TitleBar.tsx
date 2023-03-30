@@ -32,7 +32,7 @@ export default function TitleBar({ editable = false }: { editable: boolean }) {
     <div
       className={cn(
         "relative flex items-center justify-center gap-2 rounded-t-lg py-2",
-        "bg-black/50"
+        "bg-black/40"
       )}
     >
       <Tooltip
@@ -49,7 +49,6 @@ export default function TitleBar({ editable = false }: { editable: boolean }) {
           type="text"
           ref={inputRef}
           value={title ?? ""}
-          placeholder="Untitled"
           spellCheck={false}
           autoComplete="off"
           maxLength={69}
@@ -59,11 +58,9 @@ export default function TitleBar({ editable = false }: { editable: boolean }) {
           className={cn(
             "w-32 truncate rounded-md text-center font-medium leading-loose",
             "outline-none",
-            "bg-transparent text-almost-white/50",
+            "bg-transparent text-almost-white/40",
             "transition-all duration-100 ease-in-out",
-            "placeholder:text-almost-white/50",
-            "focus:text-almost-white focus:placeholder:text-transparent",
-            !title && "italic"
+            "focus:text-almost-white"
           )}
         />
       </Tooltip>
@@ -73,11 +70,11 @@ export default function TitleBar({ editable = false }: { editable: boolean }) {
           "absolute left-0 -bottom-2 flex w-full justify-between fill-black/30"
         )}
       >
-        <svg width={8} height={8} className={cn("rotate-180", "fill-black/50")}>
+        <svg width={8} height={8} className={cn("rotate-180", "fill-black/40")}>
           <path d="M0 8a8 8 0 0 0 8-8v8H0Z" />
         </svg>
 
-        <svg width={8} height={8} className={cn("-rotate-90", "fill-black/50")}>
+        <svg width={8} height={8} className={cn("-rotate-90", "fill-black/40")}>
           <path d="M0 8a8 8 0 0 0 8-8v8H0Z" />
         </svg>
       </div>

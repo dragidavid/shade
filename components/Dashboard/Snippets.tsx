@@ -21,7 +21,7 @@ import { cn } from "lib/cn";
 import { find } from "lib/find";
 import { fetcher } from "lib/fetcher";
 
-import type { Snippet } from "@prisma/client";
+import type { Snippet, View } from "@prisma/client";
 import type { SnippetSettings } from "lib/types";
 
 interface DialogProps {
@@ -30,7 +30,11 @@ interface DialogProps {
   title: string | null;
 }
 
-export default function Snippets({ snippets }: { snippets: Snippet[] }) {
+export default function Snippets({
+  snippets,
+}: {
+  snippets: (Snippet & { views: View | null })[];
+}) {
   const [localSnippets, setLocalSnippets] = useState(snippets);
   const [localDialogOpen, setLocalDialogOpen] = useState<boolean>(false);
   const [dialogProps, setDialogProps] = useState<DialogProps | null>(null);
@@ -203,7 +207,7 @@ export default function Snippets({ snippets }: { snippets: Snippet[] }) {
           open={localDialogOpen}
           onOpenChange={setLocalDialogOpen}
         >
-          {localSnippets.map(({ id, title, settings, createdAt }) => (
+          {localSnippets.map(({ id, title, settings, createdAt, views }) => (
             <ContextMenuPrimitive.Root key={id}>
               <ContextMenuPrimitive.Trigger asChild>
                 <li>
@@ -211,7 +215,7 @@ export default function Snippets({ snippets }: { snippets: Snippet[] }) {
                     id={id}
                     href={`/${id}`}
                     className={cn(
-                      "flex w-full flex-col gap-2 rounded-lg p-3 font-medium",
+                      "flex w-full flex-col gap-3 rounded-lg p-3 font-medium",
                       "select-none outline-none",
                       "border border-white/20 bg-black",
                       "transition-all duration-100 ease-in-out",
@@ -235,13 +239,21 @@ export default function Snippets({ snippets }: { snippets: Snippet[] }) {
                       </span>
                     </div>
 
-                    <span className="text-xs">
-                      {Intl.DateTimeFormat("en-US", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      }).format(new Date(createdAt))}
-                    </span>
+                    <div
+                      className={cn(
+                        "flex items-center justify-between text-xs"
+                      )}
+                    >
+                      <span>
+                        {Intl.DateTimeFormat("en-US", {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                        }).format(new Date(createdAt))}
+                      </span>
+
+                      <span>{views?.count.toLocaleString() ?? "?"} views</span>
+                    </div>
                   </Link>
                 </li>
               </ContextMenuPrimitive.Trigger>

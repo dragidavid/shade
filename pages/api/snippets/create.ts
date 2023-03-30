@@ -32,6 +32,14 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     const createdSnippet = await prisma.snippet.create({
       data: {
         userId: session.user.id,
+        views: {
+          create: {
+            count: 1,
+          },
+        },
+      },
+      include: {
+        views: true,
       },
     });
 
