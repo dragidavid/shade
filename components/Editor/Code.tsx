@@ -13,6 +13,7 @@ import TitleBar from "components/Editor/TitleBar";
 
 import { cn } from "lib/cn";
 import { useStore } from "lib/store";
+import { debounce } from "lib/debounce";
 import { hslToHsla as adjustLightness } from "lib/colors/conversions";
 
 import type { Extension } from "@codemirror/state";
@@ -170,10 +171,12 @@ export default function Code({ editable = false }: { editable: boolean }) {
     ],
   });
 
+  const debouncedUpdate = debounce(update, 200);
+
   const { setContainer, view } = useCodeMirror({
     container: editorRef.current,
     value: code,
-    onChange: (value) => update("code", value),
+    onChange: (value) => debouncedUpdate("code", value),
     autoFocus: false,
     editable: localEditable,
     basicSetup: {
