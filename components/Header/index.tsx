@@ -1,7 +1,7 @@
 "use client";
 
 import Home from "components/Header/Home";
-import SaveStatus from "components/Header/SaveStatus";
+import Message from "components/Header/Message";
 import Auth from "components/Header/Auth";
 
 import { cn } from "lib/cn";
@@ -16,7 +16,7 @@ export default function Header() {
     >
       <Home />
 
-      <SaveStatus />
+      <Message />
 
       <Auth />
     </header>
