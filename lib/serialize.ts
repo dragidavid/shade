@@ -7,6 +7,7 @@ function serializeCustom<T>(_: string, value: T): SerializedValue<T> {
   if (value instanceof Date) {
     return { type: "Date", value: (value as Date).toJSON() };
   }
+
   if (typeof value === "function") {
     return { type: "Function", value: value.toString() };
   }
@@ -30,6 +31,7 @@ function reviver<T>(_: string, value: SerializedValue<T>): T {
   if (isSerializedDate(value)) {
     return new Date(value.value) as unknown as T;
   }
+
   if (isSerializedFunction(value)) {
     return new Function(`return ${value.value}`)() as unknown as T;
   }

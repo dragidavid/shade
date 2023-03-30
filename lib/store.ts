@@ -24,7 +24,7 @@ export const useStore = create<Store>()(
     language: SUPPORTED_LANGUAGES.at(0)!,
     theme: SUPPORTED_THEMES.at(0)!,
     fontStyle: SUPPORTED_FONT_STYLES.at(0)!,
-    fontSize: SUPPORTED_FONT_SIZES.at(0)!,
+    fontSize: SUPPORTED_FONT_SIZES.at(1)!,
     lineNumbers: true,
     padding: SUPPORTED_PADDING_CHOICES.at(1)!,
     update: (type, value) =>

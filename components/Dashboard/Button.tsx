@@ -5,9 +5,10 @@ import { useRouter } from "next/navigation";
 import useSWRMutation from "swr/mutation";
 import { useHotkeys } from "react-hotkeys-hook";
 
-import { Loader2, Plus, Check, X } from "lucide-react";
+import { Plus, Check, X } from "lucide-react";
 
 import Kbd from "components/ui/Kbd";
+import Loader from "components/ui/Loader";
 
 import { cn } from "lib/cn";
 import { fetcher } from "lib/fetcher";
@@ -48,7 +49,7 @@ export default function Button() {
 
   const router = useRouter();
 
-  const { trigger: create, isMutating: loading } = useSWRMutation(
+  const { trigger, isMutating: loading } = useSWRMutation(
     "/api/snippets/create",
     (url) => fetcher(url)
   );
@@ -61,7 +62,7 @@ export default function Button() {
 
   const handleButtonClick = async () => {
     try {
-      const { id } = await create();
+      const { id } = await trigger();
 
       setButtonState(BUTTON_STATES.SUCCESS);
 
@@ -100,11 +101,7 @@ export default function Button() {
       )}
     >
       <div className={cn("flex items-center gap-2 pl-0.5")}>
-        {loading ? (
-          <Loader2 size={16} className="animate-spin" aria-hidden="true" />
-        ) : (
-          buttonState.icon
-        )}
+        {loading ? <Loader /> : buttonState.icon}
         {buttonState.text}
       </div>
 

@@ -1,10 +1,22 @@
 import domtoimage from "dom-to-image";
 import { saveAs } from "file-saver";
 
-export async function snap(mode: "DOWNLOAD" | "COPY"): Promise<void> {
+export async function snap(
+  mode: "COPY_LINK" | "COPY_IMAGE" | "DOWNLOAD_IMAGE"
+): Promise<void> {
   const editorDiv = document.getElementById("screenshot");
 
   if (!editorDiv) {
+    return;
+  }
+
+  if (mode === "COPY_LINK") {
+    if (navigator.clipboard) {
+      await navigator.clipboard.writeText(window.location.href);
+    } else {
+      throw new Error("Clipboard API not supported");
+    }
+
     return;
   }
 
@@ -22,22 +34,22 @@ export async function snap(mode: "DOWNLOAD" | "COPY"): Promise<void> {
 
     const dataUrl = await domtoimage.toPng(editorDiv, options);
 
-    fetch(dataUrl)
+    return fetch(dataUrl)
       .then((response) => response.blob())
       .then(async (blob) => {
-        if (mode === "DOWNLOAD") {
+        if (mode === "DOWNLOAD_IMAGE") {
           saveAs(blob, "code-snippet.png");
-        } else {
+        } else if (mode === "COPY_IMAGE") {
           if (navigator.clipboard && navigator.clipboard.write) {
             const item = new ClipboardItem({ "image/png": blob });
 
             await navigator.clipboard.write([item]);
           } else {
-            console.error("clipboard not supported");
+            throw new Error("Clipboard API not supported");
           }
         }
       });
-  } catch (err) {
-    console.error("something broke obviously", err);
+  } catch (e) {
+    throw new Error("Something went wrong");
   }
 }
