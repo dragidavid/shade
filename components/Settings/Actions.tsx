@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { useHotkeys } from "react-hotkeys-hook";
 
 import { Link, Copy, Image as ImageIcon, Check, X } from "lucide-react";
@@ -117,17 +118,26 @@ function Button({ id, label, icon, action, hotkey }: Button) {
       className={cn(
         "flex items-center justify-center rounded-lg py-1 px-1.5",
         "select-none outline-none",
-        "border border-transparent bg-transparent",
         "transition-all duration-100 ease-in-out",
         "hover:bg-white/10 hover:text-almost-white",
-        "focus:border-almost-white focus:text-almost-white"
+        "focus:text-almost-white"
       )}
       aria-label={id}
     >
-      <div className={cn("flex items-center gap-2")}>
-        {icon[buttonState]}
-        {label[buttonState] ?? label.DEFAULT}
-      </div>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={buttonState}
+          initial={{ opacity: 0, y: -5 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 5 }}
+          transition={{ duration: 0.1 }}
+        >
+          <div className={cn("flex items-center gap-2")}>
+            {icon[buttonState]}
+            {label[buttonState] ?? label.DEFAULT}
+          </div>
+        </motion.div>
+      </AnimatePresence>
     </button>
   );
 }

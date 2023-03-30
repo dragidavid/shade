@@ -85,7 +85,7 @@ export default function SaveStatus() {
     <div className={cn("absolute left-1/2 -translate-x-1/2")}>
       <AnimatePresence mode="wait">
         {showMessage && content && (
-          <Wrapper content={content} key={content.id} />
+          <Wrapper key={content.id} content={content} />
         )}
       </AnimatePresence>
     </div>
