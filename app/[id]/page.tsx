@@ -40,7 +40,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   const session = await getSession();
 
   const partialSnippet = await getSnippet(params.id);
-  const views = await increaseViewCount(params.id);
+  const views = partialSnippet && (await increaseViewCount(params.id));
 
   const editable = session?.user?.id === partialSnippet?.userId;
   const isAuthenticated = !!session;
@@ -52,7 +52,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   return (
     <Editor
       partialSnippet={partialSnippet}
-      views={views.count}
+      views={views?.count}
       editable={editable}
       isAuthenticated={isAuthenticated}
     />
