@@ -68,7 +68,7 @@ model VerificationToken {
 model Snippet {
   id        String   @id @default(cuid())
   title     String?  @db.VarChar(69)
-  code      String   @default("// Add some code here...") @db.Text
+  code      String?  @db.Text
   settings  Json?    @default("{ \"language\": \"typescript\", \"theme\": \"salem\", \"fontStyle\": \"fira_code\", \"fontSize\": \"sm\", \"lineNumbers\": true, \"padding\": \"md\" }")
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @default(now()) @map(name: "updated_at")
@@ -83,7 +83,7 @@ model Snippet {
 }
 
 model View {
-  count Int @default(1)
+  count Int @default(0)
 
   snippet   Snippet @relation(fields: [snippetId], references: [id], onDelete: Cascade)
   snippetId String  @unique

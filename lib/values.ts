@@ -16,10 +16,6 @@ const importLegacy = () =>
     };
   });
 
-export const INITIAL_TITLE = "Untitled";
-
-export const INITIAL_CODE = "// Add some code here...";
-
 export const SUPPORTED_LANGUAGES: LanguageDefinition[] = [
   {
     id: "typescript",

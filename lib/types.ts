@@ -31,7 +31,7 @@ export type ChoiceDefinition = {
 export type State = {
   id: string | null;
   title: string | null;
-  code: string;
+  code: string | null;
   language: LanguageDefinition;
   theme: ThemeDefinition;
   fontStyle: FontDefinition;
@@ -54,6 +54,7 @@ export type Message =
   | "ERROR"
   | "TOO_MANY_REQUESTS"
   | "LIMIT_REACHED"
+  | "EMPTY_EDITOR"
   | "PENDING"
   | "IDLE";
 

@@ -8,6 +8,7 @@ import Loader from "components/ui/Loader";
 
 import { cn } from "lib/cn";
 import { snap } from "lib/snap";
+import { useStore } from "lib/store";
 
 type ButtonStates = "DEFAULT" | "SUCCESS" | "FAILURE" | "LOADING";
 
@@ -95,13 +96,19 @@ export default function Actions() {
 function Button({ id, label, icon, action, hotkey }: Button) {
   const [buttonState, setButtonState] = useState<ButtonStates>("DEFAULT");
 
+  const update = useStore((state) => state.update);
+
   async function wrappedAction() {
     try {
       await action();
 
       setButtonState("SUCCESS");
-    } catch (err) {
+    } catch (e) {
       setButtonState("FAILURE");
+
+      if (e instanceof Error && e.message === "Something went wrong") {
+        update("message", "EMPTY_EDITOR");
+      }
     } finally {
       const timer = setTimeout(() => setButtonState("DEFAULT"), 2500);
 
@@ -115,6 +122,7 @@ function Button({ id, label, icon, action, hotkey }: Button) {
     <button
       type="button"
       onClick={wrappedAction}
+      disabled={buttonState !== "DEFAULT"}
       className={cn(
         "flex items-center justify-center rounded-lg py-1 px-1.5",
         "select-none outline-none",
@@ -127,9 +135,9 @@ function Button({ id, label, icon, action, hotkey }: Button) {
       <AnimatePresence mode="wait">
         <motion.div
           key={buttonState}
-          initial={{ opacity: 0, y: -5 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 5 }}
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.8 }}
           transition={{ duration: 0.1 }}
         >
           <div className={cn("flex items-center gap-2")}>

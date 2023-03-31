@@ -3,7 +3,6 @@ import { devtools } from "zustand/middleware";
 import produce from "immer";
 
 import {
-  INITIAL_CODE,
   SUPPORTED_LANGUAGES,
   SUPPORTED_THEMES,
   SUPPORTED_FONT_STYLES,
@@ -20,7 +19,7 @@ export const useStore = create<Store>()(
     message: "IDLE",
     id: null,
     title: null,
-    code: INITIAL_CODE,
+    code: null,
     language: SUPPORTED_LANGUAGES.at(0)!,
     theme: SUPPORTED_THEMES.at(0)!,
     fontStyle: SUPPORTED_FONT_STYLES.at(0)!,

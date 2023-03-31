@@ -35,12 +35,17 @@ export default function Code({ editable = false }: { editable: boolean }) {
   const padding = useStore((state) => state.padding);
   const update = useStore((state) => state.update);
 
+  const colors = theme.generatedColors;
+
   const customStyles = EditorView.baseTheme({
     "&.cm-editor": {
       fontWeight: 400,
     },
     "&.cm-editor.cm-focused": {
       outline: "none",
+    },
+    ".cm-placeholder": {
+      color: adjustLightness(colors.at(0)!, 0.4),
     },
     ".cm-gutterElement": {
       display: "flex",
@@ -71,8 +76,6 @@ export default function Code({ editable = false }: { editable: boolean }) {
   });
   const lineWrapping = EditorView.lineWrapping;
   const setTabIndex = EditorView.contentAttributes.of({ tabindex: "-1" });
-
-  const colors = theme.generatedColors;
 
   const customEditorTheme = createTheme({
     theme: "dark",
@@ -175,9 +178,10 @@ export default function Code({ editable = false }: { editable: boolean }) {
 
   const { setContainer, view } = useCodeMirror({
     container: editorRef.current,
-    value: code,
+    value: code ?? "",
     onChange: (value) => debouncedUpdate("code", value),
-    autoFocus: false,
+    placeholder: "// Add some code here...",
+    autoFocus: true,
     editable: localEditable,
     basicSetup: {
       lineNumbers: lineNumbers,

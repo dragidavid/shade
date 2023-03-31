@@ -34,7 +34,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         userId: session.user.id,
         views: {
           create: {
-            count: 1,
+            count: 0,
           },
         },
       },

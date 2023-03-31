@@ -3,7 +3,7 @@ import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { AnimatePresence, motion } from "framer-motion";
 
-import { Check, X } from "lucide-react";
+import { Check, Code, X } from "lucide-react";
 
 import Loader from "components/ui/Loader";
 
@@ -41,6 +41,12 @@ const CONTENT_STATES: Partial<Record<Message, ContentState>> = {
     id: "limit-reached",
     text: "Limit reached",
     additionalClasses: "text-red-400",
+  },
+  EMPTY_EDITOR: {
+    id: "empty-editor",
+    text: "Add some code first",
+    icon: <Code size={16} aria-hidden="true" />,
+    additionalClasses: "text-orange-400",
   },
   PENDING: {
     id: "pending",
