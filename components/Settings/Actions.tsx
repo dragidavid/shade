@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSession } from "next-auth/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useHotkeys } from "react-hotkeys-hook";
 
@@ -17,6 +18,7 @@ interface Button {
   label: Partial<{ [key in ButtonStates]: string }>;
   icon: { [key in ButtonStates]: JSX.Element };
   action: () => Promise<void>;
+  isDisabled?: boolean;
   hotkey: {
     key: string;
     options?: {
@@ -33,6 +35,8 @@ export default function Actions() {
     LOADING: <Loader />,
   };
 
+  const { status: sessionStatus } = useSession();
+
   const buttons: Button[] = [
     {
       id: "copy-link",
@@ -45,6 +49,7 @@ export default function Actions() {
         ...statusIcons,
       },
       action: () => snap("COPY_LINK"),
+      isDisabled: sessionStatus === "unauthenticated",
       hotkey: {
         key: "meta+shift+c",
       },
@@ -68,7 +73,7 @@ export default function Actions() {
       id: "download-image",
       label: {
         DEFAULT: "Download as PNG",
-        SUCCESS: "Image downloaded",
+        SUCCESS: "Image download started",
       },
       icon: {
         DEFAULT: <ImageIcon size={16} aria-hidden="true" />,
@@ -93,7 +98,14 @@ export default function Actions() {
   );
 }
 
-function Button({ id, label, icon, action, hotkey }: Button) {
+function Button({
+  id,
+  label,
+  icon,
+  action,
+  isDisabled = false,
+  hotkey,
+}: Button) {
   const [buttonState, setButtonState] = useState<ButtonStates>("DEFAULT");
 
   const update = useStore((state) => state.update);
@@ -122,13 +134,14 @@ function Button({ id, label, icon, action, hotkey }: Button) {
     <button
       type="button"
       onClick={wrappedAction}
-      disabled={buttonState !== "DEFAULT"}
+      disabled={buttonState !== "DEFAULT" || isDisabled}
       className={cn(
-        "flex items-center justify-center rounded-lg py-1 px-1.5",
+        "flex items-center justify-center rounded-lg px-1.5 py-1",
         "select-none outline-none",
         "transition-all duration-100 ease-in-out",
-        "hover:bg-white/10 hover:text-almost-white",
-        "focus:text-almost-white"
+        "enabled:hover:bg-white/10 enabled:hover:text-almost-white",
+        "focus:text-almost-white",
+        "disabled:cursor-not-allowed disabled:opacity-50"
       )}
       aria-label={id}
     >
@@ -138,7 +151,7 @@ function Button({ id, label, icon, action, hotkey }: Button) {
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.8 }}
-          transition={{ duration: 0.1 }}
+          transition={{ duration: 0.1, delay: 0.1 }}
         >
           <div className={cn("flex items-center gap-2")}>
             {icon[buttonState]}

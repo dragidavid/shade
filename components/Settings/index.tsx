@@ -137,7 +137,7 @@ function DraggableHandle({
       whileTap={{ cursor: "grabbing" }}
       tabIndex={-1}
       className={cn(
-        "absolute -top-[14px] left-1/2 rounded-md py-1 px-2",
+        "absolute -top-[14px] left-1/2 rounded-md px-2 py-1",
         "select-none outline-none",
         "border border-white/20 bg-black",
         "transition-all duration-100 ease-in-out",

@@ -1,4 +1,4 @@
-import LRU from "lru-cache";
+import { LRUCache } from "lru-cache";
 
 import type { NextApiResponse } from "next";
 
@@ -6,7 +6,7 @@ export function ratelimit(options?: {
   interval?: number;
   uniqueTokenPerInterval?: number;
 }) {
-  const tokenCache = new LRU({
+  const tokenCache = new LRUCache({
     ttl: options?.interval || 60000,
     max: options?.uniqueTokenPerInterval || 100,
   });
