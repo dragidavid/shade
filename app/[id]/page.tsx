@@ -5,6 +5,8 @@ import Editor from "components/Editor";
 import { prisma } from "lib/prisma";
 import { getSession } from "lib/auth";
 
+import type { Metadata } from "next";
+
 async function getSnippet(id: string) {
   return await prisma.snippet.findUnique({
     where: {
@@ -34,6 +36,25 @@ async function increaseViewCount(id: string) {
       count: true,
     },
   });
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { id: string };
+}): Promise<Metadata> {
+  const partialSnippet = await getSnippet(params.id);
+
+  return {
+    title: partialSnippet?.title ?? "Untitled",
+    twitter: {
+      card: "summary_large_image",
+      title: partialSnippet?.title ?? "Untitled snippet",
+      description: "Yet another code sharing app...",
+      creator: "@dragidavid",
+    },
+    themeColor: "#000",
+  };
 }
 
 export default async function Page({ params }: { params: { id: string } }) {
