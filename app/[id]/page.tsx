@@ -46,10 +46,10 @@ export async function generateMetadata({
   const partialSnippet = await getSnippet(params.id);
 
   return {
-    title: partialSnippet?.title ?? "Untitled",
+    title: !partialSnippet ? "404" : partialSnippet?.title ?? "Untitled",
     twitter: {
       card: "summary_large_image",
-      title: partialSnippet?.title ?? "Untitled snippet",
+      title: !partialSnippet ? "404" : partialSnippet?.title ?? "Untitled",
       description: "Yet another code sharing app...",
       creator: "@dragidavid",
     },

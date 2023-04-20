@@ -53,7 +53,7 @@ export default async function SnippetOG({
               color: "transparent",
             }}
           >
-            ?
+            404
           </h1>
         </div>
       ),
@@ -75,65 +75,71 @@ export default async function SnippetOG({
 
   return new ImageResponse(
     (
-      <div
-        tw="relative flex h-full w-full pt-32 px-32"
-        style={{
-          zIndex: "0",
-          backgroundImage: `linear-gradient(to bottom right, ${theme.baseColors[0]}, ${theme.baseColors[1]})`,
-        }}
-      >
+      <div tw="relative flex flex-col h-full w-full px-32 bg-black">
+        <div tw="flex py-12 justify-center">
+          <h1
+            style={{
+              fontFamily: "Inter",
+              fontSize: "72px",
+              fontWeight: "900",
+              backgroundImage: `linear-gradient(to bottom right, ${theme.baseColors[0]}, ${theme.baseColors[1]})`,
+              backgroundClip: "text",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              color: "transparent",
+            }}
+          >
+            shade.
+          </h1>
+        </div>
         <div
-          tw="relative flex h-full w-full rounded-t-lg"
-          style={{ zIndex: "1" }}
+          tw="relative flex h-full w-full rounded-t-lg pt-24 px-24"
+          style={{
+            zIndex: "0",
+            backgroundImage: `linear-gradient(to bottom right, ${theme.baseColors[0]}, ${theme.baseColors[1]})`,
+          }}
         >
           <div
-            tw="absolute inset-0 rounded-t-lg bg-black/60"
-            style={{
-              zIndex: "2",
-              transform: "translateY(36px) scale(1.04)",
-              filter: "blur(36px)",
-            }}
-          />
-          <div
-            tw="absolute inset-0 rounded-t-lg"
-            style={{
-              zIndex: "3",
-              backgroundImage: `linear-gradient(to bottom right, ${theme.baseColors[0]}, ${theme.baseColors[1]})`,
-            }}
-          />
-          <div
-            tw="relative flex flex-col h-full w-full p-12 rounded-t-lg bg-black/70"
-            style={{ zIndex: "4", gap: "24px" }}
+            tw="relative flex h-full w-full rounded-t-lg"
+            style={{ zIndex: "1" }}
           >
-            <span
-              tw="h-8 bg-white/10"
-              style={{ width: `${random(20, 40)}%` }}
+            <div
+              tw="absolute inset-0 rounded-t-lg bg-black/60"
+              style={{
+                zIndex: "2",
+                transform: "translateY(36px) scale(1.04)",
+                filter: "blur(36px)",
+              }}
             />
-            <span tw="h-8 bg-transparent" style={{ width: "100%" }} />
-            <span
-              tw="h-8 bg-white/10"
-              style={{ width: `${random(5, 100)}%` }}
+            <div
+              tw="absolute inset-0 rounded-t-lg"
+              style={{
+                zIndex: "3",
+                backgroundImage: `linear-gradient(to bottom right, ${theme.baseColors[0]}, ${theme.baseColors[1]})`,
+              }}
             />
-            <span
-              tw="h-8 bg-white/10"
-              style={{ width: `${random(5, 100)}%` }}
-            />
-            <span
-              tw="h-8 bg-white/10"
-              style={{ width: `${random(5, 100)}%` }}
-            />
-            <span
-              tw="h-8 bg-white/10"
-              style={{ width: `${random(5, 100)}%` }}
-            />
-            <span
-              tw="h-8 bg-white/10"
-              style={{ width: `${random(5, 100)}%` }}
-            />
-            <span
-              tw="h-8 bg-white/10"
-              style={{ width: `${random(5, 100)}%` }}
-            />
+            <div
+              tw="relative flex flex-col h-full w-full p-12 rounded-t-lg bg-black/70"
+              style={{ zIndex: "4", gap: "24px" }}
+            >
+              <span
+                tw="h-8 bg-white/10"
+                style={{ width: `${random(20, 50)}%` }}
+              />
+              <span tw="h-8 bg-transparent" style={{ width: "100%" }} />
+              <span
+                tw="h-8 bg-white/10"
+                style={{ width: `${random(5, 100)}%` }}
+              />
+              <span
+                tw="h-8 bg-white/10"
+                style={{ width: `${random(5, 100)}%` }}
+              />
+              <span
+                tw="h-8 bg-white/10"
+                style={{ width: `${random(5, 100)}%` }}
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -141,6 +147,12 @@ export default async function SnippetOG({
     {
       width: 1200,
       height: 600,
+      fonts: [
+        {
+          name: "Inter",
+          data: font,
+        },
+      ],
     }
   );
 }
