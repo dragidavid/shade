@@ -1,3 +1,5 @@
+import { Analytics } from "@vercel/analytics/react";
+
 import {
   Inter,
   Fira_Code,
@@ -13,13 +15,12 @@ import Providers from "contexts/Providers";
 
 import { cn } from "lib/cn";
 
-import type { Metadata } from "next";
-
 import "styles/globals.css";
 
-export const metadata: Metadata = {
-  title: "Home",
-  description: "Welcome to Next.js",
+export const metadata = {
+  title: {
+    template: "%s | shade",
+  },
 };
 
 const inter = Inter({
@@ -74,7 +75,11 @@ export default function RootLayout({
         <Providers>
           <Header />
 
-          <main className={cn("grid place-items-center")}>{children}</main>
+          <main className={cn("grid place-items-center")}>
+            {children}
+
+            <Analytics />
+          </main>
         </Providers>
       </body>
     </html>
