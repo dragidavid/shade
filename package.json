@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "prisma generate --data-proxy"
   },
   "dependencies": {
     "@codemirror/commands": "^6.2.3",
