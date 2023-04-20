@@ -12,7 +12,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Dashboard",
-  description: "share some code",
+  description: "Yet another code sharing app...",
 };
 
 async function getSnippets(userId: string) {

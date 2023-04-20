@@ -47,6 +47,7 @@ export async function generateMetadata({
 
   return {
     title: !partialSnippet ? "404" : partialSnippet?.title ?? "Untitled",
+    description: "Yet another code sharing app...",
     twitter: {
       card: "summary_large_image",
       title: !partialSnippet ? "404" : partialSnippet?.title ?? "Untitled",
