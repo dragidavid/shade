@@ -45,7 +45,7 @@ export default function Logo() {
       className={cn(
         "relative text-base font-black",
         "select-none",
-        "bg-gradient-to-br from-purple-400 to-violet-500 bg-clip-text text-transparent"
+        "bg-gradient-to-br from-purple-600 to-violet-800 bg-clip-text text-transparent"
       )}
     >
       <span>sha</span>

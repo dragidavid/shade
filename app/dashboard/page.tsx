@@ -8,6 +8,13 @@ import { prisma } from "lib/prisma";
 import { getSession } from "lib/auth";
 import { serialize } from "lib/serialize";
 
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Dashboard",
+  description: "share some code",
+};
+
 async function getSnippets(userId: string) {
   return await prisma.snippet.findMany({
     where: {
