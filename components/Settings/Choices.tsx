@@ -45,7 +45,7 @@ export default memo(function Choices({
             id={`${type}-${choice.id}`}
             value={choice.id}
             className={cn(
-              "flex items-center justify-center rounded-lg py-1 px-2",
+              "flex items-center justify-center rounded-lg px-2 py-1",
               "select-none outline-none",
               "border border-white/20 bg-black",
               "transition-all duration-100 ease-in-out",

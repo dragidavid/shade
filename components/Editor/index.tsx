@@ -1,14 +1,14 @@
 "use client";
 
 import Code from "components/Editor/Code";
-import Settings from "components/Settings";
+import Views from "components/Editor/Views";
 import ChangeListener from "components/Editor/ChangeListener";
+import Settings from "components/Settings";
 
 import { cn } from "lib/cn";
 import { useStore } from "lib/store";
 
 import type { Snippet } from "@prisma/client";
-import Views from "./Views";
 
 export default function Editor({
   partialSnippet,
@@ -34,7 +34,7 @@ export default function Editor({
         "relative flex h-full w-full flex-col items-center justify-center p-6"
       )}
     >
-      {views && <Views views={views} />}
+      {views !== undefined && <Views views={views} />}
 
       <Code editable={editable} />
 

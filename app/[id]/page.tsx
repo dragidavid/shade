@@ -72,7 +72,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 
   if (partialSnippet) {
     views =
-      session.user.id !== partialSnippet.userId
+      session?.user?.id !== partialSnippet.userId
         ? await increaseViewCount(params.id)
         : partialSnippet.views;
   }
