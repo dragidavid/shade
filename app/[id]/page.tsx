@@ -18,6 +18,11 @@ async function getSnippet(id: string) {
       code: true,
       settings: true,
       userId: true,
+      views: {
+        select: {
+          count: true,
+        },
+      },
     },
   });
 }
@@ -62,7 +67,15 @@ export default async function Page({ params }: { params: { id: string } }) {
   const session = await getSession();
 
   const partialSnippet = await getSnippet(params.id);
-  const views = partialSnippet && (await increaseViewCount(params.id));
+
+  let views;
+
+  if (partialSnippet) {
+    views =
+      session.user.id !== partialSnippet.userId
+        ? await increaseViewCount(params.id)
+        : partialSnippet.views;
+  }
 
   const editable = session?.user?.id === partialSnippet?.userId;
   const isAuthenticated = !!session;
