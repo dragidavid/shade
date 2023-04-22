@@ -1,6 +1,11 @@
-<a href="https://shade.dragi.me">
-  <img alt="shade – Yet another code sharing app..." src="https://shade.dragi.me/og.png">
-</a>
+<div align="center">
+  <a href="https://shade.dragi.me">
+    <img height="256" alt="shade – Yet another code sharing app..." src="https://shade.dragi.me/blob.png">
+  </a>
+</div>
+
+</br>
+</br>
 
 <p align="center">
   <a href="https://twitter.com/dragidavid">
