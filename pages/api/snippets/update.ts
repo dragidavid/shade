@@ -5,7 +5,7 @@ import { withAuthentication } from "lib/auth";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 const limiter = ratelimit({
-  interval: 60 * 1000,
+  interval: 120 * 1000,
   uniqueTokenPerInterval: 100,
 });
 
