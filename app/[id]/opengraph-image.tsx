@@ -93,18 +93,18 @@ export default async function SnippetOG({
           </h1>
         </div>
         <div
-          tw="relative flex h-full w-full rounded-t-xl pt-24 px-24"
+          tw="relative flex h-full w-full rounded-t-2xl pt-24 px-24"
           style={{
             zIndex: "0",
             backgroundImage: `linear-gradient(to bottom right, ${theme.baseColors[0]}, ${theme.baseColors[1]})`,
           }}
         >
           <div
-            tw="relative flex h-full w-full rounded-t-xl"
+            tw="relative flex h-full w-full rounded-t-2xl"
             style={{ zIndex: "1" }}
           >
             <div
-              tw="absolute inset-0 rounded-t-xl bg-black/60"
+              tw="absolute inset-0 rounded-t-2xl bg-black/60"
               style={{
                 zIndex: "2",
                 transform: "translateY(36px) scale(1.04)",
@@ -112,14 +112,14 @@ export default async function SnippetOG({
               }}
             />
             <div
-              tw="absolute inset-0 rounded-t-xl"
+              tw="absolute inset-0 rounded-t-2xl"
               style={{
                 zIndex: "3",
                 backgroundImage: `linear-gradient(to bottom right, ${theme.baseColors[0]}, ${theme.baseColors[1]})`,
               }}
             />
             <div
-              tw="relative flex flex-col h-full w-full p-12 rounded-t-xl bg-black/70"
+              tw="relative flex flex-col h-full w-full p-12 rounded-t-2xl bg-black/70"
               style={{ zIndex: "4", gap: "24px" }}
             >
               <span
