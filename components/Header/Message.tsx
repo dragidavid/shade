@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { useSession } from "next-auth/react";
 import { AnimatePresence, motion } from "framer-motion";
 
 import { Check, Code, X } from "lucide-react";
@@ -61,8 +60,6 @@ export default function Message() {
 
   const pathname = usePathname();
 
-  const { data: session } = useSession();
-
   const message = useStore((state) => state.message);
   const update = useStore((state) => state.update);
 
@@ -95,8 +92,6 @@ export default function Message() {
     }
   }, [pathname, update]);
 
-  if (!session) return null;
-
   return (
     <div className={cn("absolute left-1/2 -translate-x-1/2")}>
       <AnimatePresence mode="wait">
@@ -116,7 +111,7 @@ function Wrapper({ content }: { content: ContentState }) {
       exit={{ opacity: 0, y: 5 }}
       transition={{ duration: 0.1 }}
       className={cn(
-        "flex items-center justify-between gap-2 p-2",
+        "flex items-center justify-between gap-2 p-2 text-xs",
         "select-none",
         content.additionalClasses
       )}
