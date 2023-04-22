@@ -42,6 +42,7 @@ export default function ChangeListener() {
 
           trigger(state);
         }
+
         pendingSave.current = false;
       }, 2500);
 

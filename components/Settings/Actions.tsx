@@ -151,7 +151,7 @@ function Button({
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.8 }}
-          transition={{ duration: 0.1, delay: 0.1 }}
+          transition={{ duration: 0.08, delay: 0.08 }}
         >
           <div className={cn("flex items-center gap-2")}>
             {icon[buttonState]}
