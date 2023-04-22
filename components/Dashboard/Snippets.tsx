@@ -121,7 +121,7 @@ export default function Snippets({
     }
   }, [handleEvent, handleKeyDown]);
 
-  const { trigger: renameSnippet } = useSWRMutation(
+  const { trigger: renameSnippet, isMutating: renameLoading } = useSWRMutation(
     "/api/snippets/rename",
     (url, { arg }: { arg: { id: string; title: string } }) =>
       fetcher(url, {
@@ -148,7 +148,7 @@ export default function Snippets({
     }
   );
 
-  const { trigger: deleteSnippet } = useSWRMutation(
+  const { trigger: deleteSnippet, isMutating: deleteLoading } = useSWRMutation(
     "/api/snippets/delete",
     (url, { arg }: { arg: { id: string } }) =>
       fetcher(url, {
@@ -174,6 +174,7 @@ export default function Snippets({
           id={dialogProps.id}
           title={dialogProps.title}
           action={renameSnippet}
+          isLoading={renameLoading}
         />
       );
     }
@@ -184,6 +185,7 @@ export default function Snippets({
           id={dialogProps.id}
           title={dialogProps.title}
           action={deleteSnippet}
+          isLoading={deleteLoading}
         />
       );
     }
