@@ -1,9 +1,21 @@
 import { prisma } from "lib/prisma";
+import { ratelimit } from "lib/ratelimit";
 import { withAuthentication } from "lib/auth";
 
 import type { NextApiRequest, NextApiResponse } from "next";
 
+const limiter = ratelimit({
+  interval: 60 * 1000,
+  uniqueTokenPerInterval: 100,
+});
+
 async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const { allowed } = await limiter.check(res, 5, "UPDATE_SNIPPET");
+
+  if (!allowed) {
+    return res.status(429).send({ message: "Too many requests" });
+  }
+
   try {
     const updatedSnippet = await prisma.snippet.update({
       where: {
