@@ -4,7 +4,7 @@ export const runtime = "edge";
 
 export default async function OG() {
   const font = await fetch(
-    new URL("./fonts/Inter-Black.otf", import.meta.url)
+    new URL("../assets/fonts/local/Inter-Black.otf", import.meta.url)
   ).then((res) => res.arrayBuffer());
 
   return new ImageResponse(

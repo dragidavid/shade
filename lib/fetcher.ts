@@ -1,5 +1,8 @@
 export async function fetcher(url: RequestInfo, init?: RequestInit) {
-  const res = await fetch(url, init);
+  const res = await fetch(url, {
+    headers: { "Content-Type": "application/json" },
+    ...init,
+  });
 
   if (!res.ok) {
     const { message } = await res.json();

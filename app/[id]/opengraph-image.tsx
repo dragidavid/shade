@@ -31,7 +31,7 @@ export default async function SnippetOG({
   params: { id: string };
 }) {
   const font = await fetch(
-    new URL("../fonts/Inter-Black.otf", import.meta.url)
+    new URL("../../assets/fonts/local/Inter-Black.otf", import.meta.url)
   ).then((res) => res.arrayBuffer());
 
   const partialSnippet = await getSnippet(params.id);

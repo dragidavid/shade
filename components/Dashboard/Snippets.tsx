@@ -22,6 +22,7 @@ import { find } from "lib/find";
 import { fetcher } from "lib/fetcher";
 
 import type { Snippet, View } from "@prisma/client";
+
 import type { SnippetSettings } from "lib/types";
 
 interface DialogProps {
@@ -126,7 +127,6 @@ export default function Snippets({
       fetcher(url, {
         method: "PATCH",
         body: JSON.stringify(arg),
-        headers: { "Content-Type": "application/json" },
       }),
     {
       revalidate: false,
@@ -154,7 +154,6 @@ export default function Snippets({
       fetcher(url, {
         method: "DELETE",
         body: JSON.stringify(arg),
-        headers: { "Content-Type": "application/json" },
       }),
     {
       revalidate: false,

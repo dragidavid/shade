@@ -1,19 +1,12 @@
 import { Analytics } from "@vercel/analytics/react";
 
-import {
-  Inter,
-  Fira_Code,
-  JetBrains_Mono,
-  Inconsolata,
-  Source_Code_Pro,
-  IBM_Plex_Mono,
-} from "next/font/google";
-
 import Header from "components/Header";
 
 import Providers from "contexts/Providers";
 
 import { cn } from "lib/cn";
+
+import { fonts } from "assets/fonts";
 
 import "styles/globals.css";
 
@@ -22,32 +15,6 @@ export const metadata = {
     template: "%s | shade",
   },
 };
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-});
-const firaCode = Fira_Code({
-  variable: "--font-fira-code",
-  subsets: ["latin"],
-});
-const jetBrainsMono = JetBrains_Mono({
-  variable: "--font-jetbrains-mono",
-  subsets: ["latin"],
-});
-const inconsolata = Inconsolata({
-  variable: "--font-inconsolata",
-  subsets: ["latin"],
-});
-const sourceCodePro = Source_Code_Pro({
-  variable: "--font-source-code-pro",
-  subsets: ["latin"],
-});
-const ibmPlexMono = IBM_Plex_Mono({
-  weight: "400",
-  variable: "--font-ibm-plex-mono",
-  subsets: ["latin"],
-});
 
 export default function RootLayout({
   children,
@@ -58,12 +25,12 @@ export default function RootLayout({
     <html
       lang="en"
       className={cn(
-        inter.variable,
-        firaCode.variable,
-        jetBrainsMono.variable,
-        inconsolata.variable,
-        sourceCodePro.variable,
-        ibmPlexMono.variable
+        fonts.inter.variable,
+        fonts.firaCode.variable,
+        fonts.jetBrainsMono.variable,
+        fonts.inconsolata.variable,
+        fonts.sourceCodePro.variable,
+        fonts.ibmPlexMono.variable
       )}
     >
       <body
