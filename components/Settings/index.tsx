@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import va from "@vercel/analytics";
 import { motion, useDragControls, useAnimationControls } from "framer-motion";
 
 import { GripHorizontal } from "lucide-react";
@@ -133,7 +134,11 @@ function DraggableHandle({
 }) {
   return (
     <motion.div
-      onPointerDown={(e) => dragControls.start(e, { snapToCursor: false })}
+      onPointerDown={(e) => {
+        dragControls.start(e, { snapToCursor: false });
+
+        va.track("settings_drag");
+      }}
       whileTap={{ cursor: "grabbing" }}
       tabIndex={-1}
       className={cn(

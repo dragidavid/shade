@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
+import va from "@vercel/analytics";
 import useSWRMutation from "swr/mutation";
 
 import * as DialogPrimitive from "@radix-ui/react-dialog";
@@ -62,14 +63,20 @@ export default function Snippets({
               setDialogProps({ type: "RENAME", id, title });
               setLocalDialogOpen(true);
 
+              va.track("rename_dialog_open_hotkey");
+
               break;
             case "d":
               setDialogProps({ type: "DELETE", id, title });
               setLocalDialogOpen(true);
 
+              va.track("delete_dialog_open_hotkey");
+
               break;
             case "c":
               navigator.clipboard.writeText(`${window.location.origin}/${id}`);
+
+              va.track("snippet_link_copy_hotkey");
 
               break;
           }
@@ -271,6 +278,8 @@ export default function Snippets({
                       onClick={() => {
                         setDialogProps({ type: "RENAME", id, title });
 
+                        va.track("rename_dialog_open_button");
+
                         setLocalDialogOpen(true);
                       }}
                       className={cn(
@@ -290,11 +299,13 @@ export default function Snippets({
                   </DialogPrimitive.Trigger>
 
                   <ContextMenuPrimitive.Item
-                    onClick={() =>
+                    onClick={() => {
                       navigator.clipboard.writeText(
                         `${window.location.origin}/${id}`
-                      )
-                    }
+                      );
+
+                      va.track("snippet_link_copy_button");
+                    }}
                     className={cn(
                       "flex items-center justify-between rounded-[5px] p-1",
                       "select-none outline-none",
@@ -314,6 +325,8 @@ export default function Snippets({
                     <ContextMenuPrimitive.Item
                       onClick={() => {
                         setDialogProps({ type: "DELETE", id, title });
+
+                        va.track("delete_dialog_open_button");
 
                         setLocalDialogOpen(true);
                       }}

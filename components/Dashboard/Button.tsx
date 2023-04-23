@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import va from "@vercel/analytics";
 import useSWRMutation from "swr/mutation";
 import { useHotkeys } from "react-hotkeys-hook";
 
@@ -63,9 +64,11 @@ export default function Button({ isDisabled }: { isDisabled: boolean }) {
     }, 2500);
   };
 
-  const handleButtonClick = async () => {
+  const handleAction = async (type: "button" | "hotkey" = "button") => {
     try {
       const { id } = await trigger();
+
+      va.track(`new_snippet_${type}`);
 
       setButtonState(BUTTON_STATES.SUCCESS);
 
@@ -94,7 +97,7 @@ export default function Button({ isDisabled }: { isDisabled: boolean }) {
     "n",
     () => {
       if (!loading && buttonState.id === "default") {
-        handleButtonClick();
+        handleAction("hotkey");
       }
     },
     {
@@ -105,7 +108,7 @@ export default function Button({ isDisabled }: { isDisabled: boolean }) {
   return (
     <button
       type="button"
-      onClick={handleButtonClick}
+      onClick={() => handleAction()}
       disabled={isDisabled || loading || buttonState.id !== "default"}
       className={cn(
         "flex w-auto items-center gap-4 rounded-lg p-1 font-medium",
