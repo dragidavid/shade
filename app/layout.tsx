@@ -12,6 +12,7 @@ import "styles/globals.css";
 
 export const metadata = {
   title: {
+    absolute: "shade - Share some code",
     template: "%s | shade",
   },
 };
