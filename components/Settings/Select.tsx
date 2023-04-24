@@ -94,7 +94,7 @@ export default memo(function Select<
     >
       <SelectPrimitive.Trigger
         className={cn(
-          "flex w-auto items-center justify-between gap-2 rounded-lg py-1 px-2",
+          "flex w-auto items-center justify-between gap-2 rounded-lg px-2 py-1",
           "select-none outline-none",
           "border border-white/20 bg-black",
           "transition-all duration-100 ease-in-out",
