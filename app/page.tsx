@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     siteName: "shade - Share some code",
     images: [
       {
-        url: "https://shade.dragi.me/og.png",
+        url: "https://shade.dragi.me/og.png?v=1",
         width: 1200,
         height: 600,
       },
