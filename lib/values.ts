@@ -205,8 +205,8 @@ export const SUPPORTED_FONT_SIZES: ChoiceDefinition[] = [
 ];
 
 export const SUPPORTED_PADDING_CHOICES: ChoiceDefinition[] = [
-  { id: "sm", label: "16", class: "p-4" },
-  { id: "md", label: "32", class: "p-8" },
-  { id: "lg", label: "64", class: "p-16" },
-  { id: "xl", label: "128", class: "p-32" },
+  { id: "sm", label: "16", value: 16, class: "p-4" },
+  { id: "md", label: "32", value: 32, class: "p-8" },
+  { id: "lg", label: "64", value: 64, class: "p-16" },
+  { id: "xl", label: "128", value: 128, class: "p-32" },
 ];

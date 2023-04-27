@@ -1,4 +1,5 @@
 import { useState } from "react";
+import va from "@vercel/analytics";
 import { useSession } from "next-auth/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useHotkeys } from "react-hotkeys-hook";
@@ -114,6 +115,8 @@ function Button({
     try {
       await action();
 
+      va.track(`${id}-button-click`);
+
       setButtonState("SUCCESS");
     } catch (e) {
       setButtonState("FAILURE");
@@ -139,7 +142,7 @@ function Button({
         "flex items-center justify-center rounded-lg px-1.5 py-1",
         "select-none outline-none",
         "transition-all duration-100 ease-in-out",
-        "enabled:hover:bg-white/10 enabled:hover:text-almost-white",
+        "enabled:hover:bg-white/20 enabled:hover:text-almost-white",
         "focus:text-almost-white",
         "disabled:cursor-not-allowed disabled:opacity-50"
       )}

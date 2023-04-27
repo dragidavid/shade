@@ -78,10 +78,10 @@ export default function Auth() {
             )}
             aria-label="avatar"
           >
-            <Tooltip side="left" sideOffset={8} kbd={["U"]}>
+            <Tooltip side="bottom" sideOffset={8} kbd={["U"]}>
               <AvatarPrimitive.Root
                 className={cn(
-                  "relative flex h-8 w-8 shrink-0 justify-center overflow-hidden rounded-full",
+                  "relative flex h-[34px] w-[34px] shrink-0 justify-center overflow-hidden rounded-full",
                   "select-none",
                   "bg-almost-black"
                 )}
@@ -156,7 +156,7 @@ export default function Auth() {
           "border border-white/20 bg-black",
           "transition-all duration-100 ease-in-out",
           "hover:bg-white/20 hover:text-almost-white",
-          "focus:border-almost-white focus:text-almost-white"
+          "focus:text-almost-white focus:ring-1 focus:ring-almost-white focus:ring-offset-2 focus:ring-offset-black"
         )}
       >
         <div className={cn("flex items-center gap-2 pl-1")}>

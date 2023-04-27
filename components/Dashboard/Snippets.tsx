@@ -233,7 +233,7 @@ export default function Snippets({
                       "select-none outline-none",
                       "border border-white/20 bg-black",
                       "transition-all duration-100 ease-in-out",
-                      "hover:bg-white/10 hover:text-almost-white",
+                      "hover:bg-white/20 hover:text-almost-white",
                       "focus:border-almost-white focus:text-almost-white"
                     )}
                   >
@@ -285,8 +285,6 @@ export default function Snippets({
                         setDialogProps({ type: "RENAME", id, title });
 
                         va.track("rename_dialog_open_button");
-
-                        setLocalDialogOpen(true);
                       }}
                       className={cn(
                         "flex items-center justify-between rounded-[5px] p-1",
@@ -333,8 +331,6 @@ export default function Snippets({
                         setDialogProps({ type: "DELETE", id, title });
 
                         va.track("delete_dialog_open_button");
-
-                        setLocalDialogOpen(true);
                       }}
                       className={cn(
                         "flex items-center justify-between rounded-[5px] p-1",

@@ -98,7 +98,7 @@ export default memo(function Select<
           "select-none outline-none",
           "border border-white/20 bg-black",
           "transition-all duration-100 ease-in-out",
-          "hover:bg-white/10 hover:text-almost-white",
+          "hover:bg-white/20 hover:text-almost-white",
           "focus:text-almost-white focus:ring-1 focus:ring-almost-white focus:ring-offset-2 focus:ring-offset-black",
           type === "language" && "w-32",
           type === "fontStyle" && "w-44"
