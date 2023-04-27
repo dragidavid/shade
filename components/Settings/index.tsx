@@ -1,8 +1,16 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import va from "@vercel/analytics";
-import { motion, useDragControls, useAnimationControls } from "framer-motion";
+import {
+  MotionValue,
+  AnimatePresence,
+  motion,
+  useDragControls,
+  useAnimationControls,
+  useMotionValue,
+  useMotionValueEvent,
+} from "framer-motion";
 
-import { GripHorizontal } from "lucide-react";
+import { GripHorizontal, RefreshCcw } from "lucide-react";
 
 import Select from "components/Settings/Select";
 import Switch from "components/Settings/Switch";
@@ -42,9 +50,11 @@ export default function Settings() {
     right: 0,
     bottom: 0,
   });
+  const [hasMoved, setHasMoved] = useState<boolean>(false);
 
   const dragControls = useDragControls();
   const animationControls = useAnimationControls();
+  const isDragging = useMotionValue(false);
 
   useEffect(() => {
     const editor = document.getElementById("editor");
@@ -112,13 +122,35 @@ export default function Settings() {
       dragMomentum={false}
       dragControls={dragControls}
       dragConstraints={dragConstraints}
+      onDragStart={() => {
+        isDragging.set(true);
+
+        va.track("settings_drag");
+      }}
+      onDragEnd={(_, info) => {
+        isDragging.set(false);
+
+        if (!hasMoved && (info.point.x !== 0 || info.point.y !== 0)) {
+          setHasMoved(true);
+        }
+      }}
       animate={animationControls}
+      onUpdate={({ x, y }) => {
+        if (hasMoved && x === 0 && y === 0) {
+          setHasMoved(false);
+        }
+      }}
       className={cn(
         "fixed bottom-12 z-40 rounded-xl font-medium",
         "border border-white/20 bg-black/50 shadow-xl shadow-black/40 backdrop-blur-md"
       )}
     >
-      <DraggableHandle dragControls={dragControls} />
+      <DraggableHandle
+        dragControls={dragControls}
+        animationControls={animationControls}
+        hasMoved={hasMoved}
+        isDragging={isDragging}
+      />
 
       <SettingsControls />
 
@@ -129,28 +161,66 @@ export default function Settings() {
 
 function DraggableHandle({
   dragControls,
+  animationControls,
+  hasMoved,
+  isDragging,
 }: {
   dragControls: ReturnType<typeof useDragControls>;
+  animationControls: ReturnType<typeof useAnimationControls>;
+  hasMoved: boolean;
+  isDragging: MotionValue<boolean>;
 }) {
+  const [localIsDragging, setLocalIsDragging] = useState<boolean>(false);
+
+  useMotionValueEvent(isDragging, "change", (latest) => {
+    setLocalIsDragging(latest);
+  });
+
+  const icon = useMemo(() => {
+    if (!hasMoved || localIsDragging) {
+      return <GripHorizontal size={16} aria-hidden={true} />;
+    }
+
+    return <RefreshCcw size={14} aria-hidden={true} />;
+  }, [hasMoved, localIsDragging]);
+
   return (
     <motion.div
       onPointerDown={(e) => {
         dragControls.start(e, { snapToCursor: false });
+      }}
+      onTap={() => {
+        if (hasMoved) {
+          animationControls.start({
+            x: 0,
+            y: 0,
+          });
 
-        va.track("settings_drag");
+          va.track("settings_position_reset");
+        }
       }}
       whileTap={{ cursor: "grabbing" }}
       tabIndex={-1}
       className={cn(
-        "absolute -top-[14px] left-1/2 rounded-md px-2 py-1",
-        "select-none outline-none",
+        "absolute -top-[15px] left-1/2 flex h-7 w-9 items-center justify-center rounded-md",
+        "touch-none select-none outline-none",
         "border border-white/20 bg-black",
         "transition-all duration-100 ease-in-out",
-        "hover:scale-125 hover:cursor-grab hover:border-almost-white",
-        "active:scale-125 active:border-almost-white"
+        "hover:scale-110 hover:cursor-grab hover:border-almost-white",
+        "active:scale-110 active:border-almost-white"
       )}
     >
-      <GripHorizontal size={16} aria-hidden={true} />
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={hasMoved && !localIsDragging ? "refresh" : "grip"}
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.8 }}
+          transition={{ duration: 0.08, delay: 0.08 }}
+        >
+          {icon}
+        </motion.div>
+      </AnimatePresence>
     </motion.div>
   );
 }
