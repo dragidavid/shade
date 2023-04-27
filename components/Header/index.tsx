@@ -2,6 +2,8 @@
 
 import Home from "components/Header/Home";
 import Message from "components/Header/Message";
+import Social from "components/Header/Social";
+import Help from "components/Header/Help";
 import Auth from "components/Header/Auth";
 
 import { cn } from "lib/cn";
@@ -18,7 +20,13 @@ export default function Header() {
 
       <Message />
 
-      <Auth />
+      <div className={cn("flex items-center justify-center")}>
+        <Social />
+
+        <Help />
+
+        <Auth />
+      </div>
     </header>
   );
 }
