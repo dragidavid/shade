@@ -60,10 +60,6 @@ export default function Auth() {
     [sessionStatus]
   );
 
-  if (sessionStatus === "loading") {
-    return null;
-  }
-
   if (session && sessionStatus === "authenticated") {
     return (
       <DropdownMenuPrimitive.Root open={localOpen} onOpenChange={setLocalOpen}>
