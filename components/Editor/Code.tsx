@@ -311,7 +311,10 @@ export default function Code({ editable = false }: { editable: boolean }) {
       initial={{
         opacity: 0,
       }}
-      className={cn("overflow-hidden rounded-xl", "shadow-xl shadow-black/40")}
+      className={cn("overflow-hidden", "shadow-xl shadow-black/40")}
+      style={{
+        borderRadius: 8 + padding.value! / 10,
+      }}
     >
       <div
         id="screenshot"
