@@ -49,7 +49,13 @@ export default function Snippets({
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      if (!localDialogOpen && activeElement && !e.metaKey && !e.ctrlKey) {
+      if (
+        !localDialogOpen &&
+        activeElement &&
+        !e.metaKey &&
+        !e.ctrlKey &&
+        e.key !== "Tab"
+      ) {
         const id = activeElement.id;
         const title = (
           activeElement.querySelector('[data-id="title"]') as HTMLSpanElement
