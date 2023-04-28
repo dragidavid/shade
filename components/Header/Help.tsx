@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import va from "@vercel/analytics";
 import { useSession } from "next-auth/react";
 
 import { Keyboard } from "lucide-react";
@@ -137,8 +136,6 @@ export default function Help() {
 
       if (event.key === "?") {
         setLocalDialogOpen(true);
-
-        va.track("shortcut_dialog_open");
       }
     };
 
@@ -159,7 +156,6 @@ export default function Help() {
           <DialogPrimitive.Trigger asChild>
             <button
               type="button"
-              onClick={() => va.track("shortcut_dialog_open")}
               className={cn(
                 "rounded-md p-2",
                 "select-none outline-none",

@@ -1,5 +1,4 @@
 import { memo, useState } from "react";
-import va from "@vercel/analytics";
 
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 
@@ -29,8 +28,6 @@ export default memo(function RenameDialog({
 
         if (localInputValue !== title) {
           action({ id, title: localInputValue });
-
-          va.track("rename_snippet_confirm");
         }
       }}
     >
@@ -57,11 +54,7 @@ export default memo(function RenameDialog({
         <DialogPrimitive.Close asChild>
           <button
             type="button"
-            onClick={() => {
-              action({ id, title: localInputValue });
-
-              va.track("rename_snippet_confirm");
-            }}
+            onClick={() => action({ id, title: localInputValue })}
             disabled={localInputValue === title || isLoading}
             className={cn(
               "mt-4 w-full rounded-lg p-3",

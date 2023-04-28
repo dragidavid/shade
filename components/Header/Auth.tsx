@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import va from "@vercel/analytics";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useHotkeys } from "react-hotkeys-hook";
 
@@ -22,9 +21,7 @@ export default function Auth() {
 
   useHotkeys(
     "u",
-    () => {
-      setLocalOpen((prev) => !prev);
-    },
+    () => setLocalOpen((prev) => !prev),
     {
       enabled: sessionStatus === "authenticated",
       preventDefault: true,
@@ -34,11 +31,7 @@ export default function Auth() {
 
   useHotkeys(
     "q",
-    () => {
-      signOut();
-
-      va.track("sign_out_hotkey");
-    },
+    () => signOut(),
     {
       enabled: sessionStatus === "authenticated" && localOpen,
       preventDefault: true,
@@ -48,11 +41,7 @@ export default function Auth() {
 
   useHotkeys(
     "l",
-    () => {
-      signIn("github");
-
-      va.track("sign_in_hotkey");
-    },
+    () => signIn("github"),
     {
       enabled: sessionStatus === "unauthenticated",
       preventDefault: true,
@@ -112,11 +101,7 @@ export default function Auth() {
             )}
           >
             <DropdownMenuPrimitive.Item
-              onSelect={() => {
-                signOut();
-
-                va.track("sign_out_button");
-              }}
+              onSelect={() => signOut()}
               className={cn(
                 "flex items-center justify-between rounded-[5px] p-1",
                 "select-none outline-none",
@@ -141,11 +126,7 @@ export default function Auth() {
     <div>
       <button
         type="button"
-        onClick={() => {
-          signIn("github");
-
-          va.track("sign_in_button");
-        }}
+        onClick={() => signIn("github")}
         className={cn(
           "flex items-center gap-6 rounded-lg p-1 font-medium",
           "select-none outline-none",

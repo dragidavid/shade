@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import va from "@vercel/analytics";
 import { motion } from "framer-motion";
 import { useHotkeys } from "react-hotkeys-hook";
 
@@ -268,8 +267,6 @@ export default function Code({ editable = false }: { editable: boolean }) {
             head: view.state.doc.length,
           },
         });
-
-        va.track("editor_focus_hotkey");
       }
     },
     {
@@ -286,8 +283,6 @@ export default function Code({ editable = false }: { editable: boolean }) {
         view.contentDOM.blur();
 
         setLocalEditable(false);
-
-        va.track("editor_blur_hotkey");
       }
     },
     {

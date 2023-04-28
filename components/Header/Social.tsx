@@ -1,5 +1,4 @@
 import Link from "next/link";
-import va from "@vercel/analytics";
 
 import { Twitter } from "lucide-react";
 
@@ -37,7 +36,6 @@ export default function Social() {
           <Link
             key={id}
             href={href}
-            onClick={() => va.track(`${id}_link_click`)}
             target="_blank"
             rel="noreferrer"
             className={cn(

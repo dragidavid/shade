@@ -1,5 +1,4 @@
 import { useState, useEffect, useMemo } from "react";
-import va from "@vercel/analytics";
 import {
   MotionValue,
   AnimatePresence,
@@ -122,11 +121,7 @@ export default function Settings() {
       dragMomentum={false}
       dragControls={dragControls}
       dragConstraints={dragConstraints}
-      onDragStart={() => {
-        isDragging.set(true);
-
-        va.track("settings_drag");
-      }}
+      onDragStart={() => isDragging.set(true)}
       onDragEnd={(_, info) => {
         isDragging.set(false);
 
@@ -195,8 +190,6 @@ function DraggableHandle({
             x: 0,
             y: 0,
           });
-
-          va.track("settings_position_reset");
         }
       }}
       whileTap={{ cursor: "grabbing" }}

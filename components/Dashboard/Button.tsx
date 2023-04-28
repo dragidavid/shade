@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import va from "@vercel/analytics";
 import useSWRMutation from "swr/mutation";
 import { useHotkeys } from "react-hotkeys-hook";
 
@@ -67,8 +66,6 @@ export default function Button({ isDisabled }: { isDisabled: boolean }) {
   const handleAction = async (type: "button" | "hotkey" = "button") => {
     try {
       const { id } = await trigger();
-
-      va.track(`new_snippet_${type}`);
 
       setButtonState(BUTTON_STATES.SUCCESS);
 

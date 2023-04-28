@@ -1,5 +1,4 @@
 import { memo } from "react";
-import va from "@vercel/analytics";
 
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 
@@ -36,11 +35,7 @@ export default memo(function DeleteDialog({
         <DialogPrimitive.Close asChild>
           <button
             type="button"
-            onClick={() => {
-              action({ id });
-
-              va.track("delete_snippet_confirm");
-            }}
+            onClick={() => action({ id })}
             disabled={isLoading}
             className={cn(
               "rounded-lg p-3 font-medium",

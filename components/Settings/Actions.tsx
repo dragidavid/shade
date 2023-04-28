@@ -1,5 +1,4 @@
 import { useState } from "react";
-import va from "@vercel/analytics";
 import { useSession } from "next-auth/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useHotkeys } from "react-hotkeys-hook";
@@ -114,8 +113,6 @@ function Button({
   async function wrappedAction() {
     try {
       await action();
-
-      va.track(`${id}-button-click`);
 
       setButtonState("SUCCESS");
     } catch (e) {
