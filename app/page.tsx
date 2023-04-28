@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     siteName: "shade - Share some code",
     images: [
       {
-        url: "https://shade.dragi.me/opengraph.png",
+        url: "https://shade.dragi.me/opengraph-image.png",
         width: 1200,
         height: 600,
       },
@@ -39,6 +39,8 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "shade",
     creator: "@dragidavid",
+    description: "Yet another code sharing app...",
+    images: ["https://shade.dragi.me/opengraph-image.png"],
   },
   metadataBase: new URL("https://shade.dragi.me"),
   themeColor: "#000",
