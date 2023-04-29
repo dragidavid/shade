@@ -52,6 +52,9 @@ export default function Actions() {
       isDisabled: sessionStatus === "unauthenticated",
       hotkey: {
         key: "meta+shift+c",
+        options: {
+          preventDefault: true,
+        },
       },
     },
     {
