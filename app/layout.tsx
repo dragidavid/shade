@@ -14,6 +14,18 @@ export const metadata = {
     absolute: "shade - Share some code",
     template: "%s | shade",
   },
+  openGraph: {
+    title: {
+      absolute: "shade - Share some code",
+      template: "%s | shade",
+    },
+  },
+  twitter: {
+    title: {
+      absolute: "shade - Share some code",
+      template: "%s | shade",
+    },
+  },
 };
 
 export default function RootLayout({
