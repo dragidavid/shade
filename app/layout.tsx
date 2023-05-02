@@ -5,8 +5,7 @@ import Header from "components/Header";
 import Providers from "contexts/Providers";
 
 import { cn } from "lib/cn";
-
-import { fonts } from "assets/fonts";
+import { fonts } from "lib/fonts";
 
 import "styles/globals.css";
 
