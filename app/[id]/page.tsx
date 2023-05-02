@@ -53,11 +53,27 @@ export async function generateMetadata({
   return {
     title: !partialSnippet ? "404" : partialSnippet?.title ?? "Untitled",
     description: "Yet another code sharing app...",
+    openGraph: {
+      title: !partialSnippet ? "404" : partialSnippet?.title ?? "Untitled",
+      description: "Yet another code sharing app...",
+      url: `https://shade.dragi.me/${params.id}`,
+      siteName: "shade - Share some code",
+      images: [
+        {
+          url: "https://shade.dragi.me/opengraph-image.png",
+          width: 1200,
+          height: 600,
+        },
+      ],
+      locale: "en-US",
+      type: "website",
+    },
     twitter: {
       card: "summary_large_image",
       title: !partialSnippet ? "404" : partialSnippet?.title ?? "Untitled",
-      description: "Yet another code sharing app...",
       creator: "@dragidavid",
+      description: "Yet another code sharing app...",
+      images: ["https://shade.dragi.me/opengraph-image.png"],
     },
     themeColor: "#000",
   };
