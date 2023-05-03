@@ -23,6 +23,7 @@ module.exports = {
       inconsolata: ["var(--font-inconsolata)"],
       "source-code-pro": ["var(--font-source-code-pro)"],
       "ibm-plex-mono": ["var(--font-ibm-plex-mono)"],
+      "kode-mono": ["var(--font-kode-mono)"],
     },
   },
   plugins: [require("tailwindcss-animate"), require("tailwindcss-radix")],

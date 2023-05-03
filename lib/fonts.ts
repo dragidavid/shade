@@ -6,6 +6,7 @@ import {
   Source_Code_Pro,
   IBM_Plex_Mono,
 } from "next/font/google";
+import localFont from "next/font/local";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -38,6 +39,11 @@ const ibmPlexMono = IBM_Plex_Mono({
   subsets: ["latin"],
 });
 
+const kodeMono = localFont({
+  src: "../public/fonts/KodeMono.woff2",
+  variable: "--font-kode-mono",
+});
+
 export const fonts = {
   inter,
   firaCode,
@@ -45,4 +51,5 @@ export const fonts = {
   inconsolata,
   sourceCodePro,
   ibmPlexMono,
+  kodeMono,
 };

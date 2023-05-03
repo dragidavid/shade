@@ -196,6 +196,12 @@ export const SUPPORTED_FONT_STYLES: FontDefinition[] = [
     variable: "var(--font-ibm-plex-mono)",
     class: "font-ibm-plex-mono",
   },
+  {
+    id: "kode_mono",
+    label: "Kode Mono",
+    variable: "var(--font-kode-mono)",
+    class: "font-kode-mono",
+  },
 ];
 
 export const SUPPORTED_FONT_SIZES: ChoiceDefinition[] = [
