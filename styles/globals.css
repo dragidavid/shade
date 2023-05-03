@@ -1,14 +1,3 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-:root {
-  --font-kode-mono: "Kode Mono";
-}
-
-@font-face {
-  font-family: "Kode Mono";
-  src: url("/fonts/KodeMono.woff2") format("woff supports variations"),
-       url("/fonts/KodeMono.woff2") format("woff-variations");
-  font-weight: 400 700;
-}

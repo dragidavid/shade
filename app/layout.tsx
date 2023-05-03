@@ -42,7 +42,8 @@ export default function RootLayout({
         fonts.jetBrainsMono.variable,
         fonts.inconsolata.variable,
         fonts.sourceCodePro.variable,
-        fonts.ibmPlexMono.variable
+        fonts.ibmPlexMono.variable,
+        fonts.kodeMono.variable
       )}
     >
       <body
