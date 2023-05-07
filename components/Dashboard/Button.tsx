@@ -63,7 +63,7 @@ export default function Button({ isDisabled }: { isDisabled: boolean }) {
     }, 2500);
   };
 
-  const handleAction = async (type: "button" | "hotkey" = "button") => {
+  const handleAction = async () => {
     try {
       const { id } = await trigger();
 
@@ -94,7 +94,7 @@ export default function Button({ isDisabled }: { isDisabled: boolean }) {
     "n",
     () => {
       if (!loading && buttonState.id === "default") {
-        handleAction("hotkey");
+        handleAction();
       }
     },
     {

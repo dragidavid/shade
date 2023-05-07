@@ -42,7 +42,7 @@ export default function Social() {
               "rounded-md p-2",
               "select-none outline-none",
               "transition-all duration-100 ease-in-out",
-              "hover:bg-white/20 hover:text-almost-white",
+              "hover:cursor-ne-resize hover:bg-white/20 hover:text-almost-white",
               "focus:text-almost-white focus:outline-1 focus:outline-offset-2 focus:outline-almost-white"
             )}
           >

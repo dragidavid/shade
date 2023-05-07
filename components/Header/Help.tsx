@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 
@@ -121,8 +121,8 @@ export default function Help() {
     }
   });
 
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent) => {
       const targetElement = event.target as HTMLElement;
 
       if (
@@ -137,14 +137,17 @@ export default function Help() {
       if (event.key === "?") {
         setLocalDialogOpen(true);
       }
-    };
+    },
+    [localDialogOpen]
+  );
 
+  useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
 
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [localDialogOpen]);
+  }, [handleKeyDown]);
 
   return (
     <div className={cn("relative mr-5 pr-5")}>
