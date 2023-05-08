@@ -12,16 +12,17 @@ import Loader from "components/ui/Loader";
 
 import { cn } from "lib/cn";
 import { fetcher } from "lib/fetcher";
-import { useStore } from "lib/store";
 
-interface ButtonState {
+type ButtonType = "DEFAULT" | "SUCCESS" | "ERROR";
+
+interface Button {
   id: string;
   text: string;
   icon: JSX.Element;
   additionalClasses: string;
 }
 
-const BUTTON_STATES: Record<string, ButtonState> = {
+const buttons: Record<ButtonType, Button> = {
   DEFAULT: {
     id: "default",
     text: "New",
@@ -43,57 +44,40 @@ const BUTTON_STATES: Record<string, ButtonState> = {
   },
 };
 
-export default function Button({ isDisabled }: { isDisabled: boolean }) {
-  const [buttonState, setButtonState] = useState<ButtonState>(
-    BUTTON_STATES.DEFAULT
-  );
+export default function Button({ snippetCount }: { snippetCount: number }) {
+  const [buttonState, setButtonState] = useState<ButtonType>("DEFAULT");
 
   const router = useRouter();
 
-  const update = useStore((state) => state.update);
-
-  const { trigger, isMutating: loading } = useSWRMutation(
-    "/api/snippets/create",
-    (url) => fetcher(url)
+  const { trigger: createSnippet, isMutating: createLoading } = useSWRMutation(
+    "/api/snippets",
+    (url) =>
+      fetcher(url, {
+        method: "POST",
+        body: JSON.stringify({ snippetCount }),
+      })
   );
-
-  const reset = () => {
-    setTimeout(() => {
-      setButtonState(BUTTON_STATES.DEFAULT);
-    }, 2500);
-  };
 
   const handleAction = async () => {
     try {
-      const { id } = await trigger();
+      const { id } = await createSnippet();
 
-      setButtonState(BUTTON_STATES.SUCCESS);
+      setButtonState("SUCCESS");
 
       router.push(`/${id}`);
     } catch (e) {
-      setButtonState(BUTTON_STATES.ERROR);
-
-      if (e instanceof Error) {
-        switch (e.message) {
-          case "Too many requests":
-            update("message", "TOO_MANY_REQUESTS");
-            break;
-          case "You have reached the limit":
-            update("message", "LIMIT_REACHED");
-            break;
-          default:
-            break;
-        }
-      }
+      setButtonState("ERROR");
     } finally {
-      reset();
+      const timer = setTimeout(() => setButtonState("DEFAULT"), 2500);
+
+      return () => clearTimeout(timer);
     }
   };
 
   useHotkeys(
     "n",
     () => {
-      if (!loading && buttonState.id === "default") {
+      if (!createLoading && buttons[buttonState].id === "default") {
         handleAction();
       }
     },
@@ -106,20 +90,24 @@ export default function Button({ isDisabled }: { isDisabled: boolean }) {
     <button
       type="button"
       onClick={() => handleAction()}
-      disabled={isDisabled || loading || buttonState.id !== "default"}
+      disabled={
+        snippetCount >= 10 ||
+        createLoading ||
+        buttons[buttonState].id !== "default"
+      }
       className={cn(
         "flex w-auto items-center gap-4 rounded-lg p-1 font-medium",
         "select-none outline-none",
         "border",
         "transition-all duration-100 ease-in-out",
-        buttonState.additionalClasses,
+        buttons[buttonState].additionalClasses,
         "focus:border-almost-white focus:text-almost-white",
         "disabled:cursor-not-allowed"
       )}
     >
       <div className={cn("flex items-center gap-2 pl-0.5")}>
-        {loading ? <Loader /> : buttonState.icon}
-        {buttonState.text}
+        {createLoading ? <Loader /> : buttons[buttonState].icon}
+        {buttons[buttonState].text}
       </div>
 
       <Kbd keys={["N"]} />

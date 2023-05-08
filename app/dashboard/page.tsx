@@ -10,8 +10,6 @@ import { serialize } from "lib/serialize";
 
 import type { Metadata } from "next";
 
-const LIMIT = 10;
-
 export const metadata: Metadata = {
   title: "Dashboard",
   description: "Yet another code sharing app...",
@@ -37,8 +35,6 @@ export default async function Page() {
 
   const snippets = await getSnippets(session.user.id);
 
-  const shouldButtonBeDisabled = snippets.length >= LIMIT;
-
   return (
     <div
       className={cn(
@@ -49,13 +45,7 @@ export default async function Page() {
       <div className={cn("flex w-full items-center justify-between")}>
         <h2 className={cn("text-xl font-extrabold")}>Snippets</h2>
 
-        <Button isDisabled={shouldButtonBeDisabled} />
-      </div>
-
-      <div className={cn("mb-4 mt-1")}>
-        <p className={cn("text-xs text-greyish/80")}>
-          {snippets.length}/{LIMIT}
-        </p>
+        <Button snippetCount={snippets.length} />
       </div>
 
       <Snippets snippets={serialize(snippets)} />

@@ -20,7 +20,13 @@ export default memo(function DeleteDialog({
   isLoading: boolean;
 }) {
   return (
-    <div>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+
+        action({ id });
+      }}
+    >
       <DialogPrimitive.Title
         className={cn("mb-3 text-lg font-medium", "text-almost-white")}
       >
@@ -58,6 +64,6 @@ export default memo(function DeleteDialog({
           </button>
         </DialogPrimitive.Close>
       </div>
-    </div>
+    </form>
   );
 });

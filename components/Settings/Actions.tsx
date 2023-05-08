@@ -9,14 +9,13 @@ import Loader from "components/ui/Loader";
 
 import { cn } from "lib/cn";
 import { snap } from "lib/snap";
-import { useStore } from "lib/store";
 
-type ButtonStates = "DEFAULT" | "SUCCESS" | "FAILURE" | "LOADING";
+type ButtonType = "DEFAULT" | "SUCCESS" | "FAILURE" | "LOADING";
 
 interface Button {
   id: string;
-  label: Partial<{ [key in ButtonStates]: string }>;
-  icon: { [key in ButtonStates]: JSX.Element };
+  label: Partial<{ [key in ButtonType]: string }>;
+  icon: { [key in ButtonType]: JSX.Element };
   action: () => Promise<void>;
   isDisabled?: boolean;
   hotkey: {
@@ -29,13 +28,13 @@ interface Button {
 }
 
 export default function Actions() {
+  const { status: sessionStatus } = useSession();
+
   const statusIcons = {
     SUCCESS: <Check size={16} aria-hidden="true" />,
     FAILURE: <X size={16} aria-hidden="true" />,
     LOADING: <Loader />,
   };
-
-  const { status: sessionStatus } = useSession();
 
   const buttons: Button[] = [
     {
@@ -109,9 +108,7 @@ function Button({
   isDisabled = false,
   hotkey,
 }: Button) {
-  const [buttonState, setButtonState] = useState<ButtonStates>("DEFAULT");
-
-  const update = useStore((state) => state.update);
+  const [buttonState, setButtonState] = useState<ButtonType>("DEFAULT");
 
   async function wrappedAction() {
     try {
@@ -120,10 +117,6 @@ function Button({
       setButtonState("SUCCESS");
     } catch (e) {
       setButtonState("FAILURE");
-
-      if (e instanceof Error && e.message === "Something went wrong") {
-        update("message", "EMPTY_EDITOR");
-      }
     } finally {
       const timer = setTimeout(() => setButtonState("DEFAULT"), 2500);
 
