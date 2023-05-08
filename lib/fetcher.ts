@@ -1,14 +1,28 @@
+import { useStore } from "lib/store";
+
 export async function fetcher(url: RequestInfo, init?: RequestInit) {
   const res = await fetch(url, {
     headers: { "Content-Type": "application/json" },
     ...init,
   });
 
-  if (!res.ok) {
-    const { message } = await res.json();
+  const body = await res.json();
 
-    throw new Error(message);
+  const update = useStore.getState().update;
+
+  if (!res.ok) {
+    const { code } = body;
+
+    if (!code) {
+      update("message", "UNKNOWN_ERROR");
+
+      throw new Error("UNKNOWN_ERROR");
+    }
+
+    update("message", code);
+
+    throw new Error(code);
   }
 
-  return res.json();
+  return body;
 }

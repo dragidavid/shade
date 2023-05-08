@@ -31,6 +31,11 @@ const CONTENT_STATES: Partial<Record<Message, ContentState>> = {
     icon: <X size={16} aria-hidden="true" />,
     additionalClasses: "text-red-400",
   },
+  UNAUTHORIZED: {
+    id: "unauthorized",
+    text: "You don't have access",
+    additionalClasses: "text-red-400",
+  },
   TOO_MANY_REQUESTS: {
     id: "too-many-requests",
     text: "Too many requests",
@@ -46,6 +51,26 @@ const CONTENT_STATES: Partial<Record<Message, ContentState>> = {
     text: "Add some code first",
     icon: <Code size={16} aria-hidden="true" />,
     additionalClasses: "text-orange-400",
+  },
+  CLIPBOARD_API_NOT_SUPPORTED: {
+    id: "clipboard-api-not-supported",
+    text: "Clipboard API not supported",
+    additionalClasses: "text-red-400",
+  },
+  UNKNOWN_ERROR: {
+    id: "unknown-error",
+    text: "Something went wrong",
+    additionalClasses: "text-red-400",
+  },
+  SNIPPET_NOT_FOUND: {
+    id: "snippet-not-found",
+    text: "Snippet not found",
+    additionalClasses: "text-red-400",
+  },
+  INTERNAL_SERVER_ERROR: {
+    id: "internal-server-error",
+    text: "Internal server error",
+    additionalClasses: "text-red-400",
   },
   PENDING: {
     id: "pending",

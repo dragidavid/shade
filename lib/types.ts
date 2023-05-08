@@ -53,9 +53,14 @@ export interface SnippetSettings extends Prisma.JsonObject {
 export type Message =
   | "SUCCESS"
   | "ERROR"
+  | "UNAUTHORIZED"
   | "TOO_MANY_REQUESTS"
   | "LIMIT_REACHED"
   | "EMPTY_EDITOR"
+  | "CLIPBOARD_API_NOT_SUPPORTED"
+  | "UNKNOWN_ERROR"
+  | "SNIPPET_NOT_FOUND"
+  | "INTERNAL_SERVER_ERROR"
   | "PENDING"
   | "IDLE";
 
