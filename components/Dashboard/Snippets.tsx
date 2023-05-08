@@ -128,11 +128,14 @@ export default function Snippets({
   }, [handleEvent, handleKeyDown]);
 
   const { trigger: renameSnippet, isMutating: renameLoading } = useSWRMutation(
-    "/api/snippets/rename",
+    "/api/snippets",
     (url, { arg }: { arg: { id: string; title: string } }) =>
       fetcher(url, {
         method: "PATCH",
         body: JSON.stringify(arg),
+        headers: {
+          "X-Update-Type": "title",
+        },
       }),
     {
       revalidate: false,
@@ -155,11 +158,10 @@ export default function Snippets({
   );
 
   const { trigger: deleteSnippet, isMutating: deleteLoading } = useSWRMutation(
-    "/api/snippets/delete",
+    "/api/snippets",
     (url, { arg }: { arg: { id: string } }) =>
-      fetcher(url, {
+      fetcher(`${url}?id=${arg.id}`, {
         method: "DELETE",
-        body: JSON.stringify(arg),
       }),
     {
       revalidate: false,
@@ -201,7 +203,12 @@ export default function Snippets({
 
   if (!localSnippets.length) {
     return (
-      <div className={cn("flex items-center justify-center py-4")}>
+      <div
+        className={cn(
+          "flex items-center justify-center py-6",
+          "text-greyish/80"
+        )}
+      >
         <span>No snippets found</span>
       </div>
     );
@@ -209,6 +216,12 @@ export default function Snippets({
 
   return (
     <div>
+      <div className={cn("mb-4 mt-1")}>
+        <p className={cn("text-xs", "text-greyish/80")}>
+          {localSnippets.length}/10
+        </p>
+      </div>
+
       <ul ref={listContainerRef} className={cn("grid grid-cols-2 gap-3")}>
         <DialogPrimitive.Root
           open={localDialogOpen}

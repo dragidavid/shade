@@ -15,13 +15,19 @@ export default function ChangeListener() {
   const state = useStore((state) => state.getEditorState());
   const update = useStore((state) => state.update);
 
-  const { trigger, error, data } = useSWRMutation(
-    "/api/snippets/update",
+  const {
+    trigger: updateSnippet,
+    error: updateError,
+    data: updatedSnippet,
+  } = useSWRMutation(
+    "/api/snippets",
     (url, { arg }: { arg: State }) =>
       fetcher(url, {
         method: "PATCH",
         body: JSON.stringify(arg),
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "X-Update-Type": "full",
+        },
       }),
     {
       revalidate: false,
@@ -40,7 +46,7 @@ export default function ChangeListener() {
         if (!isEqual(prevState.current, state)) {
           prevState.current = state;
 
-          trigger(state);
+          updateSnippet(state);
         }
 
         pendingSave.current = false;
@@ -67,23 +73,23 @@ export default function ChangeListener() {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state, trigger, update]);
+  }, [state, updateSnippet, update]);
 
   useEffect(() => {
-    if (error) {
+    if (updateError) {
       update("message", "ERROR");
 
       pendingSave.current = false;
     }
-  }, [error, update]);
+  }, [updateError, update]);
 
   useEffect(() => {
-    if (data) {
+    if (updatedSnippet) {
       update("message", "SUCCESS");
 
       pendingSave.current = false;
     }
-  }, [data, update]);
+  }, [updatedSnippet, update]);
 
   return null;
 }
