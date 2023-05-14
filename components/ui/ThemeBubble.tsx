@@ -1,23 +1,14 @@
 import { cn } from "lib/cn";
 
-interface ThemeBubbleProps {
-  colors: string;
-  additionalClasses?: string;
-}
-
-export default function ThemeBubble({
-  colors,
-  additionalClasses,
-}: ThemeBubbleProps) {
+export default function ThemeBubble({ colors }: { colors: string[] }) {
   return (
-    <div className={cn(additionalClasses)}>
-      <span
-        className={cn(
-          "block h-4 w-4 rounded-full",
-          "bg-gradient-to-br",
-          colors
-        )}
-      />
-    </div>
+    <div
+      className={cn("h-4 w-4 rounded-full")}
+      style={{
+        backgroundImage: `linear-gradient(to bottom right, ${colors.join(
+          ", "
+        )})`,
+      }}
+    />
   );
 }

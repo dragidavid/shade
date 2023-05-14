@@ -12,8 +12,8 @@ import { Edit3, Link as LinkIcon, Trash } from "lucide-react";
 import RenameDialog from "components/Dashboard/RenameDialog";
 import DeleteDialog from "components/Dashboard/DeleteDialog";
 
-import ThemeBubble from "components/ui/ThemeBubble";
 import Kbd from "components/ui/Kbd";
+import ThemeBubble from "components/ui/ThemeBubble";
 
 import { SUPPORTED_THEMES } from "lib/values";
 
@@ -249,9 +249,8 @@ export default function Snippets({
                           find(
                             SUPPORTED_THEMES,
                             (settings as SnippetSettings).theme
-                          ).class
+                          ).baseColors
                         }
-                        aria-hidden="true"
                       />
 
                       <span data-id="title" className={cn("grow truncate")}>

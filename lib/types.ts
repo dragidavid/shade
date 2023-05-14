@@ -10,9 +10,7 @@ export type LanguageDefinition = {
 export type ThemeDefinition = {
   id: string;
   label: string;
-  class: string;
   baseColors: string[];
-  generatedColors: string[];
 };
 
 export type FontDefinition = {
@@ -65,6 +63,8 @@ export type Message =
   | "IDLE";
 
 export interface Store extends State {
+  editable: boolean;
+  activeSettings: "snippet" | "theme";
   message: Message;
   update: <
     T extends string,
@@ -81,4 +81,5 @@ export interface Store extends State {
   ) => void;
   setEditorState: (partialSnippet: Partial<Snippet>) => void;
   getEditorState: () => State;
+  switchActiveSettings: () => void;
 }

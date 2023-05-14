@@ -14,6 +14,7 @@ import TitleBar from "components/Editor/TitleBar";
 import { cn } from "lib/cn";
 import { useStore } from "lib/store";
 import { debounce } from "lib/debounce";
+import { generateColors } from "lib/colors";
 import { hslToHsla as adjustLightness } from "lib/colors/conversions";
 
 import type { Extension } from "@codemirror/state";
@@ -35,7 +36,7 @@ export default function Code({ editable = false }: { editable: boolean }) {
   const padding = useStore((state) => state.padding);
   const update = useStore((state) => state.update);
 
-  const colors = theme.generatedColors;
+  const colors = generateColors(theme.baseColors);
 
   const customStyles = EditorView.baseTheme({
     "&.cm-editor": {
@@ -83,8 +84,8 @@ export default function Code({ editable = false }: { editable: boolean }) {
       background: "transparent",
       foreground: "white",
       caret: localEditable ? colors.at(0) : "transparent",
-      selection: adjustLightness(colors.at(0)!, 0.4),
-      selectionMatch: adjustLightness(colors.at(0)!, 0.4),
+      selection: adjustLightness(colors.at(0)!, 0.2),
+      selectionMatch: adjustLightness(colors.at(0)!, 0.2),
       lineHighlight: "transparent",
       gutterBackground: "transparent",
       gutterForeground: adjustLightness(colors.at(0)!, 0.4),
@@ -174,7 +175,7 @@ export default function Code({ editable = false }: { editable: boolean }) {
     ],
   });
 
-  const debouncedUpdate = debounce(update, 200);
+  const debouncedUpdate = debounce(update, 300);
 
   const { setContainer, view } = useCodeMirror({
     container: editorRef.current,
@@ -292,16 +293,15 @@ export default function Code({ editable = false }: { editable: boolean }) {
     [view, localEditable]
   );
 
-  if (!selectedLanguage) {
+  if (!selectedLanguage || !colors) {
     return null;
   }
 
   return (
     <motion.div
-      layout
       animate={{
         opacity: 1,
-        transition: { duration: 0.1 },
+        transition: { duration: 0.1, delay: 0.05 },
       }}
       initial={{
         opacity: 0,
@@ -316,13 +316,13 @@ export default function Code({ editable = false }: { editable: boolean }) {
         className={cn(
           "relative z-0 w-auto min-w-[512px] max-w-5xl",
           padding.class,
-          "bg-gradient-to-br",
-          theme.class,
           "transition-all duration-100 ease-in-out"
         )}
+        style={{
+          backgroundImage: `linear-gradient(to bottom right, ${theme.baseColors[0]}, ${theme.baseColors[1]})`,
+        }}
       >
-        <motion.div
-          layout
+        <div
           className={cn(
             "relative z-[1] h-full w-full min-w-[480px] max-w-2xl rounded-lg"
           )}
@@ -334,11 +334,10 @@ export default function Code({ editable = false }: { editable: boolean }) {
             )}
           >
             <div
-              className={cn(
-                "absolute inset-0 z-[3] rounded-lg",
-                "bg-gradient-to-br",
-                theme.class
-              )}
+              className={cn("absolute inset-0 z-[3] rounded-lg")}
+              style={{
+                backgroundImage: `linear-gradient(to bottom right, ${theme.baseColors[0]}, ${theme.baseColors[1]})`,
+              }}
             />
           </div>
           <div className={cn("relative z-[4] rounded-lg", "bg-black/70")}>
@@ -346,7 +345,7 @@ export default function Code({ editable = false }: { editable: boolean }) {
 
             <div ref={editorRef} className={cn("rounded-lg p-3")} />
           </div>
-        </motion.div>
+        </div>
       </div>
     </motion.div>
   );

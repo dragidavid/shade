@@ -10,14 +10,13 @@ import { modifyColors, shiftHue } from "lib/colors/change";
 /**
  * Generates an array of similar colors based on the given colors.
  *
- * @param color1 {string} - The first hexadecimal color string, in the format "#RRGGBB".
- * @param color2 {string} - The second hexadecimal color string, in the format "#RRGGBB".
+ * @param colors {string[]} - Hexadecimal color strings, in the format "#RRGGBB".
  * @returns {string[]} - An array of hexadecimal color strings, in the format "#RRGGBB".
  */
-export function generateColors(color1: string, color2: string): string[] {
+export function generateColors(colors: string[]): string[] {
   // Convert the hexadecimal strings to RGB values
-  const [r1, g1, b1] = hexToRgb(color1);
-  const [r2, g2, b2] = hexToRgb(color2);
+  const [r1, g1, b1] = hexToRgb(colors.at(0)!);
+  const [r2, g2, b2] = hexToRgb(colors.at(-1)!);
   const [rRef, gRef, bRef] = cssColorToRgb("rgba(0, 0, 0, 0.7)");
 
   // Calculate the average RGB values of the two colors

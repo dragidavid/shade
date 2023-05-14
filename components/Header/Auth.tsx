@@ -9,8 +9,8 @@ import * as AvatarPrimitive from "@radix-ui/react-avatar";
 
 import { Github, LogOut } from "lucide-react";
 
-import Tooltip from "components/ui/Tooltip";
 import Kbd from "components/ui/Kbd";
+import Tooltip from "components/ui/Tooltip";
 
 import { cn } from "lib/cn";
 

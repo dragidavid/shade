@@ -6,8 +6,8 @@ import { Keyboard } from "lucide-react";
 
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 
-import Tooltip from "components/ui/Tooltip";
 import Kbd from "components/ui/Kbd";
+import Tooltip from "components/ui/Tooltip";
 
 import { cn } from "lib/cn";
 
@@ -160,7 +160,7 @@ export default function Help() {
             <button
               type="button"
               className={cn(
-                "rounded-md p-2",
+                "rounded-lg p-2",
                 "select-none outline-none",
                 "transition-all duration-100 ease-in-out",
                 "hover:bg-white/20 hover:text-almost-white",

@@ -39,12 +39,13 @@ export default function Social() {
             target="_blank"
             rel="noreferrer"
             className={cn(
-              "rounded-md p-2",
+              "rounded-lg p-2",
               "select-none outline-none",
               "transition-all duration-100 ease-in-out",
               "hover:cursor-ne-resize hover:bg-white/20 hover:text-almost-white",
               "focus:text-almost-white focus:outline-1 focus:outline-offset-2 focus:outline-almost-white"
             )}
+            aria-label={`social-link-${id}`}
           >
             {icon({ className: cn("w-[18px] h-[18px]") })}
             <span className="sr-only">{label}</span>
