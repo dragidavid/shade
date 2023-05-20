@@ -2,15 +2,11 @@ import { memo } from "react";
 
 import * as SelectPrimitive from "@radix-ui/react-select";
 
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Wand2 } from "lucide-react";
 
 import ThemeBubble from "components/ui/ThemeBubble";
 
-import {
-  SUPPORTED_LANGUAGES,
-  SUPPORTED_THEMES,
-  SUPPORTED_FONT_STYLES,
-} from "lib/values";
+import { BASE_LANGUAGES, BASE_THEMES, BASE_FONT_FAMILIES } from "lib/values";
 
 import { cn } from "lib/cn";
 import { find } from "lib/find";
@@ -19,16 +15,16 @@ import { useStore } from "lib/store";
 import type {
   LanguageDefinition,
   ThemeDefinition,
-  FontDefinition,
+  FontFamilyDefinition,
 } from "lib/types";
 
 export default memo(function Select<
-  T extends LanguageDefinition | ThemeDefinition | FontDefinition
+  T extends LanguageDefinition | ThemeDefinition | FontFamilyDefinition
 >({
   type,
   options,
 }: {
-  type: "language" | "theme" | "fontStyle";
+  type: "language" | "theme" | "fontFamily";
   options: T[];
 }) {
   const value = useStore((state) => state[type]);
@@ -42,40 +38,39 @@ export default memo(function Select<
           {(option as LanguageDefinition).label}
         </span>
       ),
-      valueForKey: (key: string) => find(SUPPORTED_LANGUAGES, key),
+      valueForKey: (key: string) => find(BASE_LANGUAGES, key),
     },
     theme: {
       initialValue: (
-        <ThemeBubble
-          colors={(value as ThemeDefinition).class}
-          additionalClasses="p-0.5"
-        />
+        <ThemeBubble colors={(value as ThemeDefinition).baseColors} />
       ),
       optionContent: (option: T) => (
         <div className={cn("flex items-center gap-3")}>
-          <ThemeBubble colors={(option as ThemeDefinition).class} />
+          <ThemeBubble colors={(option as ThemeDefinition).baseColors} />
           <span className={cn("block truncate")}>
             {(option as ThemeDefinition).label}
           </span>
         </div>
       ),
-      valueForKey: (key: string) => find(SUPPORTED_THEMES, key),
+      valueForKey: (key: string) => find(BASE_THEMES, key),
     },
-    fontStyle: {
+    fontFamily: {
       initialValue: (
-        <span className={(value as FontDefinition).class}>{value.label}</span>
+        <span className={(value as FontFamilyDefinition).class}>
+          {value.label}
+        </span>
       ),
       optionContent: (option: T) => (
         <span
           className={cn(
             "block truncate pr-12",
-            (option as FontDefinition).class
+            (option as FontFamilyDefinition).class
           )}
         >
-          {(option as FontDefinition).label}
+          {(option as FontFamilyDefinition).label}
         </span>
       ),
-      valueForKey: (key: string) => find(SUPPORTED_FONT_STYLES, key),
+      valueForKey: (key: string) => find(BASE_FONT_FAMILIES, key),
     },
   };
 
@@ -83,25 +78,29 @@ export default memo(function Select<
     <SelectPrimitive.Root
       defaultValue={value.id}
       value={value.id}
-      onValueChange={(value: string) =>
-        update(
-          type,
-          get[type].valueForKey(value) as LanguageDefinition &
-            ThemeDefinition &
-            FontDefinition
-        )
-      }
+      onValueChange={(value: string) => {
+        if (type === "theme" && value === "custom") {
+          update("creatingCustomTheme", true);
+        } else {
+          update(
+            type,
+            get[type].valueForKey(value) as LanguageDefinition &
+              ThemeDefinition &
+              FontFamilyDefinition
+          );
+        }
+      }}
     >
       <SelectPrimitive.Trigger
         className={cn(
-          "flex w-auto items-center justify-between gap-2 rounded-lg px-2 py-1",
+          "flex h-8 w-auto items-center justify-between gap-2 rounded-lg px-2",
           "select-none outline-none",
           "border border-white/20 bg-black",
           "transition-all duration-100 ease-in-out",
           "hover:bg-white/20 hover:text-almost-white",
           "focus:text-almost-white focus:ring-1 focus:ring-almost-white focus:ring-offset-2 focus:ring-offset-black",
           type === "language" && "w-32",
-          type === "fontStyle" && "w-44"
+          type === "fontFamily" && "w-44"
         )}
         aria-label={`${type}-select`}
       >
@@ -117,7 +116,7 @@ export default memo(function Select<
           sideOffset={-100}
           align="center"
           className={cn(
-            "z-50 overflow-hidden rounded-lg p-1",
+            "relative z-50 overflow-hidden rounded-lg p-1",
             "border border-white/20 bg-black/50 shadow-lg backdrop-blur-md",
             "animate-in fade-in zoom-in-75 duration-100 ease-in-out"
           )}
@@ -139,6 +138,26 @@ export default memo(function Select<
                 </SelectPrimitive.ItemText>
               </SelectPrimitive.Item>
             ))}
+
+            {type === "theme" && (
+              <SelectPrimitive.Item
+                key={`${type}-custom`}
+                value="custom"
+                className={cn(
+                  "rounded-[5px] p-1.5",
+                  "select-none outline-none",
+                  "transition-all duration-100 ease-in-out",
+                  "radix-highlighted:bg-gradient-to-br radix-highlighted:from-fuchsia-500/40 radix-highlighted:to-pink-700/40 radix-highlighted:text-almost-white"
+                )}
+              >
+                <SelectPrimitive.ItemText>
+                  <div className={cn("flex items-center gap-3")}>
+                    <Wand2 size={16} aria-hidden="true" />
+                    <span className={cn("block truncate")}>Custom...</span>
+                  </div>
+                </SelectPrimitive.ItemText>
+              </SelectPrimitive.Item>
+            )}
           </SelectPrimitive.Viewport>
         </SelectPrimitive.Content>
       </SelectPrimitive.Portal>

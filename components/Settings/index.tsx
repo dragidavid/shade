@@ -11,20 +11,23 @@ import {
 
 import { GripHorizontal, RefreshCcw } from "lucide-react";
 
+import Picker from "components/Settings/Picker";
 import Select from "components/Settings/Select";
 import Switch from "components/Settings/Switch";
 import Choices from "components/Settings/Choices";
 import Actions from "components/Settings/Actions";
 
 import {
-  SUPPORTED_LANGUAGES,
-  SUPPORTED_THEMES,
-  SUPPORTED_FONT_STYLES,
-  SUPPORTED_FONT_SIZES,
-  SUPPORTED_PADDING_CHOICES,
+  BASE_LANGUAGES,
+  BASE_THEMES,
+  BASE_FONT_FAMILIES,
+  BASE_FONT_SIZES,
+  BASE_PADDING_VALUES,
+  BASE_COLOR_MODES,
 } from "lib/values";
 
 import { cn } from "lib/cn";
+import { useStore } from "lib/store";
 
 interface Dimensions {
   height: number;
@@ -49,11 +52,13 @@ export default function Settings() {
     right: 0,
     bottom: 0,
   });
-  const [hasMoved, setHasMoved] = useState<boolean>(false);
+  const [hasMoved, setHasMoved] = useState(false);
 
   const dragControls = useDragControls();
   const animationControls = useAnimationControls();
   const isDragging = useMotionValue(false);
+
+  const creatingCustomTheme = useStore((state) => state.creatingCustomTheme);
 
   useEffect(() => {
     const editor = document.getElementById("editor");
@@ -136,7 +141,7 @@ export default function Settings() {
         }
       }}
       className={cn(
-        "fixed bottom-12 z-40 rounded-xl font-medium",
+        "fixed bottom-12 z-40 w-[960px] rounded-xl font-medium",
         "border border-white/20 bg-black/50 shadow-xl shadow-black/40 backdrop-blur-md"
       )}
     >
@@ -147,7 +152,30 @@ export default function Settings() {
         isDragging={isDragging}
       />
 
-      <SettingsControls />
+      <div className={cn("relative overflow-hidden rounded-xl", "bg-black")}>
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={creatingCustomTheme ? "theme" : "snippet"}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.1 }}
+          >
+            <div
+              className={cn(
+                "flex justify-evenly gap-8 rounded-xl px-4 pb-4 pt-5",
+                "border-b border-white/20 shadow-xl shadow-black/40"
+              )}
+            >
+              {creatingCustomTheme ? (
+                <CustomThemeControls />
+              ) : (
+                <BasicSnippetControls />
+              )}
+            </div>
+          </motion.div>
+        </AnimatePresence>
+      </div>
 
       <Actions />
     </motion.div>
@@ -165,7 +193,7 @@ function DraggableHandle({
   hasMoved: boolean;
   isDragging: MotionValue<boolean>;
 }) {
-  const [localIsDragging, setLocalIsDragging] = useState<boolean>(false);
+  const [localIsDragging, setLocalIsDragging] = useState(false);
 
   useMotionValueEvent(isDragging, "change", (latest) => {
     setLocalIsDragging(latest);
@@ -195,7 +223,7 @@ function DraggableHandle({
       whileTap={{ cursor: "grabbing" }}
       tabIndex={-1}
       className={cn(
-        "absolute -top-[15px] left-1/2 flex h-7 w-9 items-center justify-center rounded-md",
+        "absolute -top-[15px] left-1/2 z-50 flex h-7 w-9 items-center justify-center rounded-md",
         "touch-none select-none outline-none",
         "border border-white/20 bg-black",
         "transition-all duration-100 ease-in-out",
@@ -218,33 +246,41 @@ function DraggableHandle({
   );
 }
 
-function SettingsControls() {
+function BasicSnippetControls() {
   return (
-    <div
-      className={cn(
-        "flex gap-8 rounded-xl px-4 pb-4 pt-5",
-        "border-b border-white/20 bg-black shadow-xl shadow-black/40"
-      )}
-    >
+    <>
       <Control htmlFor="language" label="Language">
-        <Select type="language" options={SUPPORTED_LANGUAGES} />
+        <Select type="language" options={BASE_LANGUAGES} />
       </Control>
       <Control htmlFor="theme" label="Theme">
-        <Select type="theme" options={SUPPORTED_THEMES} />
+        <Select type="theme" options={BASE_THEMES} />
       </Control>
-      <Control htmlFor="fontStyle" label="Font style">
-        <Select type="fontStyle" options={SUPPORTED_FONT_STYLES} />
+      <Control htmlFor="fontFamily" label="Font family">
+        <Select type="fontFamily" options={BASE_FONT_FAMILIES} />
       </Control>
       <Control htmlFor="fontSize" label="Font size">
-        <Choices type="fontSize" choices={SUPPORTED_FONT_SIZES} />
+        <Choices type="fontSize" choices={BASE_FONT_SIZES} />
       </Control>
       <Control htmlFor="lineNumbers" label="Line numbers">
         <Switch type="lineNumbers" />
       </Control>
       <Control htmlFor="padding" label="Padding">
-        <Choices type="padding" choices={SUPPORTED_PADDING_CHOICES} />
+        <Choices type="padding" choices={BASE_PADDING_VALUES} />
       </Control>
-    </div>
+    </>
+  );
+}
+
+function CustomThemeControls() {
+  return (
+    <>
+      <Control htmlFor="colors" label="Colors">
+        <Picker />
+      </Control>
+      <Control htmlFor="colorMode" label="Color mode">
+        <Choices type="colorMode" choices={BASE_COLOR_MODES} />
+      </Control>
+    </>
   );
 }
 
@@ -258,7 +294,9 @@ function Control({
   children: React.ReactNode;
 }) {
   return (
-    <div className={cn("relative flex min-w-max flex-col gap-3")}>
+    <div
+      className={cn("relative flex min-w-max flex-col justify-between gap-3")}
+    >
       <label htmlFor={htmlFor} className={cn("text-xs font-bold")}>
         {label}
       </label>

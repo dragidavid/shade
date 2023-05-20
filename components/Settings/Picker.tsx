@@ -10,10 +10,10 @@ import { useStore } from "lib/store";
 import { debounce } from "lib/debounce";
 
 export default function Picker() {
-  const colors = useStore((state) => state.customTheme.colors);
-  const setColor = useStore((state) => state.customTheme.setColor);
-  const addColor = useStore((state) => state.customTheme.addColor);
-  const removeColor = useStore((state) => state.customTheme.removeColor);
+  const colors = useStore((state) => state.colors);
+  const setCustomColor = useStore((state) => state.setCustomColor);
+  const addCustomColor = useStore((state) => state.addCustomColor);
+  const removeCustomColor = useStore((state) => state.removeCustomColor);
 
   return (
     <div className={cn("flex h-8 w-28 gap-2 rounded-lg")}>
@@ -23,7 +23,7 @@ export default function Picker() {
             content={
               <SingleColor
                 color={color}
-                setColor={(newColor) => setColor(newColor, i)}
+                setCustomColor={(newColor) => setCustomColor(newColor, i)}
               />
             }
             sideOffset={12}
@@ -44,7 +44,7 @@ export default function Picker() {
 
           {colors.length > 1 && (
             <button
-              onClick={() => removeColor(i)}
+              onClick={() => removeCustomColor(i)}
               className={cn(
                 "absolute -right-2 -top-2 hidden h-5 w-5 items-center justify-center rounded-full",
                 "select-none outline-none",
@@ -63,7 +63,7 @@ export default function Picker() {
 
       {colors.length < 3 && (
         <button
-          onClick={() => addColor(chroma.random().hex())}
+          onClick={() => addCustomColor(chroma.random().hex())}
           className={cn(
             "flex h-full w-8 items-center justify-center rounded-lg",
             "select-none outline-none",
@@ -82,17 +82,18 @@ export default function Picker() {
 
 function SingleColor({
   color,
-  setColor,
+  setCustomColor,
 }: {
   color: string;
-  setColor: (color: string) => void;
+  setCustomColor: (color: string) => void;
 }) {
   return (
     <section className={cn("flex flex-col gap-3", "picker")}>
-      <HexColorPicker color={color} onChange={debounce(setColor, 300)} />
+      <HexColorPicker color={color} onChange={debounce(setCustomColor, 300)} />
+
       <HexColorInput
         color={color}
-        onChange={debounce(setColor, 300)}
+        onChange={debounce(setCustomColor, 300)}
         className={cn(
           "text-center font-medium uppercase",
           "outline-none",

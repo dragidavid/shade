@@ -11,6 +11,7 @@ import { useStore } from "lib/store";
 export default function TitleBar({ editable = false }: { editable: boolean }) {
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const creatingCustomTheme = useStore((state) => state.creatingCustomTheme);
   const title = useStore((state) => state.title);
   const update = useStore((state) => state.update);
 
@@ -32,7 +33,8 @@ export default function TitleBar({ editable = false }: { editable: boolean }) {
     <div
       className={cn(
         "relative flex items-center justify-center gap-2 rounded-t-lg py-2",
-        "bg-black/40"
+        "bg-black/40",
+        creatingCustomTheme && "stripes"
       )}
     >
       <Tooltip

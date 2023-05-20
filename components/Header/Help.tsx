@@ -105,7 +105,7 @@ const SHORTCUTS = [
 ];
 
 export default function Help() {
-  const [localDialogOpen, setLocalDialogOpen] = useState<boolean>(false);
+  const [localDialogOpen, setLocalDialogOpen] = useState(false);
 
   const pathname = usePathname();
 

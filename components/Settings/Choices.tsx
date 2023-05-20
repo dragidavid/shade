@@ -2,48 +2,32 @@ import { memo } from "react";
 
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
 
-import { SUPPORTED_FONT_SIZES, SUPPORTED_PADDING_CHOICES } from "lib/values";
-
 import { cn } from "lib/cn";
-import { find } from "lib/find";
 import { useStore } from "lib/store";
-
-import type { ChoiceDefinition } from "lib/types";
 
 export default memo(function Choices({
   type,
   choices,
 }: {
-  type: "fontSize" | "padding";
-  choices: ChoiceDefinition[];
+  type: "fontSize" | "padding" | "colorMode";
+  choices: string[];
 }) {
   const value = useStore((state) => state[type]);
   const update = useStore((state) => state.update);
 
-  const get = {
-    fontSize: {
-      valueForKey: (key: string) => find(SUPPORTED_FONT_SIZES, key),
-    },
-    padding: {
-      valueForKey: (key: string) => find(SUPPORTED_PADDING_CHOICES, key),
-    },
-  };
-
   return (
     <RadioGroupPrimitive.Root
-      defaultValue={value.id}
-      value={value.id}
-      onValueChange={(value: string) =>
-        update(type, get[type].valueForKey(value))
-      }
+      defaultValue={value}
+      value={value}
+      onValueChange={(value: string) => update(type, value)}
       className={cn("flex h-full items-center justify-center")}
     >
       <div className={cn("flex h-full gap-3")}>
         {choices.map((choice) => (
           <RadioGroupPrimitive.Item
-            key={`${type}-${choice.id}`}
-            id={`${type}-${choice.id}`}
-            value={choice.id}
+            key={`${type}-${choice}`}
+            id={`${type}-${choice}`}
+            value={choice}
             className={cn(
               "flex items-center justify-center rounded-lg px-2 py-1",
               "select-none outline-none",
@@ -54,7 +38,7 @@ export default memo(function Choices({
               "radix-state-checked:bg-white/20 radix-state-checked:text-almost-white"
             )}
           >
-            {choice.label}
+            {choice}
           </RadioGroupPrimitive.Item>
         ))}
       </div>

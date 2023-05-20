@@ -15,7 +15,7 @@ import Tooltip from "components/ui/Tooltip";
 import { cn } from "lib/cn";
 
 export default function Auth() {
-  const [localOpen, setLocalOpen] = useState<boolean>(false);
+  const [localOpen, setLocalOpen] = useState(false);
 
   const { data: session, status: sessionStatus } = useSession();
 
