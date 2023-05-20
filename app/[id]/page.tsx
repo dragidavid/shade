@@ -12,17 +12,8 @@ async function getSnippet(id: string) {
     where: {
       id,
     },
-    select: {
-      id: true,
-      title: true,
-      code: true,
-      settings: true,
-      userId: true,
-      views: {
-        select: {
-          count: true,
-        },
-      },
+    include: {
+      views: true,
     },
   });
 }
@@ -37,9 +28,6 @@ async function increaseViewCount(id: string) {
         increment: 1,
       },
     },
-    select: {
-      count: true,
-    },
   });
 }
 
@@ -48,13 +36,13 @@ export async function generateMetadata({
 }: {
   params: { id: string };
 }): Promise<Metadata> {
-  const partialSnippet = await getSnippet(params.id);
+  const snippet = await getSnippet(params.id);
 
   return {
-    title: !partialSnippet ? "404" : partialSnippet?.title ?? "Untitled",
+    title: !snippet ? "404" : snippet?.title ?? "Untitled",
     description: "Yet another code sharing app...",
     openGraph: {
-      title: !partialSnippet ? "404" : partialSnippet?.title ?? "Untitled",
+      title: !snippet ? "404" : snippet?.title ?? "Untitled",
       description: "Yet another code sharing app...",
       url: `https://shade.dragi.me/${params.id}`,
       siteName: "shade - Share some code",
@@ -70,7 +58,7 @@ export async function generateMetadata({
     },
     twitter: {
       card: "summary_large_image",
-      title: !partialSnippet ? "404" : partialSnippet?.title ?? "Untitled",
+      title: !snippet ? "404" : snippet?.title ?? "Untitled",
       creator: "@dragidavid",
       description: "Yet another code sharing app...",
       images: ["https://shade.dragi.me/opengraph-image.png"],
@@ -82,27 +70,27 @@ export async function generateMetadata({
 export default async function Page({ params }: { params: { id: string } }) {
   const session = await getSession();
 
-  const partialSnippet = await getSnippet(params.id);
+  const snippet = await getSnippet(params.id);
 
   let views;
 
-  if (partialSnippet) {
+  if (snippet) {
     views =
-      session?.user?.id !== partialSnippet.userId
+      session?.user?.id !== snippet.userId
         ? await increaseViewCount(params.id)
-        : partialSnippet.views;
+        : snippet.views;
   }
 
-  const editable = session?.user?.id === partialSnippet?.userId;
+  const editable = session?.user?.id === snippet?.userId;
   const isAuthenticated = !!session;
 
-  if (!partialSnippet) {
+  if (!snippet) {
     notFound();
   }
 
   return (
     <Editor
-      partialSnippet={partialSnippet}
+      snippet={snippet}
       views={views?.count}
       editable={editable}
       isAuthenticated={isAuthenticated}

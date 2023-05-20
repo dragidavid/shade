@@ -11,20 +11,20 @@ import { useStore } from "lib/store";
 import type { Snippet } from "@prisma/client";
 
 export default function Editor({
-  partialSnippet,
+  snippet,
   views,
   editable,
   isAuthenticated,
 }: {
-  partialSnippet?: Partial<Snippet>;
+  snippet?: Snippet;
   views?: number;
   editable: boolean;
   isAuthenticated: boolean;
 }) {
-  const setEditorState = useStore((state) => state.setEditorState);
+  const setAppState = useStore((state) => state.setAppState);
 
-  if (partialSnippet) {
-    setEditorState(partialSnippet);
+  if (snippet) {
+    setAppState(snippet);
   }
 
   return (
