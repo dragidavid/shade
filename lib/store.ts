@@ -2,63 +2,74 @@ import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { produce } from "immer";
 
+import chroma from "chroma-js";
+
 import {
-  SUPPORTED_LANGUAGES,
-  SUPPORTED_THEMES,
-  SUPPORTED_FONT_STYLES,
-  SUPPORTED_FONT_SIZES,
-  SUPPORTED_PADDING_CHOICES,
+  BASE_LANGUAGES,
+  BASE_THEMES,
+  BASE_FONT_FAMILIES,
+  BASE_FONT_SIZES,
+  BASE_PADDING_VALUES,
+  BASE_COLOR_MODES,
 } from "lib/values";
 
 import { find } from "lib/find";
 
-import type { Store, SnippetSettings } from "lib/types";
+import type { Store } from "lib/types";
 
 export const useStore = create<Store>()(
   devtools((set, get) => ({
     message: "IDLE",
+    creatingCustomTheme: false,
     id: null,
     title: null,
     code: null,
-    language: SUPPORTED_LANGUAGES.at(0)!,
-    theme: SUPPORTED_THEMES.at(-1)!,
-    fontStyle: SUPPORTED_FONT_STYLES.at(0)!,
-    fontSize: SUPPORTED_FONT_SIZES.at(1)!,
+    language: BASE_LANGUAGES.at(0)!,
+    theme: BASE_THEMES.at(-1)!,
+    fontFamily: BASE_FONT_FAMILIES.at(0)!,
+    fontSize: BASE_FONT_SIZES.at(1)!,
     lineNumbers: true,
-    padding: SUPPORTED_PADDING_CHOICES.at(1)!,
+    padding: BASE_PADDING_VALUES.at(1)!,
+    colors: [chroma.random().hex(), chroma.random().hex()],
+    colorMode: BASE_COLOR_MODES.at(0)!,
+    angle: 145,
     update: (type, value) =>
       set(
         produce((state) => {
           state[type] = value;
         })
       ),
-    setEditorState: (partialSnippet) =>
+    setAppState: (snippet) =>
       set(
         produce((state) => {
-          const settings = partialSnippet.settings as SnippetSettings;
-
-          state.id = partialSnippet.id;
-          state.title = partialSnippet.title;
-          state.code = partialSnippet.code;
-          state.language = find(SUPPORTED_LANGUAGES, settings.language);
-          state.theme = find(SUPPORTED_THEMES, settings.theme);
-          state.fontStyle = find(SUPPORTED_FONT_STYLES, settings.fontStyle);
-          state.fontSize = find(SUPPORTED_FONT_SIZES, settings.fontSize);
-          state.lineNumbers = settings.lineNumbers;
-          state.padding = find(SUPPORTED_PADDING_CHOICES, settings.padding);
+          state.id = snippet.id;
+          state.title = snippet.title;
+          state.code = snippet.code;
+          state.language = find(BASE_LANGUAGES, snippet.language!);
+          state.theme = find(BASE_THEMES, snippet.theme!);
+          state.fontFamily = find(BASE_FONT_FAMILIES, snippet.fontFamily!);
+          state.fontSize = snippet.fontSize;
+          state.lineNumbers = snippet.lineNumbers;
+          state.padding = snippet.padding;
+          state.colors = snippet.colors;
+          state.colorMode = snippet.colorMode;
+          state.angle = snippet.angle;
         })
       ),
-    getEditorState: () => {
+    getAppState: () => {
       const {
         id,
         title,
         code,
         language,
         theme,
-        fontStyle,
+        fontFamily,
         fontSize,
         lineNumbers,
         padding,
+        colors,
+        colorMode,
+        angle,
       } = get();
 
       return {
@@ -67,11 +78,32 @@ export const useStore = create<Store>()(
         code,
         language,
         theme,
-        fontStyle,
+        fontFamily,
         fontSize,
         lineNumbers,
         padding,
+        colors,
+        colorMode,
+        angle,
       };
     },
+    setCustomColor: (c, i) =>
+      set(
+        produce((state) => {
+          state.colors[i] = c;
+        })
+      ),
+    addCustomColor: (c) =>
+      set(
+        produce((state) => {
+          state.colors.push(c);
+        })
+      ),
+    removeCustomColor: (i) =>
+      set(
+        produce((state) => {
+          state.colors.splice(i, 1);
+        })
+      ),
   }))
 );

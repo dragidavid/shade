@@ -67,10 +67,22 @@ model VerificationToken {
 }
 
 model Snippet {
-  id        String   @id @default(cuid())
-  title     String?  @db.VarChar(69)
-  code      String?  @db.Text
-  settings  Json?    @default("{ \"language\": \"typescript\", \"theme\": \"salem\", \"fontStyle\": \"fira_code\", \"fontSize\": \"sm\", \"lineNumbers\": true, \"padding\": \"md\" }")
+  id String @id @default(cuid())
+
+  title String? @db.VarChar(69)
+  code  String? @db.Text
+
+  language    String  @db.VarChar(69)
+  theme       String  @db.VarChar(69)
+  fontFamily  String  @db.VarChar(69)
+  fontSize    String  @db.VarChar(69)
+  lineNumbers Boolean @default(true)
+  padding     String  @db.VarChar(69)
+
+  colors    Json
+  colorMode String @db.VarChar(69)
+  angle     Int
+
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @default(now()) @map(name: "updated_at")
 

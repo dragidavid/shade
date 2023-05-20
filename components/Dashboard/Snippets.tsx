@@ -15,15 +15,13 @@ import DeleteDialog from "components/Dashboard/DeleteDialog";
 import Kbd from "components/ui/Kbd";
 import ThemeBubble from "components/ui/ThemeBubble";
 
-import { SUPPORTED_THEMES } from "lib/values";
+import { BASE_THEMES } from "lib/values";
 
 import { cn } from "lib/cn";
 import { find } from "lib/find";
 import { fetcher } from "lib/fetcher";
 
 import type { Snippet, View } from "@prisma/client";
-
-import type { SnippetSettings } from "lib/types";
 
 interface DialogProps {
   type: "RENAME" | "DELETE";
@@ -37,7 +35,7 @@ export default function Snippets({
   snippets: (Snippet & { views: View | null })[];
 }) {
   const [localSnippets, setLocalSnippets] = useState(snippets);
-  const [localDialogOpen, setLocalDialogOpen] = useState<boolean>(false);
+  const [localDialogOpen, setLocalDialogOpen] = useState(false);
   const [dialogProps, setDialogProps] = useState<DialogProps | null>(null);
   const [activeElement, setActiveElement] = useState<HTMLAnchorElement | null>(
     null
@@ -133,9 +131,6 @@ export default function Snippets({
       fetcher(url, {
         method: "PATCH",
         body: JSON.stringify(arg),
-        headers: {
-          "X-Update-Type": "title",
-        },
       }),
     {
       revalidate: false,
@@ -227,7 +222,7 @@ export default function Snippets({
           open={localDialogOpen}
           onOpenChange={setLocalDialogOpen}
         >
-          {localSnippets.map(({ id, title, settings, createdAt, views }) => (
+          {localSnippets.map(({ id, title, theme, createdAt, views }) => (
             <ContextMenuPrimitive.Root key={id}>
               <ContextMenuPrimitive.Trigger asChild>
                 <li>
@@ -245,12 +240,7 @@ export default function Snippets({
                   >
                     <div className={cn("flex items-center gap-2")}>
                       <ThemeBubble
-                        colors={
-                          find(
-                            SUPPORTED_THEMES,
-                            (settings as SnippetSettings).theme
-                          ).baseColors
-                        }
+                        colors={find(BASE_THEMES, theme).baseColors}
                       />
 
                       <span data-id="title" className={cn("grow truncate")}>

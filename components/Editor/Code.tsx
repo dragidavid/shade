@@ -30,7 +30,7 @@ export default function Code({ editable = false }: { editable: boolean }) {
   const code = useStore((state) => state.code);
   const language = useStore((state) => state.language);
   const theme = useStore((state) => state.theme);
-  const fontStyle = useStore((state) => state.fontStyle);
+  const fontFamily = useStore((state) => state.fontFamily);
   const fontSize = useStore((state) => state.fontSize);
   const lineNumbers = useStore((state) => state.lineNumbers);
   const padding = useStore((state) => state.padding);
@@ -57,22 +57,22 @@ export default function Code({ editable = false }: { editable: boolean }) {
   });
   const customFontStyle = EditorView.theme({
     ".cm-content *": {
-      fontFamily: fontStyle.variable,
+      fontFamily: fontFamily.variable,
       fontVariantLigatures: "normal",
     },
     ".cm-gutters": {
-      fontFamily: fontStyle.variable,
+      fontFamily: fontFamily.variable,
       fontVariantLigatures: "normal",
     },
   });
   const customFontSize = EditorView.theme({
     ".cm-content *": {
-      fontSize: `${fontSize.value}px`,
-      lineHeight: `${fontSize.value! * 1.5}px`,
+      fontSize: `${fontSize}px`,
+      lineHeight: `${+fontSize * 1.5}px`,
     },
     ".cm-gutters": {
-      fontSize: `${fontSize.value}px`,
-      lineHeight: `${fontSize.value! * 1.5}px`,
+      fontSize: `${fontSize}px`,
+      lineHeight: `${+fontSize * 1.5}px`,
     },
   });
   const lineWrapping = EditorView.lineWrapping;
@@ -308,17 +308,17 @@ export default function Code({ editable = false }: { editable: boolean }) {
       }}
       className={cn("overflow-hidden", "shadow-xl shadow-black/40")}
       style={{
-        borderRadius: 8 + padding.value! / 10,
+        borderRadius: 8 + +padding / 10,
       }}
     >
       <div
         id="screenshot"
         className={cn(
           "relative z-0 w-auto min-w-[512px] max-w-5xl",
-          padding.class,
           "transition-all duration-100 ease-in-out"
         )}
         style={{
+          padding: `${padding}px`,
           backgroundImage: `linear-gradient(to bottom right, ${theme.baseColors[0]}, ${theme.baseColors[1]})`,
         }}
       >

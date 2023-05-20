@@ -1,12 +1,12 @@
-import { generateColors } from "lib/colors";
+import chroma from "chroma-js";
 
+import type { Snippet } from "@prisma/client";
 import type { LanguageSupport as LS, StreamParser } from "@codemirror/language";
 
 import type {
   LanguageDefinition,
   ThemeDefinition,
-  ChoiceDefinition,
-  FontDefinition,
+  FontFamilyDefinition,
 } from "lib/types";
 
 const importLegacy = () =>
@@ -16,7 +16,7 @@ const importLegacy = () =>
     };
   });
 
-export const SUPPORTED_LANGUAGES: LanguageDefinition[] = [
+export const BASE_LANGUAGES: LanguageDefinition[] = [
   {
     id: "typescript",
     label: "TypeScript",
@@ -113,26 +113,26 @@ export const SUPPORTED_LANGUAGES: LanguageDefinition[] = [
   },
 ];
 
-export const SUPPORTED_THEMES: ThemeDefinition[] = [
+export const BASE_THEMES: ThemeDefinition[] = [
   {
     id: "sky",
     label: "Sky",
-    baseColors: ["#38bdf8", "#3b82f6"],
+    baseColors: ["#89f7fe", "#66a6ff"],
   },
   {
     id: "cotton_candy",
     label: "Cotton Candy",
-    baseColors: ["#c4b5fd", "#c084fc"],
+    baseColors: ["#f6f3ff", "#cd9cf2"],
   },
   {
-    id: "smoke",
-    label: "Smoke",
-    baseColors: ["#274edd", "#000000"],
+    id: "stone",
+    label: "Stone",
+    baseColors: ["#243949", "#517fa4"],
   },
   {
     id: "honey",
     label: "Honey",
-    baseColors: ["#fcd34d", "#f97316"],
+    baseColors: ["#f9d423", "#f83600"],
   },
   {
     id: "jade",
@@ -151,7 +151,7 @@ export const SUPPORTED_THEMES: ThemeDefinition[] = [
   },
 ];
 
-export const SUPPORTED_FONT_STYLES: FontDefinition[] = [
+export const BASE_FONT_FAMILIES: FontFamilyDefinition[] = [
   {
     id: "fira_code",
     label: "Fira Code",
@@ -190,15 +190,16 @@ export const SUPPORTED_FONT_STYLES: FontDefinition[] = [
   },
 ];
 
-export const SUPPORTED_FONT_SIZES: ChoiceDefinition[] = [
-  { id: "xs", label: "12", value: 12 },
-  { id: "sm", label: "14", value: 14 },
-  { id: "md", label: "16", value: 16 },
-];
+export const BASE_FONT_SIZES: string[] = ["12", "14", "16"];
 
-export const SUPPORTED_PADDING_CHOICES: ChoiceDefinition[] = [
-  { id: "sm", label: "16", value: 16, class: "p-4" },
-  { id: "md", label: "32", value: 32, class: "p-8" },
-  { id: "lg", label: "64", value: 64, class: "p-16" },
-  { id: "xl", label: "128", value: 128, class: "p-32" },
+export const BASE_PADDING_VALUES: string[] = ["16", "32", "64", "128"];
+
+export const BASE_COLOR_MODES: string[] = [
+  "rgb",
+  "lrgb",
+  "lch",
+  "hcl",
+  "hsv",
+  "hsl",
+  "lab",
 ];

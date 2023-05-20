@@ -1,52 +1,5 @@
-import type { Prisma, Snippet } from "@prisma/client";
+import type { Snippet } from "@prisma/client";
 import type { Extension } from "@codemirror/state";
-
-export type LanguageDefinition = {
-  id: string;
-  label: string;
-  extension: () => Promise<Extension>;
-};
-
-export type ThemeDefinition = {
-  id: string;
-  label: string;
-  baseColors: string[];
-};
-
-export type FontDefinition = {
-  id: string;
-  label: string;
-  variable: string;
-  class: string;
-};
-
-export type ChoiceDefinition = {
-  id: string;
-  value?: number;
-  label?: string;
-  class?: string;
-};
-
-export type State = {
-  id: string | null;
-  title: string | null;
-  code: string | null;
-  language: LanguageDefinition;
-  theme: ThemeDefinition;
-  fontStyle: FontDefinition;
-  fontSize: ChoiceDefinition;
-  lineNumbers: boolean;
-  padding: ChoiceDefinition;
-};
-
-export interface SnippetSettings extends Prisma.JsonObject {
-  language: string;
-  theme: string;
-  fontStyle: string;
-  fontSize: string;
-  lineNumbers: boolean;
-  padding: string;
-}
 
 export type Message =
   | "SUCCESS"
@@ -62,10 +15,43 @@ export type Message =
   | "PENDING"
   | "IDLE";
 
-export interface Store extends State {
-  editable: boolean;
-  activeSettings: "snippet" | "theme";
+export type LanguageDefinition = {
+  id: string;
+  label: string;
+  extension: () => Promise<Extension>;
+};
+
+export type ThemeDefinition = {
+  id: string;
+  label: string;
+  baseColors: string[];
+};
+
+export type FontFamilyDefinition = {
+  id: string;
+  label: string;
+  variable: string;
+  class: string;
+};
+
+export type AppState = {
+  id: string | null;
+  title: string | null;
+  code: string | null;
+  language: LanguageDefinition;
+  theme: ThemeDefinition;
+  fontFamily: FontFamilyDefinition;
+  fontSize: string;
+  lineNumbers: boolean;
+  padding: string;
+  colors: string[];
+  colorMode: string;
+  angle: number;
+};
+
+export interface Store extends AppState {
   message: Message;
+  creatingCustomTheme: boolean;
   update: <
     T extends string,
     V extends
@@ -73,13 +59,14 @@ export interface Store extends State {
       | boolean
       | LanguageDefinition
       | ThemeDefinition
-      | FontDefinition
-      | ChoiceDefinition
+      | FontFamilyDefinition
   >(
     type: T,
     value: V
   ) => void;
-  setEditorState: (partialSnippet: Partial<Snippet>) => void;
-  getEditorState: () => State;
-  switchActiveSettings: () => void;
+  setAppState: (snippet: Snippet) => void;
+  getAppState: () => AppState;
+  setCustomColor: (c: string, i: number) => void;
+  addCustomColor: (c: string) => void;
+  removeCustomColor: (i: number) => void;
 }

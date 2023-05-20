@@ -6,13 +6,13 @@ import isEqual from "lodash.isequal";
 import { fetcher } from "lib/fetcher";
 import { useStore } from "lib/store";
 
-import { State } from "lib/types";
+import { AppState } from "lib/types";
 
 export default function ChangeListener() {
-  const prevState = useRef<State | null>(null);
+  const prevState = useRef<AppState | null>(null);
   const pendingSave = useRef<boolean>(false);
 
-  const state = useStore((state) => state.getEditorState());
+  const state = useStore((state) => state.getAppState());
   const update = useStore((state) => state.update);
 
   const {
@@ -21,13 +21,10 @@ export default function ChangeListener() {
     data: updatedSnippet,
   } = useSWRMutation(
     "/api/snippets",
-    (url, { arg }: { arg: State }) =>
+    (url, { arg }: { arg: AppState }) =>
       fetcher(url, {
         method: "PATCH",
         body: JSON.stringify(arg),
-        headers: {
-          "X-Update-Type": "full",
-        },
       }),
     {
       revalidate: false,
