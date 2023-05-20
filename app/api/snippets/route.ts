@@ -1,7 +1,18 @@
-import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 
+import chroma from "chroma-js";
+
+import {
+  BASE_LANGUAGES,
+  BASE_THEMES,
+  BASE_FONT_FAMILIES,
+  BASE_FONT_SIZES,
+  BASE_PADDING_VALUES,
+  BASE_COLOR_MODES,
+} from "lib/values";
+
 import { prisma } from "lib/prisma";
+import { prepare } from "lib/prepare";
 import { limiter } from "lib/limiter";
 import { getSession } from "lib/auth";
 
@@ -10,9 +21,6 @@ import type { NextRequest } from "next/server";
 const ratelimit = limiter();
 
 export async function PATCH(req: NextRequest) {
-  const headersList = headers();
-  const updateType = headersList.get("X-Update-Type");
-
   const session = await getSession();
 
   const body = await req.json();
@@ -41,42 +49,13 @@ export async function PATCH(req: NextRequest) {
     );
   }
 
-  const dataToUpdate: {
-    title: string | null;
-    code?: string;
-    settings?: {
-      language: string;
-      theme: string;
-      fontStyle: string;
-      fontSize: string;
-      lineNumbers: boolean;
-      padding: string;
-    };
-    updatedAt: string;
-  } = {
-    title: body.title && body.title.trim() !== "" ? body.title.trim() : null,
-    updatedAt: new Date().toISOString(),
-  };
-
-  if (updateType === "full") {
-    dataToUpdate["code"] = body.code;
-    dataToUpdate["settings"] = {
-      language: body.language.id,
-      theme: body.theme.id,
-      fontStyle: body.fontStyle.id,
-      fontSize: body.fontSize.id,
-      lineNumbers: body.lineNumbers,
-      padding: body.padding.id,
-    };
-  }
-
   try {
     const updatedSnippet = await prisma.snippet.update({
       where: {
         id: body.id,
         userId: session.user.id,
       },
-      data: dataToUpdate,
+      data: prepare(body),
     });
 
     return NextResponse.json(updatedSnippet, {
@@ -138,6 +117,14 @@ export async function POST(req: NextRequest) {
     const createdSnippet = await prisma.snippet.create({
       data: {
         userId: session.user.id,
+        language: BASE_LANGUAGES.at(0)!.id,
+        theme: BASE_THEMES.at(-1)!.id,
+        fontFamily: BASE_FONT_FAMILIES.at(0)!.id,
+        fontSize: BASE_FONT_SIZES.at(1)!,
+        padding: BASE_PADDING_VALUES.at(1)!,
+        colors: [chroma.random().hex(), chroma.random().hex()],
+        colorMode: BASE_COLOR_MODES.at(0)!,
+        angle: 145,
         views: {
           create: {
             count: 0,
