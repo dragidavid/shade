@@ -34,6 +34,11 @@ export type FontFamilyDefinition = {
   class: string;
 };
 
+export type AppStatus = {
+  message: Message;
+  creatingCustomTheme: boolean;
+};
+
 export type AppState = {
   id: string | null;
   title: string | null;
@@ -49,13 +54,12 @@ export type AppState = {
   angle: number;
 };
 
-export interface Store extends AppState {
-  message: Message;
-  creatingCustomTheme: boolean;
+export interface Store extends AppStatus, AppState {
   update: <
     T extends string,
     V extends
       | string
+      | number
       | boolean
       | LanguageDefinition
       | ThemeDefinition

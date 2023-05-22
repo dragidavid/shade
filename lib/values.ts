@@ -1,12 +1,13 @@
 import chroma from "chroma-js";
 
-import type { Snippet } from "@prisma/client";
 import type { LanguageSupport as LS, StreamParser } from "@codemirror/language";
 
 import type {
   LanguageDefinition,
   ThemeDefinition,
   FontFamilyDefinition,
+  AppStatus,
+  AppState,
 } from "lib/types";
 
 const importLegacy = () =>
@@ -203,3 +204,20 @@ export const BASE_COLOR_MODES: string[] = [
   "hsl",
   "lab",
 ];
+
+export const DEFAULT_VALUES: AppStatus & AppState = {
+  message: "IDLE",
+  creatingCustomTheme: false,
+  id: null,
+  title: null,
+  code: null,
+  language: BASE_LANGUAGES.at(0)!,
+  theme: BASE_THEMES.at(-1)!,
+  fontFamily: BASE_FONT_FAMILIES.at(0)!,
+  fontSize: BASE_FONT_SIZES.at(1)!,
+  lineNumbers: true,
+  padding: BASE_PADDING_VALUES.at(1)!,
+  colors: [chroma.random().hex(), chroma.random().hex()],
+  colorMode: BASE_COLOR_MODES.at(0)!,
+  angle: 145,
+};

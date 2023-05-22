@@ -2,15 +2,11 @@ import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { produce } from "immer";
 
-import chroma from "chroma-js";
-
 import {
   BASE_LANGUAGES,
   BASE_THEMES,
   BASE_FONT_FAMILIES,
-  BASE_FONT_SIZES,
-  BASE_PADDING_VALUES,
-  BASE_COLOR_MODES,
+  DEFAULT_VALUES,
 } from "lib/values";
 
 import { find } from "lib/find";
@@ -19,20 +15,7 @@ import type { Store } from "lib/types";
 
 export const useStore = create<Store>()(
   devtools((set, get) => ({
-    message: "IDLE",
-    creatingCustomTheme: false,
-    id: null,
-    title: null,
-    code: null,
-    language: BASE_LANGUAGES.at(0)!,
-    theme: BASE_THEMES.at(-1)!,
-    fontFamily: BASE_FONT_FAMILIES.at(0)!,
-    fontSize: BASE_FONT_SIZES.at(1)!,
-    lineNumbers: true,
-    padding: BASE_PADDING_VALUES.at(1)!,
-    colors: [chroma.random().hex(), chroma.random().hex()],
-    colorMode: BASE_COLOR_MODES.at(0)!,
-    angle: 145,
+    ...DEFAULT_VALUES,
     update: (type, value) =>
       set(
         produce((state) => {
@@ -42,6 +25,8 @@ export const useStore = create<Store>()(
     setAppState: (snippet) =>
       set(
         produce((state) => {
+          state.message = DEFAULT_VALUES.message;
+          state.creatingCustomTheme = DEFAULT_VALUES.creatingCustomTheme;
           state.id = snippet.id;
           state.title = snippet.title;
           state.code = snippet.code;

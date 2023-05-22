@@ -2,30 +2,24 @@
 
 import Code from "components/Editor/Code";
 import Views from "components/Editor/Views";
+import Wrapper from "components/Editor/Wrapper";
+import TitleBar from "components/Editor/TitleBar";
 import ChangeListener from "components/Editor/ChangeListener";
 import Settings from "components/Settings";
 
 import { cn } from "lib/cn";
 import { useStore } from "lib/store";
 
-import type { Snippet } from "@prisma/client";
-
 export default function Editor({
-  snippet,
   views,
   editable,
   isAuthenticated,
 }: {
-  snippet?: Snippet;
   views?: number;
   editable: boolean;
   isAuthenticated: boolean;
 }) {
-  const setAppState = useStore((state) => state.setAppState);
-
-  if (snippet) {
-    setAppState(snippet);
-  }
+  const creatingCustomTheme = useStore((state) => state.creatingCustomTheme);
 
   return (
     <div
@@ -36,11 +30,17 @@ export default function Editor({
     >
       {views !== undefined && <Views views={views} />}
 
-      <Code editable={editable} />
+      <Wrapper>
+        <TitleBar editable={editable && !creatingCustomTheme} />
+
+        <Code editable={editable && !creatingCustomTheme} />
+      </Wrapper>
 
       {editable && <Settings />}
 
-      {editable && isAuthenticated && <ChangeListener />}
+      {editable && !creatingCustomTheme && isAuthenticated && (
+        <ChangeListener />
+      )}
     </div>
   );
 }

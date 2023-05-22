@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 
 import Editor from "components/Editor";
+import SetupStore from "components/Editor/SetupStore";
 
 import { prisma } from "lib/prisma";
 import { getSession } from "lib/auth";
@@ -89,11 +90,14 @@ export default async function Page({ params }: { params: { id: string } }) {
   }
 
   return (
-    <Editor
-      snippet={snippet}
-      views={views?.count}
-      editable={editable}
-      isAuthenticated={isAuthenticated}
-    />
+    <>
+      <SetupStore snippet={snippet} />
+
+      <Editor
+        views={views?.count}
+        editable={editable}
+        isAuthenticated={isAuthenticated}
+      />
+    </>
   );
 }

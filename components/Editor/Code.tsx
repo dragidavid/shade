@@ -1,15 +1,12 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { motion } from "framer-motion";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 
 import { useCodeMirror } from "@uiw/react-codemirror";
 import { EditorView } from "@codemirror/view";
 import { createTheme } from "@uiw/codemirror-themes";
 import { tags as t } from "@lezer/highlight";
-
-import TitleBar from "components/Editor/TitleBar";
 
 import { cn } from "lib/cn";
 import { useStore } from "lib/store";
@@ -27,16 +24,23 @@ export default function Code({ editable = false }: { editable: boolean }) {
 
   const editorRef = useRef<HTMLDivElement>(null);
 
+  const creatingCustomTheme = useStore((state) => state.creatingCustomTheme);
   const code = useStore((state) => state.code);
   const language = useStore((state) => state.language);
   const theme = useStore((state) => state.theme);
   const fontFamily = useStore((state) => state.fontFamily);
   const fontSize = useStore((state) => state.fontSize);
   const lineNumbers = useStore((state) => state.lineNumbers);
-  const padding = useStore((state) => state.padding);
+  const colors = useStore((state) => state.colors);
   const update = useStore((state) => state.update);
 
-  const colors = generateColors(theme.baseColors);
+  const baseColors = useMemo(() => {
+    return creatingCustomTheme ? colors : theme.baseColors;
+  }, [creatingCustomTheme, theme.baseColors, colors]);
+
+  const generatedColors = useMemo(() => {
+    return generateColors(baseColors);
+  }, [baseColors]);
 
   const customStyles = EditorView.baseTheme({
     "&.cm-editor": {
@@ -46,7 +50,7 @@ export default function Code({ editable = false }: { editable: boolean }) {
       outline: "none",
     },
     ".cm-placeholder": {
-      color: adjustLightness(colors.at(0)!, 0.4),
+      color: adjustLightness(generatedColors.at(0)!, 0.4),
     },
     ".cm-gutterElement": {
       display: "flex",
@@ -83,12 +87,12 @@ export default function Code({ editable = false }: { editable: boolean }) {
     settings: {
       background: "transparent",
       foreground: "white",
-      caret: localEditable ? colors.at(0) : "transparent",
-      selection: adjustLightness(colors.at(0)!, 0.2),
-      selectionMatch: adjustLightness(colors.at(0)!, 0.2),
+      caret: localEditable ? generatedColors.at(0) : "transparent",
+      selection: adjustLightness(generatedColors.at(0)!, 0.2),
+      selectionMatch: adjustLightness(generatedColors.at(0)!, 0.2),
       lineHighlight: "transparent",
       gutterBackground: "transparent",
-      gutterForeground: adjustLightness(colors.at(0)!, 0.4),
+      gutterForeground: adjustLightness(generatedColors.at(0)!, 0.4),
       gutterBorder: "transparent",
     },
     styles: [
@@ -102,12 +106,12 @@ export default function Code({ editable = false }: { editable: boolean }) {
       },
       {
         tag: [t.link],
-        color: colors.at(1),
+        color: generatedColors.at(1),
       },
       {
         tag: [t.comment, t.lineComment, t.blockComment, t.docComment],
         fontStyle: "italic",
-        color: adjustLightness(colors.at(0)!, 0.4),
+        color: adjustLightness(generatedColors.at(0)!, 0.4),
       },
       {
         tag: [
@@ -117,13 +121,21 @@ export default function Code({ editable = false }: { editable: boolean }) {
           t.punctuation,
           t.angleBracket,
         ],
-        color: colors.at(0),
+        color: generatedColors.at(0),
       },
       // The following tags change a lot usually so adjust these for more drastic changes
-      { tag: t.variableName, color: colors.at(6), fontStyle: "italic" },
-      { tag: t.propertyName, color: colors.at(6), fontStyle: "italic" },
-      { tag: t.definition(t.variableName), color: colors.at(4) },
-      { tag: t.definition(t.propertyName), color: colors.at(6) },
+      {
+        tag: t.variableName,
+        color: generatedColors.at(6),
+        fontStyle: "italic",
+      },
+      {
+        tag: t.propertyName,
+        color: generatedColors.at(6),
+        fontStyle: "italic",
+      },
+      { tag: t.definition(t.variableName), color: generatedColors.at(4) },
+      { tag: t.definition(t.propertyName), color: generatedColors.at(6) },
       {
         tag: [
           t.moduleKeyword,
@@ -135,19 +147,19 @@ export default function Code({ editable = false }: { editable: boolean }) {
           t.self,
           t.meta,
         ],
-        color: colors.at(11),
+        color: generatedColors.at(11),
       },
       {
         tag: [t.typeName, t.typeOperator],
-        color: colors.at(13),
+        color: generatedColors.at(13),
       },
       {
         tag: [t.operator, t.special(t.string)],
-        color: colors.at(6),
+        color: generatedColors.at(6),
       },
       {
         tag: [t.number, t.bool, t.string, t.processingInstruction, t.inserted],
-        color: colors.at(2),
+        color: generatedColors.at(2),
       },
       {
         tag: [
@@ -158,20 +170,20 @@ export default function Code({ editable = false }: { editable: boolean }) {
           t.function(t.variableName),
           t.function(t.propertyName),
         ],
-        color: colors.at(8),
+        color: generatedColors.at(8),
       },
-      { tag: [t.regexp], color: colors.at(12) },
-      { tag: [t.tagName], color: colors.at(11) },
+      { tag: [t.regexp], color: generatedColors.at(12) },
+      { tag: [t.tagName], color: generatedColors.at(11) },
       {
         tag: [t.attributeValue],
-        color: colors.at(2),
+        color: generatedColors.at(2),
       },
       {
         tag: [t.attributeName],
-        color: colors.at(6),
+        color: generatedColors.at(6),
       },
-      { tag: [t.heading], color: colors.at(1), fontWeight: "bold" },
-      { tag: [t.quote], color: colors.at(6) },
+      { tag: [t.heading], color: generatedColors.at(1), fontWeight: "bold" },
+      { tag: [t.quote], color: generatedColors.at(6) },
     ],
   });
 
@@ -207,6 +219,12 @@ export default function Code({ editable = false }: { editable: boolean }) {
     ],
     theme: customEditorTheme,
   });
+
+  useEffect(() => {
+    if (!editable) {
+      setLocalEditable(false);
+    }
+  }, [editable]);
 
   useEffect(() => {
     async function loadLanguage() {
@@ -293,60 +311,9 @@ export default function Code({ editable = false }: { editable: boolean }) {
     [view, localEditable]
   );
 
-  if (!selectedLanguage || !colors) {
+  if (!selectedLanguage || !generatedColors) {
     return null;
   }
 
-  return (
-    <motion.div
-      animate={{
-        opacity: 1,
-        transition: { duration: 0.1, delay: 0.05 },
-      }}
-      initial={{
-        opacity: 0,
-      }}
-      className={cn("overflow-hidden", "shadow-xl shadow-black/40")}
-      style={{
-        borderRadius: 8 + +padding / 10,
-      }}
-    >
-      <div
-        id="screenshot"
-        className={cn(
-          "relative z-0 w-auto min-w-[512px] max-w-5xl",
-          "transition-all duration-100 ease-in-out"
-        )}
-        style={{
-          padding: `${padding}px`,
-          backgroundImage: `linear-gradient(to bottom right, ${theme.baseColors[0]}, ${theme.baseColors[1]})`,
-        }}
-      >
-        <div
-          className={cn(
-            "relative z-[1] h-full w-full min-w-[480px] max-w-2xl rounded-lg"
-          )}
-        >
-          <div
-            className={cn(
-              "absolute inset-0 rounded-lg",
-              "after:absolute after:inset-0 after:z-[2] after:translate-y-6 after:rounded-xl after:bg-black/60 after:blur-xl"
-            )}
-          >
-            <div
-              className={cn("absolute inset-0 z-[3] rounded-lg")}
-              style={{
-                backgroundImage: `linear-gradient(to bottom right, ${theme.baseColors[0]}, ${theme.baseColors[1]})`,
-              }}
-            />
-          </div>
-          <div className={cn("relative z-[4] rounded-lg", "bg-black/70")}>
-            <TitleBar editable={editable} />
-
-            <div ref={editorRef} className={cn("rounded-lg p-3")} />
-          </div>
-        </div>
-      </div>
-    </motion.div>
-  );
+  return <div ref={editorRef} className={cn("rounded-lg p-3")} />;
 }
