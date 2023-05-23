@@ -24,9 +24,7 @@ export default function Editor({
   return (
     <div
       id="editor"
-      className={cn(
-        "relative flex h-full w-full flex-col items-center justify-center p-6"
-      )}
+      className={cn("relative flex h-full w-full flex-col items-center p-6")}
     >
       {views !== undefined && <Views views={views} />}
 
@@ -38,9 +36,9 @@ export default function Editor({
 
       {editable && <Settings />}
 
-      {editable && !creatingCustomTheme && isAuthenticated && (
+      {/* {editable && !creatingCustomTheme && isAuthenticated && (
         <ChangeListener />
-      )}
+      )} */}
     </div>
   );
 }

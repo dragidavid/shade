@@ -1,12 +1,16 @@
 "use client";
 
-import { useMemo } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 
 import { cn } from "lib/cn";
 import { useStore } from "lib/store";
 
 export default function Wrapper({ children }: { children: React.ReactNode }) {
+  const [marginTop, setMarginTop] = useState(15);
+
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
   const creatingCustomTheme = useStore((state) => state.creatingCustomTheme);
   const theme = useStore((state) => state.theme);
   const padding = useStore((state) => state.padding);
@@ -17,8 +21,45 @@ export default function Wrapper({ children }: { children: React.ReactNode }) {
     return creatingCustomTheme ? colors : theme.baseColors;
   }, [creatingCustomTheme, theme.baseColors, colors]);
 
+  useEffect(() => {
+    const updateSize = () => {
+      if (wrapperRef.current) {
+        const viewportHeight = window.innerHeight;
+        const divHeight = wrapperRef.current.clientHeight;
+        const heightPercentage = (divHeight / viewportHeight) * 100;
+
+        if (heightPercentage > 50) {
+          const excessPercentage = heightPercentage - 50;
+          const marginTopReduction = excessPercentage / 0.5;
+          const newMarginTop = Math.max(0, 15 - marginTopReduction * 0.5);
+
+          if (newMarginTop !== marginTop) {
+            setMarginTop(newMarginTop);
+          }
+        } else if (marginTop !== 15) {
+          setMarginTop(15);
+        }
+      }
+    };
+
+    if (wrapperRef.current) {
+      const observer = new ResizeObserver(updateSize);
+
+      observer.observe(wrapperRef.current);
+
+      window.addEventListener("resize", updateSize);
+
+      return () => {
+        observer.disconnect();
+        window.removeEventListener("resize", updateSize);
+      };
+    }
+  }, [marginTop]);
+
   return (
     <motion.div
+      ref={wrapperRef}
+      layoutId="wrapper"
       animate={{
         opacity: 1,
         transition: { duration: 0.1, delay: 0.05 },
@@ -28,6 +69,7 @@ export default function Wrapper({ children }: { children: React.ReactNode }) {
       }}
       className={cn("overflow-hidden", "shadow-xl shadow-black/40")}
       style={{
+        marginTop: `${marginTop}vh`,
         borderRadius: 8 + +padding / 10,
       }}
     >
