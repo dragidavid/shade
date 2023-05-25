@@ -165,7 +165,8 @@ export default function Settings() {
             <div
               className={cn(
                 "flex justify-evenly gap-8 rounded-xl px-4 pb-4 pt-5",
-                "border-b border-white/20 shadow-xl shadow-black/40"
+                "border-b border-white/20 shadow-xl shadow-black/40",
+                creatingCustomTheme && "stripes"
               )}
             >
               {creatingCustomTheme ? (
