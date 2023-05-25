@@ -1,15 +1,6 @@
 import { NextResponse } from "next/server";
 
-import chroma from "chroma-js";
-
-import {
-  BASE_LANGUAGES,
-  BASE_THEMES,
-  BASE_FONT_FAMILIES,
-  BASE_FONT_SIZES,
-  BASE_PADDING_VALUES,
-  BASE_COLOR_MODES,
-} from "lib/values";
+import { DEFAULT_VALUES } from "lib/values";
 
 import { prisma } from "lib/prisma";
 import { prepare } from "lib/prepare";
@@ -117,14 +108,15 @@ export async function POST(req: NextRequest) {
     const createdSnippet = await prisma.snippet.create({
       data: {
         userId: session.user.id,
-        language: BASE_LANGUAGES.at(0)!.id,
-        theme: BASE_THEMES.at(-1)!.id,
-        fontFamily: BASE_FONT_FAMILIES.at(0)!.id,
-        fontSize: BASE_FONT_SIZES.at(1)!,
-        padding: BASE_PADDING_VALUES.at(1)!,
-        colors: [chroma.random().hex(), chroma.random().hex()],
-        colorMode: BASE_COLOR_MODES.at(0)!,
-        angle: 145,
+        language: DEFAULT_VALUES.language.id,
+        theme: DEFAULT_VALUES.theme.id,
+        fontFamily: DEFAULT_VALUES.fontFamily.id,
+        fontSize: DEFAULT_VALUES.fontSize,
+        padding: DEFAULT_VALUES.padding,
+        customColors: DEFAULT_VALUES.customColors,
+        colorMode: DEFAULT_VALUES.colorMode,
+        angle: DEFAULT_VALUES.angle,
+        grain: DEFAULT_VALUES.grain,
         views: {
           create: {
             count: 0,
