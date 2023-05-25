@@ -16,6 +16,9 @@ module.exports = {
       fontFamily: {
         sans: ["var(--font-inter)"],
       },
+      backgroundImage: {
+        noise: "url('/noise.png')",
+      },
     },
     fontFamily: {
       "fira-code": ["var(--font-fira-code)"],

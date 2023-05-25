@@ -31,12 +31,12 @@ export default function Code({ editable = false }: { editable: boolean }) {
   const fontFamily = useStore((state) => state.fontFamily);
   const fontSize = useStore((state) => state.fontSize);
   const lineNumbers = useStore((state) => state.lineNumbers);
-  const colors = useStore((state) => state.colors);
+  const customColors = useStore((state) => state.customColors);
   const update = useStore((state) => state.update);
 
   const baseColors = useMemo(() => {
-    return creatingCustomTheme ? colors : theme.baseColors;
-  }, [creatingCustomTheme, theme.baseColors, colors]);
+    return creatingCustomTheme ? customColors : theme.baseColors;
+  }, [creatingCustomTheme, theme.baseColors, customColors]);
 
   const generatedColors = useMemo(() => {
     return generateColors(baseColors);
@@ -196,6 +196,7 @@ export default function Code({ editable = false }: { editable: boolean }) {
     placeholder: "// Add some code here...",
     autoFocus: true,
     editable: localEditable,
+    readOnly: !localEditable,
     basicSetup: {
       lineNumbers: lineNumbers,
       foldGutter: false,

@@ -5,7 +5,11 @@ import * as SwitchPrimitive from "@radix-ui/react-switch";
 import { cn } from "lib/cn";
 import { useStore } from "lib/store";
 
-export default memo(function Switch({ type }: { type: "lineNumbers" }) {
+export default memo(function Switch({
+  type,
+}: {
+  type: "lineNumbers" | "grain";
+}) {
   const value = useStore((state) => state[type]);
   const update = useStore((state) => state.update);
 

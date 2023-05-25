@@ -11,6 +11,7 @@ import {
 
 import { GripHorizontal, RefreshCcw } from "lucide-react";
 
+import Angle from "components/Settings/Angle";
 import Picker from "components/Settings/Picker";
 import Select from "components/Settings/Select";
 import Switch from "components/Settings/Switch";
@@ -279,6 +280,12 @@ function CustomThemeControls() {
       </Control>
       <Control htmlFor="colorMode" label="Color mode">
         <Choices type="colorMode" choices={BASE_COLOR_MODES} />
+      </Control>
+      <Control htmlFor="gradientAngle" label="Gradient angle">
+        <Angle />
+      </Control>
+      <Control htmlFor="grain" label="Grain">
+        <Switch type="grain" />
       </Control>
     </>
   );

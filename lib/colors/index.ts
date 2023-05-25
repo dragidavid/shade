@@ -14,15 +14,34 @@ import { modifyColors, shiftHue } from "lib/colors/change";
  * @returns {string[]} - An array of hexadecimal color strings, in the format "#RRGGBB".
  */
 export function generateColors(colors: string[]): string[] {
-  // Convert the hexadecimal strings to RGB values
-  const [r1, g1, b1] = hexToRgb(colors.at(0)!);
-  const [r2, g2, b2] = hexToRgb(colors.at(-1)!);
+  let avgR = 0;
+  let avgG = 0;
+  let avgB = 0;
+
   const [rRef, gRef, bRef] = cssColorToRgb("rgba(0, 0, 0, 0.7)");
 
-  // Calculate the average RGB values of the two colors
-  const avgR = Math.floor((r1 + r2) / 2);
-  const avgG = Math.floor((g1 + g2) / 2);
-  const avgB = Math.floor((b1 + b2) / 2);
+  if (colors.length > 0) {
+    let totalR = 0;
+    let totalG = 0;
+    let totalB = 0;
+
+    colors.forEach((color) => {
+      const [r, g, b] = hexToRgb(color);
+      totalR += r;
+      totalG += g;
+      totalB += b;
+    });
+
+    // Calculate the average RGB values of the colors
+    avgR = Math.floor(totalR / colors.length);
+    avgG = Math.floor(totalG / colors.length);
+    avgB = Math.floor(totalB / colors.length);
+  } else {
+    // If no colors are provided, use black as the default color
+    avgR = 0;
+    avgG = 0;
+    avgB = 0;
+  }
 
   // Generate the five similar colors by slightly adjusting the average RGB values
   let gC1 = rgbToHex(avgR + 20, avgG - 20, avgB - 20);

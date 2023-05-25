@@ -2,6 +2,8 @@ import chroma from "chroma-js";
 
 import type { LanguageSupport as LS, StreamParser } from "@codemirror/language";
 
+import type { InterpolationMode } from "chroma-js";
+
 import type {
   LanguageDefinition,
   ThemeDefinition,
@@ -195,14 +197,12 @@ export const BASE_FONT_SIZES: string[] = ["12", "14", "16"];
 
 export const BASE_PADDING_VALUES: string[] = ["16", "32", "64", "128"];
 
-export const BASE_COLOR_MODES: string[] = [
+export const BASE_COLOR_MODES: InterpolationMode[] = [
   "rgb",
   "lrgb",
-  "lch",
-  "hcl",
-  "hsv",
-  "hsl",
   "lab",
+  "lch",
+  "hsl",
 ];
 
 export const DEFAULT_VALUES: AppStatus & AppState = {
@@ -217,7 +217,8 @@ export const DEFAULT_VALUES: AppStatus & AppState = {
   fontSize: BASE_FONT_SIZES.at(1)!,
   lineNumbers: true,
   padding: BASE_PADDING_VALUES.at(1)!,
-  colors: [chroma.random().hex(), chroma.random().hex()],
+  customColors: [chroma.random().hex(), chroma.random().hex()],
   colorMode: BASE_COLOR_MODES.at(0)!,
   angle: 145,
+  grain: false,
 };

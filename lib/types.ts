@@ -1,6 +1,8 @@
 import type { Snippet } from "@prisma/client";
 import type { Extension } from "@codemirror/state";
 
+import type { InterpolationMode } from "chroma-js";
+
 export type Message =
   | "SUCCESS"
   | "ERROR"
@@ -49,9 +51,10 @@ export type AppState = {
   fontSize: string;
   lineNumbers: boolean;
   padding: string;
-  colors: string[];
-  colorMode: string;
+  customColors: string[];
+  colorMode: InterpolationMode;
   angle: number;
+  grain: boolean;
 };
 
 export interface Store extends AppStatus, AppState {

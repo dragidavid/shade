@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
+import chroma from "chroma-js";
 
 import { cn } from "lib/cn";
 import { useStore } from "lib/store";
@@ -14,12 +15,23 @@ export default function Wrapper({ children }: { children: React.ReactNode }) {
   const creatingCustomTheme = useStore((state) => state.creatingCustomTheme);
   const theme = useStore((state) => state.theme);
   const padding = useStore((state) => state.padding);
-  const colors = useStore((state) => state.colors);
+  const customColors = useStore((state) => state.customColors);
+  const colorMode = useStore((state) => state.colorMode);
   const angle = useStore((state) => state.angle);
+  const grain = useStore((state) => state.grain);
 
   const baseColors = useMemo(() => {
-    return creatingCustomTheme ? colors : theme.baseColors;
-  }, [creatingCustomTheme, theme.baseColors, colors]);
+    return creatingCustomTheme ? customColors : theme.baseColors;
+  }, [creatingCustomTheme, theme.baseColors, customColors]);
+
+  const gradientColors = useMemo(() => {
+    return baseColors.length === 1
+      ? [...baseColors, baseColors[0]]
+      : chroma
+          .scale(baseColors)
+          .mode(colorMode)
+          .colors(baseColors.length + (baseColors.length - 1));
+  }, [baseColors, colorMode]);
 
   useEffect(() => {
     const updateSize = () => {
@@ -81,9 +93,19 @@ export default function Wrapper({ children }: { children: React.ReactNode }) {
         )}
         style={{
           padding: `${padding}px`,
-          backgroundImage: `linear-gradient(${angle}deg, ${baseColors[0]}, ${baseColors[1]})`,
+          backgroundImage: `linear-gradient(${angle}deg, ${gradientColors.join(
+            ", "
+          )})`,
         }}
       >
+        <div
+          className={cn(
+            "invisible absolute inset-0",
+            "bg-noise bg-contain opacity-20",
+            grain && "visible"
+          )}
+        />
+
         <div
           className={cn(
             "relative z-[1] h-full w-full min-w-[480px] max-w-2xl rounded-lg"
@@ -98,7 +120,9 @@ export default function Wrapper({ children }: { children: React.ReactNode }) {
             <div
               className={cn("absolute inset-0 z-[3] rounded-lg")}
               style={{
-                backgroundImage: `linear-gradient(${angle}deg, ${baseColors[0]}, ${baseColors[1]})`,
+                backgroundImage: `linear-gradient(${angle}deg, ${gradientColors.join(
+                  ", "
+                )})`,
               }}
             />
           </div>

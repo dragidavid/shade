@@ -79,9 +79,10 @@ model Snippet {
   lineNumbers Boolean @default(true)
   padding     String  @db.VarChar(69)
 
-  colors    Json
-  colorMode String @db.VarChar(69)
-  angle     Int
+  customColors Json
+  colorMode    String  @db.VarChar(69)
+  angle        Int
+  grain        Boolean
 
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @default(now()) @map(name: "updated_at")

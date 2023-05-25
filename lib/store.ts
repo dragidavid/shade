@@ -36,9 +36,10 @@ export const useStore = create<Store>()(
           state.fontSize = snippet.fontSize;
           state.lineNumbers = snippet.lineNumbers;
           state.padding = snippet.padding;
-          state.colors = snippet.colors;
+          state.customColors = snippet.customColors;
           state.colorMode = snippet.colorMode;
           state.angle = snippet.angle;
+          state.grain = snippet.grain;
         })
       ),
     getAppState: () => {
@@ -52,9 +53,10 @@ export const useStore = create<Store>()(
         fontSize,
         lineNumbers,
         padding,
-        colors,
+        customColors,
         colorMode,
         angle,
+        grain,
       } = get();
 
       return {
@@ -67,27 +69,28 @@ export const useStore = create<Store>()(
         fontSize,
         lineNumbers,
         padding,
-        colors,
+        customColors,
         colorMode,
         angle,
+        grain,
       };
     },
     setCustomColor: (c, i) =>
       set(
         produce((state) => {
-          state.colors[i] = c;
+          state.customColors[i] = c;
         })
       ),
     addCustomColor: (c) =>
       set(
         produce((state) => {
-          state.colors.push(c);
+          state.customColors.push(c);
         })
       ),
     removeCustomColor: (i) =>
       set(
         produce((state) => {
-          state.colors.splice(i, 1);
+          state.customColors.splice(i, 1);
         })
       ),
   }))

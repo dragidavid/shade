@@ -10,14 +10,14 @@ import { useStore } from "lib/store";
 import { debounce } from "lib/debounce";
 
 export default function Picker() {
-  const colors = useStore((state) => state.colors);
+  const customColors = useStore((state) => state.customColors);
   const setCustomColor = useStore((state) => state.setCustomColor);
   const addCustomColor = useStore((state) => state.addCustomColor);
   const removeCustomColor = useStore((state) => state.removeCustomColor);
 
   return (
     <div className={cn("flex h-8 w-28 gap-2 rounded-lg")}>
-      {colors.map((color, i) => (
+      {customColors.map((color, i) => (
         <div key={i} className={cn("relative", "group")}>
           <Popover
             content={
@@ -42,7 +42,7 @@ export default function Picker() {
             />
           </Popover>
 
-          {colors.length > 1 && (
+          {customColors.length > 1 && (
             <button
               onClick={() => removeCustomColor(i)}
               className={cn(
@@ -61,7 +61,7 @@ export default function Picker() {
         </div>
       ))}
 
-      {colors.length < 3 && (
+      {customColors.length < 3 && (
         <button
           onClick={() => addCustomColor(chroma.random().hex())}
           className={cn(
