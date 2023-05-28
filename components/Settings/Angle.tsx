@@ -4,7 +4,7 @@ import { cn } from "lib/cn";
 import { useStore } from "lib/store";
 
 export default function Angle() {
-  const customColors = useStore((state) => state.customColors);
+  const customColorsCount = useStore((state) => state.customColors.length);
   const angle = useStore((state) => state.angle);
   const update = useStore((state) => state.update);
 
@@ -15,7 +15,7 @@ export default function Angle() {
         onValueChange={(value) => update("angle", value[0])}
         max={360}
         step={1}
-        disabled={customColors.length === 1}
+        disabled={customColorsCount === 1}
         className={cn(
           "relative flex h-5 w-32 items-center",
           "touch-none select-none"
