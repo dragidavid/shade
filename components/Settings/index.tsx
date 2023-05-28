@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useRef, useMemo } from "react";
 import {
   MotionValue,
   AnimatePresence,
@@ -30,30 +30,10 @@ import {
 import { cn } from "lib/cn";
 import { useStore } from "lib/store";
 
-interface Dimensions {
-  height: number;
-  width: number;
-}
-
-interface DragConstraints {
-  top: number;
-  left: number;
-  right: number;
-  bottom: number;
-}
-
 export default function Settings() {
-  const [editorDimensions, setEditorDimensions] = useState<Dimensions>({
-    height: 0,
-    width: 0,
-  });
-  const [dragConstraints, setDragConstraints] = useState<DragConstraints>({
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-  });
   const [hasMoved, setHasMoved] = useState(false);
+
+  const constraintsRef = useRef(null);
 
   const dragControls = useDragControls();
   const animationControls = useAnimationControls();
@@ -61,126 +41,66 @@ export default function Settings() {
 
   const creatingCustomTheme = useStore((state) => state.creatingCustomTheme);
 
-  useEffect(() => {
-    const editor = document.getElementById("editor");
-
-    let timeoutId: NodeJS.Timeout;
-
-    const handleResize = () => {
-      clearTimeout(timeoutId);
-
-      timeoutId = setTimeout(() => {
-        setEditorDimensions({
-          height: editor!.offsetHeight,
-          width: editor!.offsetWidth,
-        });
-
-        animationControls.start({
-          x: 0,
-          y: 0,
-        });
-      }, 500);
-    };
-
-    setEditorDimensions({
-      height: editor!.offsetHeight,
-      width: editor!.offsetWidth,
-    });
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      clearTimeout(timeoutId);
-
-      window.removeEventListener("resize", handleResize);
-    };
-  }, [animationControls]);
-
-  useEffect(() => {
-    const settings = document.getElementById("settings");
-
-    setDragConstraints({
-      top: -settings!.offsetTop + 88.6,
-      left:
-        -editorDimensions.width +
-        settings!.offsetWidth +
-        settings!.offsetLeft +
-        24,
-      right:
-        editorDimensions.width -
-        settings!.offsetWidth -
-        settings!.offsetLeft -
-        24,
-      bottom:
-        editorDimensions.height -
-        settings!.offsetHeight -
-        settings!.offsetTop +
-        40.9,
-    });
-  }, [editorDimensions.height, editorDimensions.width]);
-
   return (
-    <motion.div
-      id="settings"
-      drag
-      dragListener={false}
-      dragMomentum={false}
-      dragControls={dragControls}
-      dragConstraints={dragConstraints}
-      onDragStart={() => isDragging.set(true)}
-      onDragEnd={(_, info) => {
-        isDragging.set(false);
-
-        if (!hasMoved && (info.point.x !== 0 || info.point.y !== 0)) {
-          setHasMoved(true);
-        }
-      }}
-      animate={animationControls}
-      onUpdate={({ x, y }) => {
-        if (hasMoved && x === 0 && y === 0) {
-          setHasMoved(false);
-        }
-      }}
-      className={cn(
-        "fixed bottom-12 z-40 w-[960px] rounded-xl font-medium",
-        "border border-white/20 bg-black/50 shadow-xl shadow-black/40 backdrop-blur-md"
-      )}
-    >
-      <DraggableHandle
-        dragControls={dragControls}
-        animationControls={animationControls}
-        hasMoved={hasMoved}
-        isDragging={isDragging}
+    <>
+      <div
+        key={`settings-expanded-${creatingCustomTheme}`}
+        ref={constraintsRef}
+        className={cn(
+          "fixed bottom-6 left-6 right-6 top-[88px] -z-10",
+          "pointer-events-none"
+        )}
       />
 
-      <div className={cn("relative overflow-hidden rounded-xl", "bg-black")}>
-        <AnimatePresence mode="wait" initial={false}>
-          <motion.div
-            key={creatingCustomTheme ? "theme" : "snippet"}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.1 }}
-          >
-            <div
-              className={cn(
-                "flex justify-evenly gap-8 rounded-xl px-4 pb-4 pt-5",
-                "border-b border-white/20 shadow-xl shadow-black/40",
-                creatingCustomTheme && "stripes"
-              )}
-            >
-              {creatingCustomTheme ? (
-                <CustomThemeControls />
-              ) : (
-                <BasicSnippetControls />
-              )}
-            </div>
-          </motion.div>
-        </AnimatePresence>
-      </div>
+      <motion.div
+        id="settings"
+        drag
+        dragListener={false}
+        dragMomentum={false}
+        dragControls={dragControls}
+        dragConstraints={constraintsRef}
+        onDragStart={() => isDragging.set(true)}
+        onDragEnd={(_, info) => {
+          isDragging.set(false);
 
-      <Actions />
-    </motion.div>
+          if (!hasMoved && (info.point.x !== 0 || info.point.y !== 0)) {
+            setHasMoved(true);
+          }
+        }}
+        animate={animationControls}
+        onUpdate={({ x, y }) => {
+          if (hasMoved && x === 0 && y === 0) {
+            setHasMoved(false);
+          }
+        }}
+        className={cn(
+          "fixed bottom-12 z-40 w-[960px] rounded-xl font-medium",
+          "border border-white/20 bg-black/50 shadow-xl shadow-black/40 backdrop-blur-md"
+        )}
+      >
+        <DraggableHandle
+          dragControls={dragControls}
+          animationControls={animationControls}
+          hasMoved={hasMoved}
+          isDragging={isDragging}
+        />
+
+        <div
+          className={cn(
+            "relative flex-col overflow-hidden rounded-xl px-4 pb-4 pt-5",
+            "border-b border-white/20 bg-black shadow-xl shadow-black/40",
+            "transition-all duration-100 ease-in-out",
+            creatingCustomTheme ? "h-[211px]" : "h-[97px]"
+          )}
+        >
+          <BasicSnippetControls />
+
+          {creatingCustomTheme && <CustomThemeControls />}
+        </div>
+
+        <Actions />
+      </motion.div>
+    </>
   );
 }
 
@@ -250,7 +170,7 @@ function DraggableHandle({
 
 function BasicSnippetControls() {
   return (
-    <>
+    <div className={cn("flex justify-evenly gap-8")}>
       <Control htmlFor="language" label="Language">
         <Select type="language" options={BASE_LANGUAGES} />
       </Control>
@@ -269,13 +189,21 @@ function BasicSnippetControls() {
       <Control htmlFor="padding" label="Padding">
         <Choices type="padding" choices={BASE_PADDING_VALUES} />
       </Control>
-    </>
+    </div>
   );
 }
 
 function CustomThemeControls() {
   return (
-    <>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.1, delay: 0.2 }}
+      className={cn(
+        "mt-4 flex justify-evenly gap-8 rounded-xl pb-4 pt-5",
+        "stripes border border-dashed border-white/20 bg-white/[0.04]"
+      )}
+    >
       <Control htmlFor="colors" label="Colors">
         <Picker />
       </Control>
@@ -288,7 +216,7 @@ function CustomThemeControls() {
       <Control htmlFor="grain" label="Grain">
         <Switch type="grain" />
       </Control>
-    </>
+    </motion.div>
   );
 }
 
