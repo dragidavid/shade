@@ -72,17 +72,17 @@ model Snippet {
   title String? @db.VarChar(69)
   code  String? @db.Text
 
-  language    String? @db.VarChar(69)
-  theme       String? @db.VarChar(69)
-  fontFamily  String? @db.VarChar(69)
-  fontSize    String? @db.VarChar(69)
+  language    String  @default("typescript")
+  theme       String  @default("bubblegum")
+  fontFamily  String  @default("fira_code")
+  fontSize    String  @default("14")
   lineNumbers Boolean @default(true)
-  padding     String? @db.VarChar(69)
+  padding     String  @default("32")
 
-  customColors Json?
-  colorMode    String?  @db.VarChar(69)
-  angle        Int?
-  grain        Boolean?
+  customColors Json?   @default("{}")
+  colorMode    String  @default("rgb")
+  angle        Int     @default(145)
+  grain        Boolean @default(false)
 
   createdAt DateTime @default(now()) @map(name: "created_at")
   updatedAt DateTime @default(now()) @map(name: "updated_at")
