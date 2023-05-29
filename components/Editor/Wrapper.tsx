@@ -12,7 +12,7 @@ export default function Wrapper({ children }: { children: React.ReactNode }) {
 
   const wrapperRef = useRef<HTMLDivElement>(null);
 
-  const creatingCustomTheme = useStore((state) => state.creatingCustomTheme);
+  const hasCustomTheme = useStore((state) => state.hasCustomTheme);
   const theme = useStore((state) => state.theme);
   const padding = useStore((state) => state.padding);
   const customColors = useStore((state) => state.customColors);
@@ -21,8 +21,8 @@ export default function Wrapper({ children }: { children: React.ReactNode }) {
   const grain = useStore((state) => state.grain);
 
   const baseColors = useMemo(() => {
-    return creatingCustomTheme ? customColors : theme.baseColors;
-  }, [creatingCustomTheme, theme.baseColors, customColors]);
+    return hasCustomTheme ? customColors : theme.baseColors;
+  }, [hasCustomTheme, theme.baseColors, customColors]);
 
   const gradientColors = useMemo(() => {
     return baseColors.length === 1
@@ -40,8 +40,8 @@ export default function Wrapper({ children }: { children: React.ReactNode }) {
         const divHeight = wrapperRef.current.clientHeight;
         const heightPercentage = (divHeight / viewportHeight) * 100;
 
-        if (heightPercentage > 50) {
-          const excessPercentage = heightPercentage - 50;
+        if (heightPercentage > 40) {
+          const excessPercentage = heightPercentage - 40;
           const marginTopReduction = excessPercentage / 0.5;
           const newMarginTop = Math.max(0, 15 - marginTopReduction * 0.5);
 

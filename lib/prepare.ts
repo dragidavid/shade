@@ -61,7 +61,7 @@ export function prepare(body: Partial<AppState>): Partial<PreparedAppState> {
     data.colorMode = body.colorMode;
   }
 
-  if (body.angle) {
+  if (body.angle !== undefined) {
     data.angle = body.angle;
   }
 

@@ -92,10 +92,12 @@ export default memo(function Select<
             FontFamilyDefinition
         );
 
-        if (value === "custom") {
-          update("creatingCustomTheme", true);
-        } else {
-          update("creatingCustomTheme", false);
+        if (type === "theme") {
+          if (value === "custom") {
+            update("hasCustomTheme", true);
+          } else {
+            update("hasCustomTheme", false);
+          }
         }
       }}
     >

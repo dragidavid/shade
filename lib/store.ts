@@ -26,9 +26,9 @@ export const useStore = create<Store>()(
       set(
         produce((state) => {
           state.message = DEFAULT_VALUES.message;
-          state.creatingCustomTheme =
+          state.hasCustomTheme =
             Boolean(snippet.theme === "custom") ||
-            DEFAULT_VALUES.creatingCustomTheme;
+            DEFAULT_VALUES.hasCustomTheme;
           state.id = snippet.id;
           state.title = snippet.title;
           state.code = snippet.code;

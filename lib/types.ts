@@ -38,7 +38,7 @@ export type FontFamilyDefinition = {
 
 export type AppStatus = {
   message: Message;
-  creatingCustomTheme: boolean;
+  hasCustomTheme: boolean;
 };
 
 export type AppState = {

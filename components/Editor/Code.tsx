@@ -24,7 +24,7 @@ export default function Code({ editable = false }: { editable: boolean }) {
 
   const editorRef = useRef<HTMLDivElement>(null);
 
-  const creatingCustomTheme = useStore((state) => state.creatingCustomTheme);
+  const hasCustomTheme = useStore((state) => state.hasCustomTheme);
   const code = useStore((state) => state.code);
   const language = useStore((state) => state.language);
   const theme = useStore((state) => state.theme);
@@ -35,8 +35,8 @@ export default function Code({ editable = false }: { editable: boolean }) {
   const update = useStore((state) => state.update);
 
   const baseColors = useMemo(() => {
-    return creatingCustomTheme ? customColors : theme.baseColors;
-  }, [creatingCustomTheme, theme.baseColors, customColors]);
+    return hasCustomTheme ? customColors : theme.baseColors;
+  }, [hasCustomTheme, theme.baseColors, customColors]);
 
   const generatedColors = useMemo(() => {
     return generateColors(baseColors);

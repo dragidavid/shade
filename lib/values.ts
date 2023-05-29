@@ -212,7 +212,7 @@ export const BASE_COLOR_MODES: InterpolationMode[] = [
 
 export const DEFAULT_VALUES: AppStatus & AppState = {
   message: "IDLE",
-  creatingCustomTheme: false,
+  hasCustomTheme: false,
   id: null,
   title: null,
   code: null,

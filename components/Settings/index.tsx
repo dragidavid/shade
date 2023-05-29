@@ -39,12 +39,12 @@ export default function Settings() {
   const animationControls = useAnimationControls();
   const isDragging = useMotionValue(false);
 
-  const creatingCustomTheme = useStore((state) => state.creatingCustomTheme);
+  const hasCustomTheme = useStore((state) => state.hasCustomTheme);
 
   return (
     <>
       <div
-        key={`settings-expanded-${creatingCustomTheme}`}
+        key={`settings-expanded-${hasCustomTheme}`}
         ref={constraintsRef}
         className={cn(
           "fixed bottom-6 left-6 right-6 top-[88px] -z-10",
@@ -90,12 +90,12 @@ export default function Settings() {
             "relative flex-col overflow-hidden rounded-xl px-4 pb-4 pt-5",
             "border-b border-white/20 bg-black shadow-xl shadow-black/40",
             "transition-all duration-100 ease-in-out",
-            creatingCustomTheme ? "h-[211px]" : "h-[97px]"
+            hasCustomTheme ? "h-[211px]" : "h-[97px]"
           )}
         >
           <BasicSnippetControls />
 
-          {creatingCustomTheme && <CustomThemeControls />}
+          {hasCustomTheme && <CustomThemeControls />}
         </div>
 
         <Actions />

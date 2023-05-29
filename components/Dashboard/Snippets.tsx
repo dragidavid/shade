@@ -223,7 +223,7 @@ export default function Snippets({
           onOpenChange={setLocalDialogOpen}
         >
           {localSnippets.map(
-            ({ id, title, theme, customColors, createdAt, views }) => (
+            ({ id, title, theme, customColors, angle, createdAt, views }) => (
               <ContextMenuPrimitive.Root key={id}>
                 <ContextMenuPrimitive.Trigger asChild>
                   <li>
@@ -241,11 +241,13 @@ export default function Snippets({
                     >
                       <div className={cn("flex items-center gap-2")}>
                         <ThemeBubble
-                          colors={
-                            theme === "custom"
+                          style={{
+                            backgroundImage: `linear-gradient(${angle}deg, ${(theme ===
+                            "custom"
                               ? (customColors as string[])
                               : find(BASE_THEMES, theme).baseColors
-                          }
+                            ).join(" ,")}`,
+                          }}
                         />
 
                         <span data-id="title" className={cn("grow truncate")}>
