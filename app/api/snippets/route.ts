@@ -108,15 +108,8 @@ export async function POST(req: NextRequest) {
     const createdSnippet = await prisma.snippet.create({
       data: {
         userId: session.user.id,
-        language: DEFAULT_VALUES.language.id,
-        theme: DEFAULT_VALUES.theme.id,
-        fontFamily: DEFAULT_VALUES.fontFamily.id,
-        fontSize: DEFAULT_VALUES.fontSize,
-        padding: DEFAULT_VALUES.padding,
+        // Apparently you can't give a default value to a JSON field in Prisma 🙄
         customColors: DEFAULT_VALUES.customColors,
-        colorMode: DEFAULT_VALUES.colorMode,
-        angle: DEFAULT_VALUES.angle,
-        grain: DEFAULT_VALUES.grain,
         views: {
           create: {
             count: 0,
