@@ -9,21 +9,24 @@ type PreparedAppState = {
   fontSize: string;
   lineNumbers: boolean;
   padding: string;
-  colors: string[];
+  customColors: string[];
   colorMode: string;
   angle: number;
+  grain: boolean;
   updatedAt: string;
 };
 
 export function prepare(body: Partial<AppState>): Partial<PreparedAppState> {
   let data: Partial<PreparedAppState> = {};
 
-  if (body.title) {
-    data.title = body.title?.trim() !== "" ? body.title.trim() : null;
+  if (body.title !== undefined) {
+    const trimmedTitle = body.title?.trim();
+
+    data.title = trimmedTitle !== "" ? trimmedTitle : null;
   }
 
-  if (body.code) {
-    data.code = body.code;
+  if (body.code !== undefined) {
+    data.code = body.code === "" ? null : body.code;
   }
 
   if (body.language) {
@@ -50,8 +53,8 @@ export function prepare(body: Partial<AppState>): Partial<PreparedAppState> {
     data.padding = body.padding;
   }
 
-  if (body.colors) {
-    data.colors = body.colors;
+  if (body.customColors) {
+    data.customColors = body.customColors;
   }
 
   if (body.colorMode) {
@@ -60,6 +63,10 @@ export function prepare(body: Partial<AppState>): Partial<PreparedAppState> {
 
   if (body.angle) {
     data.angle = body.angle;
+  }
+
+  if (body.grain) {
+    data.grain = body.grain;
   }
 
   if (Object.keys(data).length > 0) {

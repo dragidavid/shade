@@ -222,62 +222,91 @@ export default function Snippets({
           open={localDialogOpen}
           onOpenChange={setLocalDialogOpen}
         >
-          {localSnippets.map(({ id, title, theme, createdAt, views }) => (
-            <ContextMenuPrimitive.Root key={id}>
-              <ContextMenuPrimitive.Trigger asChild>
-                <li>
-                  <Link
-                    id={id}
-                    href={`/${id}`}
-                    className={cn(
-                      "flex w-full flex-col gap-3 rounded-lg p-3 font-medium",
-                      "select-none outline-none",
-                      "border border-white/20 bg-black",
-                      "transition-all duration-100 ease-in-out",
-                      "hover:bg-white/20 hover:text-almost-white",
-                      "focus:border-almost-white focus:text-almost-white"
-                    )}
-                  >
-                    <div className={cn("flex items-center gap-2")}>
-                      <ThemeBubble
-                        colors={find(BASE_THEMES, theme).baseColors}
-                      />
-
-                      <span data-id="title" className={cn("grow truncate")}>
-                        {title ?? "Untitled"}
-                      </span>
-                    </div>
-
-                    <div
+          {localSnippets.map(
+            ({ id, title, theme, customColors, createdAt, views }) => (
+              <ContextMenuPrimitive.Root key={id}>
+                <ContextMenuPrimitive.Trigger asChild>
+                  <li>
+                    <Link
+                      id={id}
+                      href={`/${id}`}
                       className={cn(
-                        "flex items-center justify-between text-xs"
+                        "flex w-full flex-col gap-3 rounded-lg p-3 font-medium",
+                        "select-none outline-none",
+                        "border border-white/20 bg-black",
+                        "transition-all duration-100 ease-in-out",
+                        "hover:bg-white/20 hover:text-almost-white",
+                        "focus:border-almost-white focus:text-almost-white"
                       )}
                     >
-                      <span>
-                        {Intl.DateTimeFormat("en-US", {
-                          year: "numeric",
-                          month: "short",
-                          day: "numeric",
-                        }).format(new Date(createdAt))}
-                      </span>
+                      <div className={cn("flex items-center gap-2")}>
+                        <ThemeBubble
+                          colors={
+                            theme === "custom"
+                              ? (customColors as string[])
+                              : find(BASE_THEMES, theme).baseColors
+                          }
+                        />
 
-                      <span>{views?.count.toLocaleString() ?? "?"} views</span>
-                    </div>
-                  </Link>
-                </li>
-              </ContextMenuPrimitive.Trigger>
-              <ContextMenuPrimitive.Portal>
-                <ContextMenuPrimitive.Content
-                  className={cn(
-                    "z-50 w-40 rounded-lg p-1",
-                    "border border-white/20 bg-black/50 shadow-lg backdrop-blur-md",
-                    "animate-in fade-in zoom-in-75 duration-100 ease-in-out"
-                  )}
-                >
-                  <DialogPrimitive.Trigger asChild>
+                        <span data-id="title" className={cn("grow truncate")}>
+                          {title ?? "Untitled"}
+                        </span>
+                      </div>
+
+                      <div
+                        className={cn(
+                          "flex items-center justify-between text-xs"
+                        )}
+                      >
+                        <span>
+                          {Intl.DateTimeFormat("en-US", {
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric",
+                          }).format(new Date(createdAt))}
+                        </span>
+
+                        <span>
+                          {views?.count.toLocaleString() ?? "?"} views
+                        </span>
+                      </div>
+                    </Link>
+                  </li>
+                </ContextMenuPrimitive.Trigger>
+                <ContextMenuPrimitive.Portal>
+                  <ContextMenuPrimitive.Content
+                    className={cn(
+                      "z-50 w-40 rounded-lg p-1",
+                      "border border-white/20 bg-black/50 shadow-lg backdrop-blur-md",
+                      "animate-in fade-in zoom-in-75 duration-100 ease-in-out"
+                    )}
+                  >
+                    <DialogPrimitive.Trigger asChild>
+                      <ContextMenuPrimitive.Item
+                        onClick={() =>
+                          setDialogProps({ type: "RENAME", id, title })
+                        }
+                        className={cn(
+                          "flex items-center justify-between rounded-[5px] p-1",
+                          "select-none outline-none",
+                          "transition-all duration-100 ease-in-out",
+                          "focus:cursor-pointer focus:bg-white/20 focus:text-almost-white"
+                        )}
+                      >
+                        <div className={cn("flex items-center gap-2 pl-0.5")}>
+                          <Edit3 size={16} aria-hidden="true" />
+                          Rename...
+                        </div>
+
+                        <Kbd keys={["R"]} />
+                      </ContextMenuPrimitive.Item>
+                    </DialogPrimitive.Trigger>
+
                     <ContextMenuPrimitive.Item
                       onClick={() =>
-                        setDialogProps({ type: "RENAME", id, title })
+                        navigator.clipboard.writeText(
+                          `${window.location.origin}/${id}`
+                        )
                       }
                       className={cn(
                         "flex items-center justify-between rounded-[5px] p-1",
@@ -287,59 +316,38 @@ export default function Snippets({
                       )}
                     >
                       <div className={cn("flex items-center gap-2 pl-0.5")}>
-                        <Edit3 size={16} aria-hidden="true" />
-                        Rename...
+                        <LinkIcon size={16} aria-hidden="true" />
+                        Copy link
                       </div>
 
-                      <Kbd keys={["R"]} />
+                      <Kbd keys={["C"]} />
                     </ContextMenuPrimitive.Item>
-                  </DialogPrimitive.Trigger>
 
-                  <ContextMenuPrimitive.Item
-                    onClick={() =>
-                      navigator.clipboard.writeText(
-                        `${window.location.origin}/${id}`
-                      )
-                    }
-                    className={cn(
-                      "flex items-center justify-between rounded-[5px] p-1",
-                      "select-none outline-none",
-                      "transition-all duration-100 ease-in-out",
-                      "focus:cursor-pointer focus:bg-white/20 focus:text-almost-white"
-                    )}
-                  >
-                    <div className={cn("flex items-center gap-2 pl-0.5")}>
-                      <LinkIcon size={16} aria-hidden="true" />
-                      Copy link
-                    </div>
+                    <DialogPrimitive.Trigger asChild>
+                      <ContextMenuPrimitive.Item
+                        onClick={() =>
+                          setDialogProps({ type: "DELETE", id, title })
+                        }
+                        className={cn(
+                          "flex items-center justify-between rounded-[5px] p-1",
+                          "select-none outline-none",
+                          "transition-all duration-100 ease-in-out",
+                          "focus:cursor-pointer focus:bg-white/20 focus:text-almost-white"
+                        )}
+                      >
+                        <div className={cn("flex items-center gap-2 pl-0.5")}>
+                          <Trash size={16} aria-hidden="true" />
+                          Delete
+                        </div>
 
-                    <Kbd keys={["C"]} />
-                  </ContextMenuPrimitive.Item>
-
-                  <DialogPrimitive.Trigger asChild>
-                    <ContextMenuPrimitive.Item
-                      onClick={() =>
-                        setDialogProps({ type: "DELETE", id, title })
-                      }
-                      className={cn(
-                        "flex items-center justify-between rounded-[5px] p-1",
-                        "select-none outline-none",
-                        "transition-all duration-100 ease-in-out",
-                        "focus:cursor-pointer focus:bg-white/20 focus:text-almost-white"
-                      )}
-                    >
-                      <div className={cn("flex items-center gap-2 pl-0.5")}>
-                        <Trash size={16} aria-hidden="true" />
-                        Delete
-                      </div>
-
-                      <Kbd keys={["D"]} />
-                    </ContextMenuPrimitive.Item>
-                  </DialogPrimitive.Trigger>
-                </ContextMenuPrimitive.Content>
-              </ContextMenuPrimitive.Portal>
-            </ContextMenuPrimitive.Root>
-          ))}
+                        <Kbd keys={["D"]} />
+                      </ContextMenuPrimitive.Item>
+                    </DialogPrimitive.Trigger>
+                  </ContextMenuPrimitive.Content>
+                </ContextMenuPrimitive.Portal>
+              </ContextMenuPrimitive.Root>
+            )
+          )}
 
           <DialogPrimitive.Portal>
             <div

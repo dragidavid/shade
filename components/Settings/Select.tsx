@@ -42,11 +42,17 @@ export default memo(function Select<
     },
     theme: {
       initialValue: (
-        <ThemeBubble colors={(value as ThemeDefinition).baseColors} />
+        <ThemeBubble
+          colors={(value as ThemeDefinition).baseColors}
+          useCustomColorsFromStore={value.id === "custom"}
+        />
       ),
       optionContent: (option: T) => (
         <div className={cn("flex items-center gap-3")}>
-          <ThemeBubble colors={(option as ThemeDefinition).baseColors} />
+          <ThemeBubble
+            colors={(option as ThemeDefinition).baseColors}
+            useCustomColorsFromStore={option.id === "custom"}
+          />
           <span className={cn("block truncate")}>
             {(option as ThemeDefinition).label}
           </span>
@@ -79,15 +85,17 @@ export default memo(function Select<
       defaultValue={value.id}
       value={value.id}
       onValueChange={(value: string) => {
-        if (type === "theme" && value === "custom") {
+        update(
+          type,
+          get[type].valueForKey(value) as LanguageDefinition &
+            ThemeDefinition &
+            FontFamilyDefinition
+        );
+
+        if (value === "custom") {
           update("creatingCustomTheme", true);
         } else {
-          update(
-            type,
-            get[type].valueForKey(value) as LanguageDefinition &
-              ThemeDefinition &
-              FontFamilyDefinition
-          );
+          update("creatingCustomTheme", false);
         }
       }}
     >
@@ -138,26 +146,6 @@ export default memo(function Select<
                 </SelectPrimitive.ItemText>
               </SelectPrimitive.Item>
             ))}
-
-            {type === "theme" && (
-              <SelectPrimitive.Item
-                key={`${type}-custom`}
-                value="custom"
-                className={cn(
-                  "rounded-[5px] p-1.5",
-                  "select-none outline-none",
-                  "transition-all duration-100 ease-in-out",
-                  "radix-highlighted:bg-gradient-to-br radix-highlighted:from-fuchsia-500/40 radix-highlighted:to-pink-700/40 radix-highlighted:text-almost-white"
-                )}
-              >
-                <SelectPrimitive.ItemText>
-                  <div className={cn("flex items-center gap-3")}>
-                    <Wand2 size={16} aria-hidden="true" />
-                    <span className={cn("block truncate")}>Custom...</span>
-                  </div>
-                </SelectPrimitive.ItemText>
-              </SelectPrimitive.Item>
-            )}
           </SelectPrimitive.Viewport>
         </SelectPrimitive.Content>
       </SelectPrimitive.Portal>

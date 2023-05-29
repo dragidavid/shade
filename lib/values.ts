@@ -152,6 +152,11 @@ export const BASE_THEMES: ThemeDefinition[] = [
     label: "Salem",
     baseColors: ["#581c87", "#6d28d9"],
   },
+  {
+    id: "custom",
+    label: "Custom...",
+    baseColors: [chroma.random().hex(), chroma.random().hex()],
+  },
 ];
 
 export const BASE_FONT_FAMILIES: FontFamilyDefinition[] = [
@@ -212,12 +217,12 @@ export const DEFAULT_VALUES: AppStatus & AppState = {
   title: null,
   code: null,
   language: BASE_LANGUAGES.at(0)!,
-  theme: BASE_THEMES.at(-1)!,
+  theme: BASE_THEMES.at(-3)!,
   fontFamily: BASE_FONT_FAMILIES.at(0)!,
   fontSize: BASE_FONT_SIZES.at(1)!,
   lineNumbers: true,
   padding: BASE_PADDING_VALUES.at(1)!,
-  customColors: [chroma.random().hex(), chroma.random().hex()],
+  customColors: BASE_THEMES.at(-1)!.baseColors,
   colorMode: BASE_COLOR_MODES.at(0)!,
   angle: 145,
   grain: false,

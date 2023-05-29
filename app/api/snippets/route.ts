@@ -16,7 +16,7 @@ export async function PATCH(req: NextRequest) {
 
   const body = await req.json();
 
-  const { allowed } = await ratelimit.check(8, "UPDATE_SNIPPET");
+  const { allowed } = await ratelimit.check(30, "UPDATE_SNIPPET");
 
   if (!session || !session.user.id) {
     return NextResponse.json(

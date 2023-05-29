@@ -8,7 +8,6 @@ import ChangeListener from "components/Editor/ChangeListener";
 import Settings from "components/Settings";
 
 import { cn } from "lib/cn";
-import { useStore } from "lib/store";
 
 export default function Editor({
   views,
@@ -19,8 +18,6 @@ export default function Editor({
   editable: boolean;
   isAuthenticated: boolean;
 }) {
-  const creatingCustomTheme = useStore((state) => state.creatingCustomTheme);
-
   return (
     <div
       id="editor"
@@ -29,16 +26,14 @@ export default function Editor({
       {views !== undefined && <Views views={views} />}
 
       <Wrapper>
-        <TitleBar editable={editable && !creatingCustomTheme} />
+        <TitleBar editable={editable} />
 
-        <Code editable={editable && !creatingCustomTheme} />
+        <Code editable={editable} />
       </Wrapper>
 
       {editable && <Settings />}
 
-      {/* {editable && !creatingCustomTheme && isAuthenticated && (
-        <ChangeListener />
-      )} */}
+      {editable && isAuthenticated && <ChangeListener />}
     </div>
   );
 }

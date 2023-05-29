@@ -101,7 +101,7 @@ export default function Wrapper({ children }: { children: React.ReactNode }) {
         <div
           className={cn(
             "invisible absolute inset-0",
-            "bg-noise bg-contain opacity-20",
+            "bg-noise bg-contain opacity-30",
             grain && "visible"
           )}
         />
