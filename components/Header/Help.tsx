@@ -168,6 +168,7 @@ export default function Help() {
               )}
             >
               <Keyboard size={18} aria-hidden="true" />
+              <span className="sr-only">Open shortcuts dialog</span>
             </button>
           </DialogPrimitive.Trigger>
         </Tooltip>

@@ -20,6 +20,7 @@ export default function Popover({
         <PopoverPrimitive.Content
           side={side}
           sideOffset={sideOffset}
+          onFocusOutside={(e) => e.preventDefault()}
           className={cn(
             "relative z-50 rounded-lg p-2",
             "border border-white/20 bg-black/50 shadow-lg backdrop-blur-md",
