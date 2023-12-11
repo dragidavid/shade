@@ -49,7 +49,8 @@ export default function RootLayout({
       <body
         className={cn(
           "grid min-h-screen grid-rows-[auto,1fr] text-sm",
-          "bg-almost-black text-greyish caret-fuchsia-500 selection:bg-fuchsia-500 selection:text-almost-white"
+          "bg-almost-black text-greyish caret-fuchsia-500",
+          "selection:bg-fuchsia-500 selection:text-almost-white"
         )}
       >
         <Providers>
